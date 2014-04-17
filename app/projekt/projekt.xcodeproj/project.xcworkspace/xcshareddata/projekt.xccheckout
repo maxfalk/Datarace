@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>7655CEBB-6D95-4663-8B93-33A83432BA24</string>
+	<string>B4D1BBD8-5B4A-45A0-8EA3-6E0AE4DACE9C</string>
 	<key>IDESourceControlProjectName</key>
 	<string>projekt</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D4F07379-2252-4EBC-9FC4-361BF0E751FD</key>
-		<string>https://github.com/maxfalk/OSM.git</string>
+		<key>7D03D785-0D55-4338-8BFB-1016F9B6E6C8</key>
+		<string>https://github.com/maxfalk/Datarace.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>projekt/projekt.xcodeproj/project.xcworkspace</string>
+	<string>app/projekt/projekt.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D4F07379-2252-4EBC-9FC4-361BF0E751FD</key>
-		<string>../../..</string>
+		<key>7D03D785-0D55-4338-8BFB-1016F9B6E6C8</key>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/maxfalk/OSM.git</string>
+	<string>https://github.com/maxfalk/Datarace.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D4F07379-2252-4EBC-9FC4-361BF0E751FD</string>
+	<string>7D03D785-0D55-4338-8BFB-1016F9B6E6C8</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D4F07379-2252-4EBC-9FC4-361BF0E751FD</string>
+			<string>7D03D785-0D55-4338-8BFB-1016F9B6E6C8</string>
 			<key>IDESourceControlWCCName</key>
-			<string>projekt</string>
+			<string>Datarace</string>
 		</dict>
 	</array>
 </dict>
