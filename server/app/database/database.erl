@@ -1,6 +1,12 @@
+%%@doc Author: Max Falk Nilsson
+%% This module conatins fucntions to start and stop
+%% the database connection.
+%%
+%%
+
 -module(database).
 
--export([init/0,test/0]).
+-export([init/0,stop/0]).
 
 %%@doc init login in to database
 %%
@@ -12,25 +18,10 @@ init()->
 				  {database,"datarace"},
 				  {encoding,utf8}]).
 
-%%@doc Checks if the given user name and user password 
-%% match the user in the database
+%%@doc stop the database
 %%
-%%-spec login()
+%%
+%%
+stop()->
+    emysql:remove_pool(database_pool).
 
-%%login(User_name,Password)->
-  
-login(User_name,Password)->  
-    %%get information from the database about the user
-    {_,_,_,Result,_} = emysql:execute(database_pool,
-     <<"select salt,password from tUsers where user_name = "User_name"">>),
-    {Salt,Password} = hd([{S,Pw} || {X,S,Pw} <- Result || X == 1]),
-    %%check if password is the same as recieve password
-    
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%         TESTS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-login_test("max","max")->
-    ?assert(login("max","max") =:= ok).
