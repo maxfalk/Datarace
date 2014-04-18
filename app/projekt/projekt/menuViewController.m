@@ -53,10 +53,10 @@
     [green setStroke];
     [path1 stroke];
     
-    UIColor *red = [UIColor colorWithRed:225/255 green:0/255 blue:0/255 alpha:1];
+    UIColor *red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
     path2.lineWidth = 15.0f;
     path2.lineCapStyle = kCGLineCapRound;
-    [[UIColor redColor] setStroke];
+    [red setStroke];
     [path2 stroke];
     self.drawpad.image = UIGraphicsGetImageFromCurrentImageContext();
     
