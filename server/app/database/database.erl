@@ -1,0 +1,36 @@
+-module(database).
+
+-export([init/0,test/0]).
+
+%%@doc init login in to database
+%%
+%%
+init()->
+    emysql:add_pool(database_pool,[{size,1},
+				  {user,"logger"},
+				  {password,"squats1991"},
+				  {database,"datarace"},
+				  {encoding,utf8}]).
+
+%%@doc Checks if the given user name and user password 
+%% match the user in the database
+%%
+%%-spec login()
+
+%%login(User_name,Password)->
+  
+login(User_name,Password)->  
+    %%get information from the database about the user
+    {_,_,_,Result,_} = emysql:execute(database_pool,
+     <<"select salt,password from tUsers where user_name = "User_name"">>),
+    {Salt,Password} = hd([{S,Pw} || {X,S,Pw} <- Result || X == 1]),
+    %%check if password is the same as recieve password
+    
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%         TESTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+login_test("max","max")->
+    ?assert(login("max","max") =:= ok).
