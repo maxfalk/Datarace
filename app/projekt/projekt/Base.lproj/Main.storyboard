@@ -335,10 +335,10 @@
             </objects>
             <point key="canvasLocation" x="2132" y="-50"/>
         </scene>
-        <!--View Controller-->
+        <!--Challenge View Controller-->
         <scene sceneID="Pes-FH-xyf">
             <objects>
-                <viewController id="sJU-9r-IiU" sceneMemberID="viewController">
+                <viewController id="sJU-9r-IiU" customClass="ChallengeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="M2h-Nb-mkm"/>
                         <viewControllerLayoutGuide type="bottom" id="cKD-7f-IB1"/>
