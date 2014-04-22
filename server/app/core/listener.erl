@@ -32,7 +32,7 @@ connect(initialized, ListenSocket) ->
     end.
 
 handle_info({tcp, _Socket, Packet}, login, AcceptSocket) ->
-    io:format("Received message~n"),
+    io:format("Received message: ~s~n", [binary_to_list(Packet)]),
     gen_tcp:send(AcceptSocket, Packet),    
     {next_state, login, AcceptSocket}.
 
