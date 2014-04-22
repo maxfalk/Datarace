@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface projektViewController : UIViewController  <CLLocationManagerDelegate, UITextFieldDelegate>
+@interface projektViewController : UIViewController  <CLLocationManagerDelegate, UITextFieldDelegate, NSStreamDelegate>
 {
     CLLocationManager *locationManager;
+    NSInputStream *inputStream;
+    NSOutputStream *outputStream;
 }
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 //hejhejhejhejlknaslknöaglknögasö

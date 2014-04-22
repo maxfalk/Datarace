@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChallengeViewController : UIViewController
+@interface ChallengeViewController : UIViewController 
+
+//@property (nonatomic) NSInputStream *inputStream;
+//@property (nonatomic) NSOutputStream *outputStream;
 
 @end

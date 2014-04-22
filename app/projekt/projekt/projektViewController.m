@@ -27,6 +27,8 @@ typedef struct __attribute__ ((packed)) {
 
 - (void)viewDidLoad
 {
+    
+
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
@@ -50,15 +52,13 @@ typedef struct __attribute__ ((packed)) {
     
     _wheel.hidden=YES;
     NSLog(@"%lu", (sizeof(mystruct)));
-
-    
-}
+    }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [super viewWillAppear:animated];
-}
+   }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:NO animated:animated];
@@ -105,9 +105,25 @@ typedef struct __attribute__ ((packed)) {
         [_wheel stopAnimating];
         [_loginButton setTitle:@"Logga in" forState:UIControlStateNormal];
     });
+    [self initNetworkCommunication];
+
+}
+
+-(void)initNetworkCommunication {
+    CFReadStreamRef readStream;
+    CFWriteStreamRef writeStream;
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"localhost", 8888, &readStream, &writeStream);
+    inputStream = (NSInputStream *)readStream;
+    outputStream = (NSOutputStream *)writeStream;
+    [inputStream setDelegate:self];
+    [outputStream setDelegate:self];
+    [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
+    [inputStream open];
+    [outputStream open];
     
-    
+    [self initNetworkCommunication];
 }
 
 
