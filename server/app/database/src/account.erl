@@ -2,7 +2,7 @@
 %% This module contains functions for interacting with 
 %% the databases' accounting operations. Sush as logging in to
 %% the system, loggin out and registering a new user.
-%%
+%% !! NOT FINISHED !!
 -module(account).
 
 -export([login/2,logout/1,register/3]).
@@ -55,21 +55,12 @@ login_helper(Password, User_data)->
       User_name :: string().
 
 get_login_data(User_name)->
-    emysql:prepare(login_user_info,
-		   <<"SELECT id, salt, password from tUsers WHERE user_name = ?">>),
-    Sql_result =  emysql:execute(database_pool, login_user_info, [User_name]),
-    emysql:as_record(Sql_result, login_table, record_info(fields,login_table)).
+    Sql_result = database:query(login_user_info, 
+		  <<"SELECT id, salt, password from tUsers WHERE user_name = ?">>,
+		 [User_name]),
+		 database:result_to_record(Sql_result, login_table).
+
     
-%%@doc Gets the nth row of data from a list.
--spec get_row(List, Num) -> any() | {error,no_item} when
-      List :: list(),
-      Num :: integer().
-
-
-get_row(List, Num) when length(List) > 0->
-    lists:nth(Num,List);
-get_row(_List, _Num) ->
-    {error, no_item}.
 
 %%@doc Checks if two passwords match the input password with salt un hashed and
 %%the stored password hashed.
@@ -97,9 +88,9 @@ crypt(Password)->
       Userid :: integer().
 
 set_loggedin(Userid)->
-    emysql:prepare(login_log_login,
-		   <<"INSERT INTO tLoginLog (userId,login) VALUES(?, now())">>),
-    emysql:execute(database_pool, login_log_login, [Userid]),
+    database:query(login_log_login,
+		   <<"INSERT INTO tLoginLog (userId,login) VALUES(?, now())">>,
+		   [Userid]),
     ok.
 
 
@@ -125,11 +116,11 @@ set_loggedout(Userid)->
       Userid :: integer().
     
 get_user_lastlogin(Userid)->
-    emysql:prepare(loginlog_logout_select,
-		   <<"SELECT max(id) as id FROM tLoginLog WHERE userId = ?">>),
-    Sql_result =  emysql:execute(database_pool, loginlog_logout_select, [Userid]),
-    get_row(emysql:as_record(Sql_result, 
-				     loginlog_table, record_info(fields,loginlog_table)),1).
+    Sql_result = database:query(loginlog_logout_select,
+				<<"SELECT max(id) as id FROM tLoginLog WHERE userId = ?">>,
+				[Userid]),
+    database:get_row(database:result_to_record(Sql_result, 
+					       loginlog_table),1).
     
 
 %%@doc Set the time when the user logged out in the database.
@@ -137,9 +128,9 @@ get_user_lastlogin(Userid)->
       LoginlogId :: integer().
 
 set_logout_time(LoginlogId)->
-    emysql:prepare(loginlog_logout_update,
-		   <<"UPDATE tLoginLog SET logout = now() WHERE id = ?">>),
-    emysql:execute(database_pool, loginlog_logout_update, [LoginlogId]),
+    database:query(loginlog_logout_update,
+		   <<"UPDATE tLoginLog SET logout = now() WHERE id = ?">>,
+		   [LoginlogId]),
     ok.
     
 
@@ -168,10 +159,10 @@ register(User_name, Password, Email)->
       Salt :: string().
 
 register_user(User_name,Password,Email,Salt)->
-    emysql:prepare(register_insert,
+    database:query(register_insert,
 		   <<"INSERT INTO tUsers (user_name, email, register_date,password,salt) 
-                      VALUES(?,?,now(),?,?)">>),
-    emysql:execute(database_pool, register_insert, [User_name,Email,Password,Salt]),
+                      VALUES(?,?,now(),?,?)">>,
+		  [User_name,Email,Password,Salt]),
     ok.
   
 %%@doc Check if user already exist, is already register in the DB.
@@ -194,10 +185,10 @@ check_user_exists(User_name)->
       User_name :: string().
 
 get_user(User_name)->
-    emysql:prepare(register_select,
-		   <<"SELECT id FROM tUsers WHERE user_name = ?">>),
-    Sql_result = emysql:execute(database_pool, register_select, [User_name]),
-    get_row(emysql:as_record(Sql_result,register_table,record_info(fields,register_table)),1).
+    Sql_result = database:query(register_select,
+				<<"SELECT id FROM tUsers WHERE user_name = ?">>,
+				[User_name]),
+    database:get_row(database:result_to_record(Sql_result, register_table), 1).
     
     
 
