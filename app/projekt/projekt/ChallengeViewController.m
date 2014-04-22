@@ -9,8 +9,9 @@
 #import "ChallengeViewController.h"
 
 typedef struct __attribute__ ((packed)) {
-    int a;
-    char c;
+    char info;
+    char username [50];
+    char password [50];
 } mystruct;
 
 
@@ -33,7 +34,6 @@ typedef struct __attribute__ ((packed)) {
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    NSLog((sizeof()));
 }
 
 - (void)didReceiveMemoryWarning
