@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5D170770190692C700355AD3 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D17076F190692C700355AD3 /* GCDAsyncSocket.m */; };
 		C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */; };
 		C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */; };
 		C7B7C7DD18FD17EC0096DB88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B7C7DC18FD17EC0096DB88 /* Foundation.framework */; };
@@ -25,6 +24,7 @@
 		C7B7C80618FD17EC0096DB88 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C7B7C80418FD17EC0096DB88 /* InfoPlist.strings */; };
 		C7B7C80818FD17EC0096DB88 /* projektTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B7C80718FD17EC0096DB88 /* projektTests.m */; };
 		C7ECED5318FD4A0000C3EE81 /* menuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7ECED5218FD4A0000C3EE81 /* menuViewController.m */; };
+		C7F584B41906A47D0040254A /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F584B31906A47D0040254A /* GCDAsyncUdpSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,8 +38,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5D17076E190692BB00355AD3 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = "../../../../../Downloads/CocoaAsyncSocket-master/GCD/GCDAsyncSocket.h"; sourceTree = "<group>"; };
-		5D17076F190692C700355AD3 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = "../../../../../Downloads/CocoaAsyncSocket-master/GCD/GCDAsyncSocket.m"; sourceTree = "<group>"; };
 		C7A7ED3618FFD5BA00DE0740 /* requestTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = requestTableViewController.h; sourceTree = "<group>"; };
 		C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = requestTableViewController.m; sourceTree = "<group>"; };
 		C7A7ED3918FFD89E00DE0740 /* CustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCell.h; sourceTree = "<group>"; };
@@ -65,6 +63,8 @@
 		C7B7C80718FD17EC0096DB88 /* projektTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = projektTests.m; sourceTree = "<group>"; };
 		C7ECED5118FD4A0000C3EE81 /* menuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = menuViewController.h; sourceTree = "<group>"; };
 		C7ECED5218FD4A0000C3EE81 /* menuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = menuViewController.m; sourceTree = "<group>"; };
+		C7F584B21906A47D0040254A /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		C7F584B31906A47D0040254A /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,8 +124,8 @@
 		C7B7C7E218FD17EC0096DB88 /* projekt */ = {
 			isa = PBXGroup;
 			children = (
-				5D17076E190692BB00355AD3 /* GCDAsyncSocket.h */,
-				5D17076F190692C700355AD3 /* GCDAsyncSocket.m */,
+				C7F584B21906A47D0040254A /* GCDAsyncUdpSocket.h */,
+				C7F584B31906A47D0040254A /* GCDAsyncUdpSocket.m */,
 				C7B7C7EB18FD17EC0096DB88 /* projektAppDelegate.h */,
 				C7B7C7EC18FD17EC0096DB88 /* projektAppDelegate.m */,
 				C7B7C7EE18FD17EC0096DB88 /* Main.storyboard */,
@@ -274,8 +274,8 @@
 				C7B7C7E918FD17EC0096DB88 /* main.m in Sources */,
 				C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */,
 				C7B7C7F318FD17EC0096DB88 /* projektViewController.m in Sources */,
+				C7F584B41906A47D0040254A /* GCDAsyncUdpSocket.m in Sources */,
 				C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */,
-				5D170770190692C700355AD3 /* GCDAsyncSocket.m in Sources */,
 				C7ECED5318FD4A0000C3EE81 /* menuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
