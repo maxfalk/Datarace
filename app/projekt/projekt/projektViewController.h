@@ -14,5 +14,6 @@
     CLLocationManager *locationManager;
 }
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+//hejhejhejhejlknaslknöaglknögasö
 
 @end
