@@ -124,13 +124,11 @@
 		C7B7C7E218FD17EC0096DB88 /* projekt */ = {
 			isa = PBXGroup;
 			children = (
-				C7B7C7EB18FD17EC0096DB88 /* projektAppDelegate.h */,
 				5D17076E190692BB00355AD3 /* GCDAsyncSocket.h */,
 				5D17076F190692C700355AD3 /* GCDAsyncSocket.m */,
+				C7B7C7EB18FD17EC0096DB88 /* projektAppDelegate.h */,
 				C7B7C7EC18FD17EC0096DB88 /* projektAppDelegate.m */,
 				C7B7C7EE18FD17EC0096DB88 /* Main.storyboard */,
-				C7342322190684F500E0439D /* ChallengeViewController.h */,
-				C7342323190684F500E0439D /* ChallengeViewController.m */,
 				C7A7ED3918FFD89E00DE0740 /* CustomCell.h */,
 				C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */,
 				C7ECED5118FD4A0000C3EE81 /* menuViewController.h */,
@@ -275,7 +273,6 @@
 				C7B7C7ED18FD17EC0096DB88 /* projektAppDelegate.m in Sources */,
 				C7B7C7E918FD17EC0096DB88 /* main.m in Sources */,
 				C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */,
-				C7342324190684F500E0439D /* ChallengeViewController.m in Sources */,
 				C7B7C7F318FD17EC0096DB88 /* projektViewController.m in Sources */,
 				C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */,
 				5D170770190692C700355AD3 /* GCDAsyncSocket.m in Sources */,
