@@ -27,7 +27,7 @@ typedef struct __attribute__ ((packed)) {
 
 - (void)viewDidLoad
 {
-    
+    [self initNetworkCommunication];
 
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
@@ -96,7 +96,6 @@ typedef struct __attribute__ ((packed)) {
 
     [_loginButton setTitle:@"" forState:UIControlStateNormal];
     [_passwordField resignFirstResponder];
-    
     double delayInSeconds = 0.1;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -105,7 +104,7 @@ typedef struct __attribute__ ((packed)) {
         [_wheel stopAnimating];
         [_loginButton setTitle:@"Logga in" forState:UIControlStateNormal];
     });
-    [self initNetworkCommunication];
+    
 
 }
 
@@ -113,8 +112,8 @@ typedef struct __attribute__ ((packed)) {
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"localhost", 8888, &readStream, &writeStream);
-    inputStream = (NSInputStream *)readStream;
-    outputStream = (NSOutputStream *)writeStream;
+    inputStream = (__bridge NSInputStream *)readStream;
+    outputStream = (__bridge NSOutputStream *)writeStream;
     [inputStream setDelegate:self];
     [outputStream setDelegate:self];
     [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -123,7 +122,6 @@ typedef struct __attribute__ ((packed)) {
     [inputStream open];
     [outputStream open];
     
-    [self initNetworkCommunication];
 }
 
 
