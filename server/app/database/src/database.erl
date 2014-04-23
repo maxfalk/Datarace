@@ -7,7 +7,9 @@
 -module(database).
 
 -export([init/0,stop/0]).
+-export([db_query/3,db_query/1,get_row/2,result_to_record/2]).
 
+-include("../include/database.hrl").
 %%@doc init login in to database
 %%
 %%
@@ -29,11 +31,11 @@ stop()->
 %%
 %%
 %%
-query(Binary_string)->
+db_query(Binary_string)->
 	emysql:execute(database_pool, Binary_string).
 
 
-query(Name, Binary_string, Args)->
+db_query(Name, Binary_string, Args)->
 	emysql:prepare(Name, Binary_string),
 	emysql:execute(database_pool, Name, Args).
 
@@ -49,9 +51,16 @@ get_row(List, Num) when length(List) > 0->
 get_row(_List, _Num) ->
     {error, no_item}.
 
-
 %%@doc
 %%
 %%
 result_to_record(Sql_result, Record)->
-        emysql:as_record(Sql_result, Record, record_info(fields, Record)).
+    case Record of
+	login_table ->
+	    emysql:as_record(Sql_result, login_table, record_info(fields, login_table));
+	loginlog_table ->
+	   emysql:as_record(Sql_result, loginlog_table, record_info(fields, loginlog_table));
+	register_table ->
+	    emysql:as_record(Sql_result, register_table, record_info(fields, register_table))
+    end.
+	        

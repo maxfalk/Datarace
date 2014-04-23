@@ -38,8 +38,10 @@ connect(initialized, ListenSocket) ->
 
 login({?LOGIN_INFO, Packet}, AcceptSocket) ->
     inet:setopts(AcceptSocket, [{active, once}]),
-    case Packet of
-	<<"login">> -> 
+    {UserName, Password} = packconv:convert_pack(0,Packet),
+    io:format("UN: ~p, PW: ~p",[UserName,Password]),
+    case account:login(UserName, Password) of
+	{ok, UserId} -> 
 	    gen_tcp:send(AcceptSocket, <<"You are logged in">>),
 	    io:format("Logged in~n"),
 	    {next_state, login, AcceptSocket};

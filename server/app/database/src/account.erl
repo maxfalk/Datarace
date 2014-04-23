@@ -7,14 +7,8 @@
 
 -export([login/2,logout/1,register/3]).
 
-%%@doc Records to hold database collected data.
--record(login_table, {id :: integer(), salt :: string(), password :: string()}).
--record(loginlog_table, {id :: integer()}).
--record(register_table,{id :: integer()}).
+-include("../include/database.hrl").
 
--type login_table() :: {integer(), string(), string()}.
--type loginlog_table() :: {integer()}.
--type register_table() :: {integer()}.
 
 %%@doc Looks at the user and password combinations if it is valid 
 %% and matches a register user.
@@ -37,7 +31,7 @@ login_helper(_Password, [])->
     %%logg attempeted loggin?
     {error, no_user};
 login_helper(Password, User_data)->
-    Login_rec = get_row(User_data,1),
+    Login_rec = database:get_row(User_data,1),
     Password_salt = Password ++ binary_to_list(Login_rec#login_table.salt),
     io:format("User logging in: ~p , ~p~n",[Login_rec#login_table.id,Password_salt]),
     case check_password(Password_salt ,Login_rec#login_table.password) of
@@ -55,10 +49,10 @@ login_helper(Password, User_data)->
       User_name :: string().
 
 get_login_data(User_name)->
-    Sql_result = database:query(login_user_info, 
-		  <<"SELECT id, salt, password from tUsers WHERE user_name = ?">>,
+    Sql_result = database:db_query(login_user_info, 
+			    <<"SELECT id, salt, password from tUsers WHERE user_name = ?">>,
 		 [User_name]),
-		 database:result_to_record(Sql_result, login_table).
+			       database:result_to_record(Sql_result, login_table).
 
     
 
@@ -88,7 +82,7 @@ crypt(Password)->
       Userid :: integer().
 
 set_loggedin(Userid)->
-    database:query(login_log_login,
+    database:db_query(login_log_login,
 		   <<"INSERT INTO tLoginLog (userId,login) VALUES(?, now())">>,
 		   [Userid]),
     ok.
@@ -116,7 +110,7 @@ set_loggedout(Userid)->
       Userid :: integer().
     
 get_user_lastlogin(Userid)->
-    Sql_result = database:query(loginlog_logout_select,
+    Sql_result = database:db_query(loginlog_logout_select,
 				<<"SELECT max(id) as id FROM tLoginLog WHERE userId = ?">>,
 				[Userid]),
     database:get_row(database:result_to_record(Sql_result, 
@@ -128,7 +122,7 @@ get_user_lastlogin(Userid)->
       LoginlogId :: integer().
 
 set_logout_time(LoginlogId)->
-    database:query(loginlog_logout_update,
+    database:db_query(loginlog_logout_update,
 		   <<"UPDATE tLoginLog SET logout = now() WHERE id = ?">>,
 		   [LoginlogId]),
     ok.
@@ -159,7 +153,7 @@ register(User_name, Password, Email)->
       Salt :: string().
 
 register_user(User_name,Password,Email,Salt)->
-    database:query(register_insert,
+    database:db_query(register_insert,
 		   <<"INSERT INTO tUsers (user_name, email, register_date,password,salt) 
                       VALUES(?,?,now(),?,?)">>,
 		  [User_name,Email,Password,Salt]),
@@ -185,7 +179,7 @@ check_user_exists(User_name)->
       User_name :: string().
 
 get_user(User_name)->
-    Sql_result = database:query(register_select,
+    Sql_result = database:db_query(register_select,
 				<<"SELECT id FROM tUsers WHERE user_name = ?">>,
 				[User_name]),
     database:get_row(database:result_to_record(Sql_result, register_table), 1).
