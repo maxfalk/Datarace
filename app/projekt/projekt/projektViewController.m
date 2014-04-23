@@ -11,6 +11,7 @@
 #import "projektViewController.h"
 
 typedef struct __attribute__ ((packed)) {
+    uint32_t length;
     char info;
     char username [50];
     char password [50];
@@ -25,16 +26,15 @@ typedef struct __attribute__ ((packed)) {
 
 @implementation projektViewController 
 
-- (void)viewDidLoad
-{
-    [self initNetworkCommunication];
-
+- (void)viewDidLoad {
+    NSLog(@"%lu", sizeof(mystruct));
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
     locationManager = [[CLLocationManager alloc] init];
     locationManager.delegate = self;
     [locationManager startUpdatingLocation];
+    
     NSLog(@"latitude= %f longitude = %f",locationManager.location.coordinate.latitude, locationManager.location.coordinate.latitude);
 
     UIColor *babyBlue = [UIColor colorWithRed:0.4 green:0.6 blue:0.72 alpha:1];
@@ -52,7 +52,7 @@ typedef struct __attribute__ ((packed)) {
     
     _wheel.hidden=YES;
     NSLog(@"%lu", (sizeof(mystruct)));
-    }
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -65,7 +65,7 @@ typedef struct __attribute__ ((packed)) {
     [super viewWillDisappear:animated];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)didReceiveMemoryWaring
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -91,20 +91,41 @@ typedef struct __attribute__ ((packed)) {
 }
 
 - (IBAction)loginButtonPressed:(id)sender {
+   
     _wheel.hidden = NO;
     [_wheel startAnimating];
-
+    [self initNetworkCommunication];
     [_loginButton setTitle:@"" forState:UIControlStateNormal];
     [_passwordField resignFirstResponder];
     double delayInSeconds = 0.1;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if (true /* login success*/ ) {
          [self performSegueWithIdentifier:@"login" sender:self];
+        } else {
+            NSLog(@"Login failed");
+        }
         _wheel.hidden=YES;
         [_wheel stopAnimating];
         [_loginButton setTitle:@"Logga in" forState:UIControlStateNormal];
     });
     
+    const char *user = [_usernameField.text UTF8String];
+    const char *pass = [_passwordField.text UTF8String];
+
+    
+    uint32_t myInt32Value = 101;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    mystruct packet;
+    packet.length = myInt32AsABigEndianNumber;
+    *packet.username = *user;
+    *packet.username = *pass;
+    
+    //NSData *usernameData = [[NSData alloc] initWithData:
+    
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(mystruct)];
+    //[outputStream write:mystruct maxLength:[usernameData length]];
 
 }
 
@@ -124,7 +145,76 @@ typedef struct __attribute__ ((packed)) {
     
 }
 
-
+- (void)addBounceAnimationToView:(UIView *)view {
+    CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+    
+    bounceAnimation.values = @[@(1), @(0.9), @(1.1), @(1)];
+    
+    bounceAnimation.duration = 0.6;
+    NSMutableArray *timingFunctions = [[NSMutableArray alloc] initWithCapacity:bounceAnimation.values.count];
+    
+    for (NSUInteger i = 0; i < bounceAnimation.values.count; i++) {
+        [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    }
+    
+    [bounceAnimation setTimingFunctions:timingFunctions.copy];
+    bounceAnimation.removedOnCompletion = NO;
+    
+    [view.layer addAnimation:bounceAnimation forKey:@"bounce"];
+}
+/*
+-(void) sendDataToServer:(CLLocation *)newLocation
+{
+    NSLog(@"Sending Data to Server");
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // I also want to send the battery level to the server. Get battery level
+        [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
+        float batteryLevel = [[UIDevice currentDevice] batteryLevel];
+        
+        float lat = newLocation.coordinate.latitude;
+        float lng = newLocation.coordinate.longitude;
+        NSLog(@"Accuracy: %f", newLocation.horizontalAccuracy);
+        NSString *userId = [[NSUserDefaults standardUserDefaults] stringForKey:@"userId"];
+        
+        // This is the data I am sending to the server
+        // I am sending a userID that the server recognizes
+        // I am sending the latitude and longitude of the user as well as their speed course and battery life
+        // I am also sending the horizontal & vertical accuracy so I can see how accurate the gps location was
+        NSString *post = [[NSString alloc] initWithFormat:@"login_id=%@&latitude=%f&longitude=%f&speed=%f&course=%f&battery_level=%f&horizontal_accuracy=%f&vertical_accuracy=%f",
+                          userId,
+                          lat,
+                          lng,
+                          [newLocation speed],
+                          [newLocation course],
+                          batteryLevel,
+                          newLocation.horizontalAccuracy,
+                          newLocation.verticalAccuracy];
+        
+        NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        
+        NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+        
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        NSString *urlstring = [NSString stringWithFormat:@"%@webservice/post_logins_location.php", kBaseURL];
+        [request setURL:[NSURL URLWithString:urlstring]];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        [request setHTTPBody:postData];
+        
+        NSError *error;
+        NSURLResponse *response;
+        NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        
+        if (!error) {
+            jsonResults = [NSJSONSerialization JSONObjectWithData:urlData options:kNilOptions error:&error];
+            NSLog(@"GPS Send results: %@", jsonResults);
+        } else {
+            NSLog(@"Error sending GPS data to server");
+        }
+    });
+}
+*/
 
 
 @end

@@ -81,6 +81,13 @@
     UIGraphicsEndImageContext();
     //[self.view addSubview:self.drawpad];
     */
+    
+    
+    CABasicAnimation *animateStrokeEnd = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    animateStrokeEnd.duration  = 2;
+    animateStrokeEnd.fromValue = [NSNumber numberWithFloat:0.0f];
+    animateStrokeEnd.toValue   = [NSNumber numberWithFloat:1.0f];
+    [self.drawpad.layer addAnimation:animateStrokeEnd forKey:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -131,6 +138,8 @@
     CGContextAddArc(ctx, center.x, center.y, 100.0, 0, 2*M_PI, 0);
     CGContextStrokePath(ctx);
 }
+
+
 
 /*
 #pragma mark - Navigation
