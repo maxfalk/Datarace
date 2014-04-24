@@ -22,7 +22,7 @@
                                 <color key="backgroundColor" red="0.90588235294117647" green="0.40000000000000002" blue="0.36078431372549019" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
                                 <size key="titleShadowOffset" width="4" height="4"/>
-                                <state key="normal" title="Log in">
+                                <state key="normal" title="Login">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -106,7 +106,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="WB7-au-axN" kind="push" id="c6K-Sj-079"/>
+                                    <segue destination="hXZ-KW-ZzZ" kind="push" id="POo-SL-Klq"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D7z-zy-BuZ">
@@ -352,9 +352,52 @@
             </objects>
             <point key="canvasLocation" x="2204" y="-50"/>
         </scene>
+        <!--Challengelist Table View Controller-->
+        <scene sceneID="hd7-jq-ypZ">
+            <objects>
+                <tableViewController id="hXZ-KW-ZzZ" customClass="ChallengelistTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q8c-vL-frE">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="vuG-Cf-EJH">
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vuG-Cf-EJH" id="NeC-JK-B5j">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="hXZ-KW-ZzZ" id="Hnc-Co-nw8"/>
+                            <outlet property="delegate" destination="hXZ-KW-ZzZ" id="KoM-K5-IdK"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="f1C-Qt-nZp">
+                        <nil key="title"/>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="M3H-wt-FRU">
+                            <rect key="frame" x="113" y="5" width="94" height="34"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <state key="normal" title="Competitor">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="WB7-au-axN" kind="push" identifier="challenge" id="7qm-KA-zx8"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F6s-qh-YI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1387" y="-775"/>
+        </scene>
         <!--Challenge View Controller-->
         <scene sceneID="Xz8-ER-5RT">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kga-DJ-Cvd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="WB7-au-axN" customClass="ChallengeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NxU-wt-HTl"/>
@@ -421,9 +464,8 @@
                         <outlet property="distanceSlider" destination="lyE-0J-EoH" id="q3u-rq-fEw"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Kga-DJ-Cvd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1597" y="-784"/>
+            <point key="canvasLocation" x="1794" y="-775"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="FLD-l6-0bl">

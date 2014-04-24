@@ -35,8 +35,15 @@ typedef struct __attribute__ ((packed)) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    _distanceLabel.hidden=YES;
+    _distanceSlider.hidden=YES;
+    _distanceLabel.text=@"distance";
 
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 
@@ -69,12 +76,7 @@ typedef struct __attribute__ ((packed)) {
     UISlider *slider = (UISlider *)sender;
     NSInteger val = lround(slider.value);
     self.distanceLabel.text = [NSString stringWithFormat:@"%li km",(long)val];
-
-    
 }
-
-
-
 
 
 

@@ -14,6 +14,10 @@
 		C77FDC541907B66E00AB6244 /* SBJson4StreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = C77FDC4B1907B66E00AB6244 /* SBJson4StreamWriter.m */; };
 		C77FDC551907B66E00AB6244 /* SBJson4StreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = C77FDC4D1907B66E00AB6244 /* SBJson4StreamWriterState.m */; };
 		C77FDC561907B66E00AB6244 /* SBJson4Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = C77FDC4F1907B66E00AB6244 /* SBJson4Writer.m */; };
+		C77FDC681907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C77FDC651907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoTableViewCell.m */; };
+		C77FDC691907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C77FDC671907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoViewController.m */; };
+		C77FDC6C1907F98400AB6244 /* RMSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C77FDC6B1907F98400AB6244 /* RMSwipeTableViewCell.m */; };
+		C77FDC6F1907FAAC00AB6244 /* ChallengelistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C77FDC6E1907FAAC00AB6244 /* ChallengelistTableViewController.m */; };
 		C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */; };
 		C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */; };
 		C7B7C7DD18FD17EC0096DB88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B7C7DC18FD17EC0096DB88 /* Foundation.framework */; };
@@ -61,6 +65,14 @@
 		C77FDC4D1907B66E00AB6244 /* SBJson4StreamWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamWriterState.m; sourceTree = "<group>"; };
 		C77FDC4E1907B66E00AB6244 /* SBJson4Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4Writer.h; sourceTree = "<group>"; };
 		C77FDC4F1907B66E00AB6244 /* SBJson4Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4Writer.m; sourceTree = "<group>"; };
+		C77FDC641907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMSwipeTableViewCelliOS7UIDemoTableViewCell.h; sourceTree = "<group>"; };
+		C77FDC651907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMSwipeTableViewCelliOS7UIDemoTableViewCell.m; sourceTree = "<group>"; };
+		C77FDC661907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMSwipeTableViewCelliOS7UIDemoViewController.h; sourceTree = "<group>"; };
+		C77FDC671907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMSwipeTableViewCelliOS7UIDemoViewController.m; sourceTree = "<group>"; };
+		C77FDC6A1907F98400AB6244 /* RMSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMSwipeTableViewCell.h; sourceTree = "<group>"; };
+		C77FDC6B1907F98400AB6244 /* RMSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMSwipeTableViewCell.m; sourceTree = "<group>"; };
+		C77FDC6D1907FAAC00AB6244 /* ChallengelistTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChallengelistTableViewController.h; sourceTree = "<group>"; };
+		C77FDC6E1907FAAC00AB6244 /* ChallengelistTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChallengelistTableViewController.m; sourceTree = "<group>"; };
 		C7A7ED3618FFD5BA00DE0740 /* requestTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = requestTableViewController.h; sourceTree = "<group>"; };
 		C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = requestTableViewController.m; sourceTree = "<group>"; };
 		C7A7ED3918FFD89E00DE0740 /* CustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCell.h; sourceTree = "<group>"; };
@@ -176,7 +188,15 @@
 				C7F584B31906A47D0040254A /* GCDAsyncUdpSocket.m */,
 				C7F584B51906A7F90040254A /* ChallengeViewController.h */,
 				C7F584B61906A7F90040254A /* ChallengeViewController.m */,
+				C77FDC6D1907FAAC00AB6244 /* ChallengelistTableViewController.h */,
+				C77FDC6E1907FAAC00AB6244 /* ChallengelistTableViewController.m */,
 				C7B7C7EE18FD17EC0096DB88 /* Main.storyboard */,
+				C77FDC6A1907F98400AB6244 /* RMSwipeTableViewCell.h */,
+				C77FDC6B1907F98400AB6244 /* RMSwipeTableViewCell.m */,
+				C77FDC641907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoTableViewCell.h */,
+				C77FDC651907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoTableViewCell.m */,
+				C77FDC661907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoViewController.h */,
+				C77FDC671907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoViewController.m */,
 				C7A7ED3918FFD89E00DE0740 /* CustomCell.h */,
 				C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */,
 				C7ECED5118FD4A0000C3EE81 /* menuViewController.h */,
@@ -322,14 +342,18 @@
 			files = (
 				C77FDC511907B66E00AB6244 /* SBJson4StreamParser.m in Sources */,
 				C77FDC541907B66E00AB6244 /* SBJson4StreamWriter.m in Sources */,
+				C77FDC691907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoViewController.m in Sources */,
 				C7B7C7ED18FD17EC0096DB88 /* projektAppDelegate.m in Sources */,
+				C77FDC6F1907FAAC00AB6244 /* ChallengelistTableViewController.m in Sources */,
 				C77FDC531907B66E00AB6244 /* SBJson4StreamTokeniser.m in Sources */,
 				C77FDC561907B66E00AB6244 /* SBJson4Writer.m in Sources */,
 				C7B7C7E918FD17EC0096DB88 /* main.m in Sources */,
+				C77FDC6C1907F98400AB6244 /* RMSwipeTableViewCell.m in Sources */,
 				C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */,
 				C77FDC521907B66E00AB6244 /* SBJson4StreamParserState.m in Sources */,
 				C77FDC501907B66E00AB6244 /* SBJson4Parser.m in Sources */,
 				C7B7C7F318FD17EC0096DB88 /* projektViewController.m in Sources */,
+				C77FDC681907F95900AB6244 /* RMSwipeTableViewCelliOS7UIDemoTableViewCell.m in Sources */,
 				C7F584B41906A47D0040254A /* GCDAsyncUdpSocket.m in Sources */,
 				C77FDC551907B66E00AB6244 /* SBJson4StreamWriterState.m in Sources */,
 				C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */,

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface projektViewController : UIViewController  <CLLocationManagerDelegate, UITextFieldDelegate, NSStreamDelegate>
+@interface projektViewController : UIViewController  <CLLocationManagerDelegate, UITextFieldDelegate, NSStreamDelegate, UIAlertViewDelegate>
 {
     CLLocationManager *locationManager;
     NSInputStream *inputStream;
