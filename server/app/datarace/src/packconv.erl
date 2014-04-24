@@ -6,15 +6,20 @@
 
 -export([convert_pack/2]).
 
+-include("../include/types.hrl").
+
+
 %%@doc convert a received message to a easier read format
 %%
 %%
 
-convert_pack(Type,Data)->
+convert_pack(Type, Data)->
     List_data = binary_to_list(Data),
     case Type of
-	0 ->
-	    login_pack(List_data)
+	?LOGIN ->
+	    login_pack(List_data);
+	?REGISTER ->
+	    register_pack(List_data)
     end.
     
 
@@ -23,7 +28,14 @@ convert_pack(Type,Data)->
 %%
 
 login_pack(List)->
-    {Username, Password} = lists:split(50,List),
+    {Username, Password} = lists:split(50, List),
     {[X || X <- Username, X =/= 0], [X || X <- Password, X =/= 0]}.
 
+
+register_pack(List)->
+    {Username, Rest} = lists:split(50, List),
+    {Password, Email} = lists:split(50, Rest),    
+    {[X || X <- Username, X =/= 0], 
+     [X || X <- Password, X =/= 0], 
+     [X || X <- Email, X =/= 0]}.
 
