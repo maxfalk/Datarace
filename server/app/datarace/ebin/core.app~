@@ -1,0 +1,7 @@
+{application, datarace,
+ [{description, "Datarace main server"},
+  {vsn, "0.0.0"},
+  {mod, {core, []}},
+  {registered, []},
+  {modules, [core, master_sup, listener, client_serv, packconv]},
+  {applications, [stdlib, kernel, emysql, database]}]}.

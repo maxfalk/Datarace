@@ -1,4 +1,0 @@
-
--module(account).
-
--export([login/2,logout/1]).
