@@ -16,7 +16,7 @@
 convert_pack(Type, Data)->
     List_data = binary_to_list(Data),
     case Type of
-	?LOGIN_INFO ->
+	?LOGIN ->
 	    login_pack(List_data)
     end.
     
