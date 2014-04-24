@@ -12,5 +12,6 @@
 
 //@property (nonatomic) NSInputStream *inputStream;
 //@property (nonatomic) NSOutputStream *outputStream;
+@property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 
 @end
