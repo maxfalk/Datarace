@@ -1,0 +1,15 @@
+
+
+-module(core).
+
+-behaviour(application).
+
+-export([start/0,stop/0]).
+
+
+start()->
+    master_sup:start_link().
+
+
+stop(_)->
+    ok.
