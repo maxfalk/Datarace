@@ -139,6 +139,15 @@
     CGContextStrokePath(ctx);
 }
 
+- (IBAction)signOutButtonPressed:(id)sender {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign out"
+                                                    message:@"Do you want to sign out?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes",nil];
+    [alert show];
+
+}
 
 
 /*

@@ -17,6 +17,11 @@ typedef struct __attribute__ ((packed)) {
     char password [50];
 } mystruct;
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char info;
+} loginOutput;
+
 @interface projektViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -97,42 +102,137 @@ typedef struct __attribute__ ((packed)) {
     [self initNetworkCommunication];
     [_loginButton setTitle:@"" forState:UIControlStateNormal];
     [_passwordField resignFirstResponder];
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        if (true /* login success*/ ) {
-         [self performSegueWithIdentifier:@"login" sender:self];
+    
+    //double delayInSeconds = 0.1;
+    //dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    //dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        //if (NSStreamEventErrorOccurred) {
+         //[self performSegueWithIdentifier:@"login" sender:self];
+    /*if
+            NSLog(@"stream failed");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Could not connect to server"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:@"Retry",nil];
+            [alert show];
+            
         } else {
-            NSLog(@"Login failed");
-        }
+         */
+           [self performSegueWithIdentifier:@"login" sender:self];
+       // }
         _wheel.hidden=YES;
         [_wheel stopAnimating];
         [_loginButton setTitle:@"Logga in" forState:UIControlStateNormal];
-    });
+   // });
+    
     
     const char *user = [_usernameField.text UTF8String];
     const char *pass = [_passwordField.text UTF8String];
-
+    uint32_t structInfo = 0;
+    uint32_t myInt32AsABigEndianNumber2 = CFSwapInt32HostToBig(structInfo);
     
     uint32_t myInt32Value = 101;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
     mystruct packet;
     packet.length = myInt32AsABigEndianNumber;
-    *packet.username = *user;
-    *packet.username = *pass;
+    packet.info = myInt32AsABigEndianNumber2;
+    memset(packet.username, 0, 50);
+    strcpy(packet.username, user);
+    memset(packet.password, 0, 50);
+    strcpy(packet.password, pass);
+    
+    loginOutput message;
+
     
     //NSData *usernameData = [[NSData alloc] initWithData:
-    
+    //char buffer[2];
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(mystruct)];
-    //[outputStream write:mystruct maxLength:[usernameData length]];
+    //[inputStream read:((uint8_t *)&buffer) maxLength:sizeof(buffer)];
+    
+    NSInteger result;
+    uint8_t buffer[20]; // BUFFER_LEN can be any positive integer
+    [inputStream read:buffer maxLength:sizeof(buffer)];
+        if(buffer) {
+           //login success
+    } else {
+        
+        }
+    
 
 }
+
+- (void)stream:(NSInputStream *)iStream handleEvent:(NSStreamEvent)event {
+    BOOL shouldClose = NO;
+    switch(event) {
+        case  NSStreamEventEndEncountered:
+            shouldClose = YES;
+            // If all data hasn't been read, fall through to the "has bytes" event
+            if(![iStream hasBytesAvailable]) break;
+        case NSStreamEventHasBytesAvailable: ; // We need a semicolon here before we can declare local variables
+            uint8_t *buffer;
+            NSUInteger length;
+            BOOL freeBuffer = NO;
+            // The stream has data. Try to get its internal buffer instead of creating one
+            if(![inputStream getBuffer:&buffer length:&length]) {
+                // The stream couldn't provide its internal buffer. We have to make one ourselves
+                buffer = malloc(sizeof(buffer) * sizeof(uint8_t));
+                freeBuffer = YES;
+                NSInteger result = [inputStream read:buffer maxLength:sizeof(buffer)];
+                if(result < 0) {
+                    // error copying to buffer
+                    break;
+                }
+                length = result;
+            }
+            // length bytes of data in buffer
+            if(freeBuffer) free(buffer);
+            break;
+        case NSStreamEventErrorOccurred:
+            // some other error
+            shouldClose = YES;
+            break;
+    }
+    if(shouldClose) [inputStream close];
+}
+
+
+/*
+
+- (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode {
+    NSLog(@"got an event");
+    switch (eventCode) {
+        case NSStreamEventHasSpaceAvailable:
+            NSLog(@"None!");
+            break;
+        case NSStreamEventOpenCompleted:
+            NSLog(@"Stream opened");
+            break;
+        case NSStreamEventHasBytesAvailable:
+            NSLog(@"NSStreamEventHasBytesAvail");
+
+            
+            [inputStream close];
+            [inputStream removeFromRunLoop:[NSRunLoop currentRunLoop]forMode:NSDefaultRunLoopMode];
+            break;
+        case NSStreamEventErrorOccurred:
+            NSLog(@"CONNECTION ERROR: Connection to the host  failed!");
+            break;
+        case NSStreamEventEndEncountered:
+            NSLog(@"Stream Closed");
+            break;    
+        default:
+            break;
+    } 
+}
+ */
+
 
 -(void)initNetworkCommunication {
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"localhost", 8888, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.5.227", 8888, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *)readStream;
     outputStream = (__bridge NSOutputStream *)writeStream;
     [inputStream setDelegate:self];
@@ -162,59 +262,13 @@ typedef struct __attribute__ ((packed)) {
     
     [view.layer addAnimation:bounceAnimation forKey:@"bounce"];
 }
-/*
--(void) sendDataToServer:(CLLocation *)newLocation
-{
-    NSLog(@"Sending Data to Server");
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // I also want to send the battery level to the server. Get battery level
-        [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
-        float batteryLevel = [[UIDevice currentDevice] batteryLevel];
-        
-        float lat = newLocation.coordinate.latitude;
-        float lng = newLocation.coordinate.longitude;
-        NSLog(@"Accuracy: %f", newLocation.horizontalAccuracy);
-        NSString *userId = [[NSUserDefaults standardUserDefaults] stringForKey:@"userId"];
-        
-        // This is the data I am sending to the server
-        // I am sending a userID that the server recognizes
-        // I am sending the latitude and longitude of the user as well as their speed course and battery life
-        // I am also sending the horizontal & vertical accuracy so I can see how accurate the gps location was
-        NSString *post = [[NSString alloc] initWithFormat:@"login_id=%@&latitude=%f&longitude=%f&speed=%f&course=%f&battery_level=%f&horizontal_accuracy=%f&vertical_accuracy=%f",
-                          userId,
-                          lat,
-                          lng,
-                          [newLocation speed],
-                          [newLocation course],
-                          batteryLevel,
-                          newLocation.horizontalAccuracy,
-                          newLocation.verticalAccuracy];
-        
-        NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-        
-        NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-        
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-        NSString *urlstring = [NSString stringWithFormat:@"%@webservice/post_logins_location.php", kBaseURL];
-        [request setURL:[NSURL URLWithString:urlstring]];
-        [request setHTTPMethod:@"POST"];
-        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [request setHTTPBody:postData];
-        
-        NSError *error;
-        NSURLResponse *response;
-        NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-        
-        if (!error) {
-            jsonResults = [NSJSONSerialization JSONObjectWithData:urlData options:kNilOptions error:&error];
-            NSLog(@"GPS Send results: %@", jsonResults);
-        } else {
-            NSLog(@"Error sending GPS data to server");
-        }
-    });
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 1) {
+        [self loginButtonPressed:self];
+    }
 }
-*/
 
 
 @end
