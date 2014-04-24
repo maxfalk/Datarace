@@ -1,5 +1,9 @@
 
-%% listener
+%% @doc Author: Max Reeves
+
+%%====================================================================
+%% Listener
+%%====================================================================
 
 -module(listener).
 -behaviour(gen_fsm).
@@ -7,24 +11,39 @@
 -export([start_link/1]).
 -export([init/1, connect/2, login/2, terminate/3, handle_info/3]).
 
--define(LOGIN_INFO, <<0>>).
--define(LOGIN_REPLY, <<1>>).
--define(REGISTER_INFO, <<2>>).
+-include("../include/types.hrl").
 
 
+%%====================================================================
 %% Server API
+%%====================================================================
+
+%% @doc Starts a new Listener process, waiting for incoming client
+%% connections. Once a connection is established, it will wait for the
+%% client to log in and spawn a new client_serv process to handle the
+%% connection.
 
 start_link(ListenSocket) ->
     gen_fsm:start_link(?MODULE, ListenSocket, []).
 
 
+%%====================================================================
 %% Callback functions
+%%====================================================================
+
+
+%% @doc Initializes the Listener and tells the gen_fsm behaviour to  
+%% go to and execute the connect state directly.
 
 init(ListenSocket) ->
     io:format("Initializing~n"),
     gen_fsm:send_event(self(), initialized),
     {ok, connect, ListenSocket}.
 
+
+%% @doc Waits for incoming connections. Moves to the login state if 
+%% a connection was successfully established. Stops the process otherwise.
+ 
 connect(initialized, ListenSocket) ->
     case gen_tcp:accept(ListenSocket) of
 	{ok, AcceptSocket} ->
@@ -36,33 +55,56 @@ connect(initialized, ListenSocket) ->
 	    {stop, Reason, ListenSocket} 
     end.
 
-login({?LOGIN_INFO, Packet}, AcceptSocket) ->
-    inet:setopts(AcceptSocket, [{active, once}]),
-    {UserName, Password} = packconv:convert_pack(0,Packet),
-    io:format("UN: ~p, PW: ~p",[UserName,Password]),
+
+%% @doc 
+
+login({?LOGIN, Packet}, AcceptSocket) ->
+    {UserName, Password} = packconv:convert_pack(?LOGIN, Packet),
+    io:format("UN: ~p, PW: ~p", [UserName, Password]),
     case account:login(UserName, Password) of
-	{ok, UserId} -> 
-	    gen_tcp:send(AcceptSocket, <<"You are logged in">>),
+	{ok, UserId} ->
+	    gen_tcp:send(AcceptSocket, ?LOGIN_TRUE),
 	    io:format("Logged in~n"),
+	    %% Spawn new client_serv process and give it control over AcceptSocket 
+	    %% and UserId, then stop this process
+	    {stop, normal, AcceptSocket};
+	{error, no_user} -> 
+	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_USERNAME),
+	    io:format("Login in failed: Wrong username~n"),
 	    {next_state, login, AcceptSocket};
-	_Packet -> 
-	    gen_tcp:send(AcceptSocket, <<"Login failed">>),
-	    io:format("Login in failed~n"),
+	{error, wrong_password} ->
+	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_PASSWORD),
+	    io:format("Login in failed: Wrong password~n"),
 	    {next_state, login, AcceptSocket}
     end;
+login({?REGISTER, _Packet}, AcceptSocket) ->
+    %% Try to register a user and stay in the login state
+    {next_state, login, AcceptSocket};
 login(Packet, AcceptSocket) ->
-    inet:setopts(AcceptSocket, [{active, once}]),
+    %% Received an unknown packet, log it and stay in the state
     io:format("Received weird message: ~w~n", [Packet]),
     {stop, normal, AcceptSocket}.
 
-handle_info({tcp, _, <<Type:1/binary, Packet/binary>>}, State, Socket) ->
-    ?MODULE:State({Type, Packet}, Socket);
-handle_info({tcp, _t, <<Type:1/binary>>}, State, Socket) ->
-    ?MODULE:State(Type, Socket);
+
+%% @doc Receives {tcp, Socket, Package} messages as events and forwards 
+%% them to the correct state. Returns {stop, normal, Socket} if the message 
+%% is {tcp_closed, Reason} or {tcp_error, Socket, Reason}, which will 
+%% terminate the process and execute terminate/3.
+
+handle_info({tcp, _, <<Type:1/binary, Packet/binary>>}, State, AcceptSocket) ->
+    inet:setopts(AcceptSocket, [{active, once}]),
+    ?MODULE:State({Type, Packet}, AcceptSocket);
+handle_info({tcp, _t, <<Type:1/binary>>}, State, AcceptSocket) ->
+    inet:setopts(AcceptSocket, [{active, once}]),
+    ?MODULE:State(Type, AcceptSocket);
 handle_info({tcp_closed, _}, _State, Socket) ->
     {stop, normal, Socket};
 handle_info({tcp_error, _, _Reason}, _State, Socket) ->
     {stop, normal, Socket}.
 
-terminate(_Reason, _State, _Socket) ->
+
+terminate(_Reason, connect, _ListenSocket) ->
+    io:format("Terminating~n");
+terminate(_Reason, _State, AcceptSocket) ->
+    gen_tcp:close(AcceptSocket),
     io:format("Terminating~n").
