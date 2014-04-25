@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "NetworkConnectionClass.h"
 
-@interface projektViewController : UIViewController  <CLLocationManagerDelegate, UITextFieldDelegate, NSStreamDelegate, UIAlertViewDelegate>
+
+@interface projektViewController : UIViewController  <CLLocationManagerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 {
     CLLocationManager *locationManager;
-    NSInputStream *inputStream;
-    NSOutputStream *outputStream;
 }
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
-//hejhejhejhejlknaslknöaglknögasö
+
+//@property (nonatomic) NetworkConnectionClass *networkConnection;
+//+(NetworkConnectionClass *)networkConnection;
+//-(void)initNetworkCommunication;
 
 @end
