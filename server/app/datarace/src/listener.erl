@@ -48,13 +48,15 @@ init(ListenSocket) ->
 
 
 %% @doc Waits for incoming connections. Moves to the login state if 
-%% a connection was successfully established. Stops the process otherwise.
+%% a connection was successfully established. Stops the process 
+%% otherwise.
  
 -spec connect(initialized, ListenSocket) -> Result when
       ListenSocket :: socket(),
       AcceptSocket :: socket(),
       Reason :: term(),
-      Result :: {next_state, login, AcceptSocket} | {stop, Reason, ListenSocket}.
+      Result :: {next_state, login, AcceptSocket} | 
+		{stop, Reason, ListenSocket}.
 
 connect(initialized, ListenSocket) ->
     case gen_tcp:accept(ListenSocket) of
@@ -68,12 +70,13 @@ connect(initialized, ListenSocket) ->
     end.
 
 
-%% @doc Handles login and registration instructions sent from a client. 
-%% When a clients sends a valid user login packet, this callback will make the
-%% login and spawn a new client_serv process and transfer control over
-%% AcceptSocket to the spawned process, then terminate. When a user register
-%% packet is sent, the callback will try the registration and go back to its
-%% initial state.
+%% @doc Handles login and registration instructions sent from a 
+%% client. When a clients sends a valid user login packet, this 
+%% callback will make the login and spawn a new client_serv process 
+%% and transfer control over AcceptSocket to the spawned process, 
+%% then terminate. When a user register packet is sent, the 
+%% callback will try the registration and go back to its initial 
+%% state.
 
 -spec login(Event, AcceptSocket) -> Result when
       Type :: binary(),
@@ -86,10 +89,10 @@ login({?LOGIN, Packet}, AcceptSocket) ->
     io:format("UN: ~p, PW: ~p~n", [UserName, Password]),
     case account:login(UserName, Password) of
 	{ok, UserId} ->
-	    gen_tcp:send(AcceptSocket, ?LOGIN_TRUE),
 	    io:format("Logged in~n"),
-	    {ok, Pid} = client_serv_sup:start_client_serv(), %% Send UserId and AcceptSocket
-	    ok = gen_tcp:controlling_process(AcceptSocket, Pid), 
+	    {ok, Pid} = client_serv_sup:start_client_serv(UserId, AcceptSocket),
+	    ok = gen_tcp:controlling_process(AcceptSocket, Pid),
+	    ok = client_serv:verify_control_transfer(Pid),
 	    {stop, normal, AcceptSocket};
 	{error, no_user} -> 
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_USERNAME),
@@ -118,10 +121,11 @@ login(Packet, AcceptSocket) ->
     {next_state, login, AcceptSocket}.
 
 
-%% @doc Receives {tcp, Socket, Package} messages as events and forwards 
-%% them to the correct state. Returns {stop, normal, Socket} if the message 
-%% is {tcp_closed, Reason} or {tcp_error, Socket, Reason}, which will 
-%% terminate the process and execute terminate/3.
+%% @doc Receives {tcp, Socket, Package} messages as events and 
+%% forwards them to the correct state. Returns {stop, normal, 
+%% Socket} if the message is {tcp_closed, Reason} or {tcp_error, 
+%% Socket, Reason}, which will terminate the process and execute 
+%% terminate/3.
 
 -spec handle_info(Event, State, Socket) -> Result when
       Packet :: binary(),
@@ -157,6 +161,6 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
 
 terminate(_Reason, login, AcceptSocket) ->
     gen_tcp:close(AcceptSocket),
-    io:format("Terminating~n");
+    io:format("Terminating listener~n");
 terminate(_Reason, _State, _ListenSocket) ->
-    io:format("Terminating~n").
+    io:format("Terminating listener~n").
