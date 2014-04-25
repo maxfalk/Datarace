@@ -64,7 +64,7 @@ login({?LOGIN, Packet}, AcceptSocket) ->
 	    gen_tcp:send(AcceptSocket, ?LOGIN_TRUE),
 	    io:format("Logged in~n"),
 	    {ok, Pid} = client_serv_sup:start_client_serv(), %% Send UserId and AcceptSocket
-	    ok = gen_tcp:controlling_process(AcceptSocket), 
+	    ok = gen_tcp:controlling_process(AcceptSocket, Pid), 
 	    {stop, normal, AcceptSocket};
 	{error, no_user} -> 
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_USERNAME),
@@ -76,7 +76,7 @@ login({?LOGIN, Packet}, AcceptSocket) ->
 	    {next_state, login, AcceptSocket}
     end;
 login({?REGISTER, Packet}, AcceptSocket) ->
-    {UserName, Password, Email} = packconv:convert_pack(?LOGIN, Packet),
+    {UserName, Password, Email} = packconv:convert_pack(?REGISTER, Packet),
     io:format("UN: ~p, PW: ~p, EM: ~p~n", [UserName, Password, Email]),
     case account:register(UserName, Password, Email) of
 	ok ->
