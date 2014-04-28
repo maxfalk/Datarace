@@ -1,0 +1,91 @@
+
+%%@doc Log messages to file and if started as verbose to 
+%%the screen aswell.
+%%
+%%
+
+-module(log_serv).
+
+-export([start_link/1, print/1, stop/0]).
+-export([init/1, handle_cast/2, terminate/2]).
+
+-behaviour(gen_server).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SERVER API
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+start_link(Options)->
+    
+    gen_server:start_link({local, ?MODULE}, ?MODULE, Options, []).
+
+stop()->
+    gen_server:cast(?MODULE, stop).
+
+
+print(Msg)->
+    gen_server:cast(?MODULE, Msg).
+    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% SERVER PRIVATE FUNCTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+make_log_msg(Msg) ->
+    {{Year, Month, Day}, {Hour, Minute, Seconds}} = calendar:local_time(),
+    Date = integer_to_list(Year) ++ "-" ++ 
+			       integer_to_list(Month) ++ "-" ++ integer_to_list(Day),
+    Time = integer_to_list(Hour) ++ ":" ++ 
+			       integer_to_list(Minute) ++ ":" ++ integer_to_list(Seconds),
+    "[" ++ Date ++ " " ++ Time  ++ "] " ++ Msg ++ "\n".
+
+make_filename()->
+    {{Year, Month, Day}, _} = calendar:local_time(),
+    ("datarace_log_" ++ integer_to_list(Year) ++ "_" ++ integer_to_list(Month) ++ 
+	 "_" ++ integer_to_list(Day) ++ ".log").
+
+write(Filename, String)->
+    file:write_file(Filename, String).
+
+open(Filename, Mode)->
+    file:open(Filename, Mode).
+
+close(Filename)->
+    file:close(Filename).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% CALLBACK FUNCTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+init(Options)->
+    {Current_date, _} = calendar:local_time(),
+    Filename = make_filename(),
+    open(Filename, [append]),
+    spawn_link(fun ()-> date_serv:start(self()) end),
+    {ok, {Filename, Current_date, Options}}.
+
+
+terminate(_Reason, {Filename, _Options})->
+    close(Filename).
+
+handle_cast(open_new_file, {Filename, _Old_date, Options})->
+    New_filename = make_filename(),
+    {Current_date, _} = calendar:local_time(),
+    close(Filename),
+    open(New_filename, append),
+    {noreply,{New_filename, Current_date, Options}};    
+handle_cast(stop, Loopdata)->
+    {stop, normal, Loopdata};
+handle_cast(Msg, {Filename, _Current_date, verbose} = Loopdata)->
+    Log_string = make_log_msg(Msg), 
+    write(Filename, Log_string),
+    io:format(Log_string),
+    {noreply, Loopdata};
+handle_cast(Msg, {Filename, _Date, normal} = Loopdata)->
+    Log_string = make_log_msg(Msg), 
+    write(Filename, Log_string),
+    {noreply, Loopdata}.
+
+

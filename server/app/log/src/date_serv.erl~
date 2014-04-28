@@ -1,0 +1,14 @@
+
+-module(date_serv).
+
+-export([start_link/1]).
+
+start(Pid)->
+    {{Year, Month, Day} = Date, _} = calendar:local_time(),
+    loop(Date).
+
+send_msg(Pid)->
+    gen_server:cast(Pid, open_new_file).
+    
+loop(CurrentDate)->
+    
