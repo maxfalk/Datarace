@@ -15,7 +15,7 @@
 -define(LOGIN_TRUE, <<0,0>>). 
 -define(LOGIN_FALSE_USERNAME, <<0,1>>). 
 -define(LOGIN_FALSE_PASSWORD, <<0,2>>). 
-
+-define(LOGIN_LOGOUT, <<0,3>>).
 
 %%====================================================================
 %% Register

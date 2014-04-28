@@ -17,7 +17,6 @@ typedef struct __attribute__ ((packed)) {
 
 @interface ChallengeViewController ()
 @property (weak, nonatomic) IBOutlet UISlider *distanceSlider;
-@property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 
 @end
 
@@ -35,8 +34,13 @@ typedef struct __attribute__ ((packed)) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    _distanceLabel.hidden=YES;
 
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 
@@ -46,35 +50,14 @@ typedef struct __attribute__ ((packed)) {
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)distanceButton:(id)sender {
-    
-    [UIView transitionWithView: self.distanceSlider
-                      duration: 0.25f
-                       options: UIViewAnimationOptionTransitionCrossDissolve
-                    animations: ^(void)
-     {
-         self.distanceSlider.hidden=NO;
-         
-     }
-                    completion: ^(BOOL isFinished)
-     {
-         /* TODO: Whatever you want here */
-     }];
-
-    
-}
 
 - (IBAction)sliderChanged:(id)sender{
-    NSLog(@"slider changed");
     UISlider *slider = (UISlider *)sender;
     NSInteger val = lround(slider.value);
-    self.distanceLabel.text = [NSString stringWithFormat:@"%li km",(long)val];
-
+    //[_distanceButton setTitle:[NSString stringWithFormat:@"%li km",(long)val] forState:UIControlStateNormal];
     
+    _distanceLabel.text = [NSString stringWithFormat:@"%li km",(long)val];
 }
-
-
-
 
 
 
