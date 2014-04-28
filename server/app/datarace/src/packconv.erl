@@ -9,9 +9,15 @@
 -include("../include/types.hrl").
 
 
-%%@doc convert a received message to a easier read format
+%%@doc convert a received message to an easier read format.
 %%
 %%
+
+-spec convert_pack(Type, Data) -> Result when
+      Type :: binary(),
+      Data :: binary(),
+      Result :: {[integer()], [integer()]} | 
+		{[integer()], [integer()], [integer()]}.
 
 convert_pack(Type, Data)->
     List_data = binary_to_list(Data),
@@ -23,14 +29,29 @@ convert_pack(Type, Data)->
     end.
     
 
-%%@doc Convert a login packet
+%%@doc Convert a login packet.
 %%
 %%
+
+-spec login_pack(Packet) -> {Username, Password} when
+      Packet :: [integer()],
+      Username :: [integer()],
+      Password :: [integer()].
 
 login_pack(List)->
     {Username, Password} = lists:split(50, List),
     {[X || X <- Username, X =/= 0], [X || X <- Password, X =/= 0]}.
 
+
+%%@doc Convert a register packet.
+%%
+%%
+
+-spec register_pack(Packet) -> {Username, Password, Email} when 
+      Packet :: [integer()],
+      Username :: [integer()],
+      Password :: [integer()],
+      Email :: [integer()].
 
 register_pack(List)->
     {Username, Rest} = lists:split(50, List),

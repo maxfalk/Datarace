@@ -1,6 +1,6 @@
 
 %%====================================================================
-%% Listener
+%% listener
 %%====================================================================
 
 -module(listener).
@@ -11,7 +11,7 @@
 
 -include("../include/types.hrl").
 
--type socket() :: undefined.
+-type socket() :: none().
 
 
 %%====================================================================
@@ -91,18 +91,18 @@ login({?LOGIN, Packet}, AcceptSocket) ->
 	{ok, UserId} ->
 	    io:format("Logged in~n"),
 	    {ok, Pid} = client_serv_sup:start_client_serv(UserId, AcceptSocket),
-	    ok = gen_tcp:controlling_process(AcceptSocket, Pid),
-	    ok = client_serv:verify_control_transfer(Pid),
-	    {stop, normal, AcceptSocket};
+	    case gen_tcp:controlling_process(AcceptSocket, Pid) of
+		ok -> client_serv:verify_control_transfer(Pid);
+		{error, Reason} -> io:format("Socket control transfer failed: ~w~n", [Reason]) %% Log that shit
+	    end;
 	{error, no_user} -> 
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_USERNAME),
-	    io:format("Login in failed: Wrong username~n"),
-	    {next_state, login, AcceptSocket};
+	    io:format("Login in failed: Wrong username~n");
 	{error, wrong_password} ->
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_PASSWORD),
-	    io:format("Login in failed: Wrong password~n"),
-	    {next_state, login, AcceptSocket}
-    end;
+	    io:format("Login in failed: Wrong password~n")
+    end,
+    {stop, normal, AcceptSocket};
 login({?REGISTER, Packet}, AcceptSocket) ->
     {UserName, Password, Email} = packconv:convert_pack(?REGISTER, Packet),
     io:format("UN: ~p, PW: ~p, EM: ~p~n", [UserName, Password, Email]),
