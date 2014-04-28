@@ -108,7 +108,7 @@ static NSOutputStream *outputStream;
     const char *mail = [email UTF8String];
     
     //length
-    uint32_t myInt32Value = 101;
+    uint32_t myInt32Value = 151;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
     signup packet;
