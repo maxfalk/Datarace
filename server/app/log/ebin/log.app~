@@ -1,0 +1,7 @@
+{application, datarace,
+ [{description, "Log server"},
+  {vsn, "0.0.0"},
+  {mod, {log, []}},
+  {registered, []},
+  {modules, [log, log_sup, log_serv, date_serv]},
+  {applications, [stdlib, kernel]}]}.

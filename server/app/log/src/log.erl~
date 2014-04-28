@@ -1,0 +1,13 @@
+
+-module(log).
+
+-behaviour(application).
+
+-export([start/0,stop/0]).
+
+start()->
+    log_sup:start_link().
+
+
+stop(_)->
+    ok.
