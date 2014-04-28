@@ -136,11 +136,10 @@ set_logout_time(LoginlogId)->
 
 register(User_name, Password, Email)->
     case check_user_exists(User_name) of
-	false ->
+	user_not_found ->
 	    Salt = base64:encode(crypto:strong_rand_bytes(50)),
-	    register_user(User_name,crypt(Password ++ binary_to_list(Salt)),Email, Salt),
-	    ok;
-	true ->
+	    register_user(User_name,crypt(Password ++ binary_to_list(Salt)),Email, Salt);
+	user_found ->
 	    {error, user_already_exist}
     end.
 
@@ -160,14 +159,14 @@ register_user(User_name,Password,Email,Salt)->
     ok.
   
 %%@doc Check if user already exist, is already register in the DB.
--spec check_user_exists(User_name)-> true | false when
+-spec check_user_exists(User_name)-> user_found | user_not_found when
       User_name :: string().
 
 check_user_exists(User_name)->
-    Check_fun = fun(List) when length(List) == 0->
-			true;
+    Check_fun = fun(List) when length(List) == 0 ->
+			user_not_found;
 		   (_List) ->
-			false
+			user_found
 		end,
     Check_fun(get_user(User_name)).
     
@@ -182,7 +181,7 @@ get_user(User_name)->
     Sql_result = database:db_query(register_select,
 				<<"SELECT id FROM tUsers WHERE user_name = ?">>,
 				[User_name]),
-    database:get_row(database:result_to_record(Sql_result, register_table), 1).
+    database:result_to_record(Sql_result, register_table).
     
     
 
