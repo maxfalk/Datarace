@@ -63,7 +63,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="U4d-3u-7x2" kind="push" id="c0h-tp-X6G"/>
+                                    <segue destination="U4d-3u-7x2" kind="push" identifier="signup" id="c0h-tp-X6G"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -271,6 +271,7 @@
                         </button>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <outlet property="emailCheck" destination="nMj-o8-i2e" id="iBq-6G-GuA"/>
                         <outlet property="emailField" destination="NVn-gE-RuO" id="BPh-0W-ZYL"/>
@@ -281,11 +282,68 @@
                         <outlet property="signupButton" destination="QtU-Ue-Hde" id="4by-f4-lbx"/>
                         <outlet property="usernameCheck" destination="WDz-Ey-EUS" id="pH2-dB-uk0"/>
                         <outlet property="usernameField" destination="5KC-g6-ysn" id="5Rb-qK-77I"/>
+                        <segue destination="Xld-VS-KTA" kind="modal" identifier="registerSuccess" id="f63-R9-Onc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ETz-7w-BNZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="449" y="647"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="zO4-XN-4hO">
+            <objects>
+                <viewController id="Xld-VS-KTA" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rxM-I2-IWW"/>
+                        <viewControllerLayoutGuide type="bottom" id="W3S-Lk-xHC"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Eo1-yR-k2f" customClass="Registered">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Register successful!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="204" translatesAutoresizingMaskIntoConstraints="NO" id="ZTi-xU-7bH">
+                                <rect key="frame" x="58" y="234" width="204" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aZz-4J-Pvr">
+                                <rect key="frame" x="120" y="146" width="80" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <bool key="isElement" value="NO"/>
+                                </accessibility>
+                                <state key="normal" backgroundImage="logo">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3eh-By-bd5">
+                                <rect key="frame" x="87" y="518" width="147" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Login and get started">
+                                    <color key="titleColor" red="0.33725490200000002" green="0.55294117649999996" blue="0.68235294120000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="V9P-fZ-dyb" kind="modal" modalTransitionStyle="crossDissolve" id="RKp-jb-Tbl"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="ZTi-xU-7bH" firstAttribute="centerX" secondItem="aZz-4J-Pvr" secondAttribute="centerX" id="6ZV-lU-HGg"/>
+                            <constraint firstItem="ZTi-xU-7bH" firstAttribute="leading" secondItem="Eo1-yR-k2f" secondAttribute="leading" constant="58" id="J24-dA-OcE"/>
+                            <constraint firstItem="ZTi-xU-7bH" firstAttribute="centerY" secondItem="Eo1-yR-k2f" secondAttribute="centerY" id="Jgz-hj-jiH"/>
+                            <constraint firstItem="ZTi-xU-7bH" firstAttribute="centerX" secondItem="Eo1-yR-k2f" secondAttribute="centerX" id="rly-8L-zWU"/>
+                            <constraint firstItem="W3S-Lk-xHC" firstAttribute="top" secondItem="ZTi-xU-7bH" secondAttribute="bottom" constant="234" id="wNW-BR-E78"/>
+                            <constraint firstItem="ZTi-xU-7bH" firstAttribute="top" secondItem="aZz-4J-Pvr" secondAttribute="bottom" constant="8" id="yAc-Tp-qy6"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UD3-zc-9Fs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="992" y="647"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="ewT-we-2rH">
@@ -534,7 +592,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FcR-YD-gQM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1597" y="653"/>
+            <point key="canvasLocation" x="1597" y="647"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="o7C-qi-rfO">
@@ -696,4 +754,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="RKp-jb-Tbl"/>
+    </inferredMetricsTieBreakers>
 </document>

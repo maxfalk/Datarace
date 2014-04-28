@@ -12,6 +12,9 @@
 
 @interface SignupViewController : UIViewController <UIScrollViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic, copy) projektViewController *networkConnection;
+@property (strong) NetworkConnectionClass *networkConnection;
+
+
+//@property (nonatomic, copy) projektViewController *networkConnection;
 
 @end

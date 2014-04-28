@@ -20,12 +20,12 @@
 @property (weak, nonatomic) IBOutlet UIImageView *passwordRepeatCheck;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIButton *signupButton;
-//@property (nonatomic) projektViewController *networkConnection;
+//@property (strong) NetworkConnectionClass *signUp;
 
 @end
 
 @implementation SignupViewController
-@synthesize networkConnection = _networkConnection;
+//@synthesize networkConnection = _networkConnection;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -39,10 +39,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+   
     //_networkConnection = [[projektViewController alloc] init];
     //[_networkConnection initNetworkCommunication];
     //_signupButton.backgroundColor = [UIColor colorWithRed:0 green:205/255 blue:205/255 alpha:1];
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 50, self.view.frame.size.width, 300)];
+    _scrollView = [[UIScrollView  alloc] initWithFrame:CGRectMake(0, 50, self.view.frame.size.width, 300)];
     _scrollView.scrollEnabled=YES;
     _scrollView.showsVerticalScrollIndicator = YES;
     _scrollView.pagingEnabled = YES;
@@ -167,15 +168,31 @@
 }
 
 - (IBAction)signupButtonPressed:(id)sender {
-    //_networkConnection = [[NetworkConnectionClass alloc] init];
-    //[_networkConnection initNetworkCommunication];
+    [NetworkConnectionClass initNetworkCommunication];
+    int result = [NetworkConnectionClass signupUser:_usernameField.text password:_passwordField.text email:_emailField.text];
     
-    //NetworkConnectionClass *signup = [projektViewController networkConnection];
+    if (result == 0) {
+        [self performSegueWithIdentifier:@"registerSuccess" sender:self];
+    } else if (result == 1) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Signup unsuccessful"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    } else if (result == 2) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Wrong password"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
-    
-    //projektViewController *networkConnection =[projektViewController networkConnection];
-    //[_networkConnection signupUser:(_usernameField.text) password:(_passwordField.text) email:(_emailField.text)];
-    
+  
 }
 
 /*

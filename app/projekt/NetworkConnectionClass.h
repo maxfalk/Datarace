@@ -10,14 +10,18 @@
 
 @interface NetworkConnectionClass : NSObject <NSStreamDelegate>
 {
-    NSInputStream *inputStream;
-    NSOutputStream *outputStream;
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
+    //NSInputStream *inputStream;
+    //NSOutputStream *outputStream;
+    //CFReadStreamRef readStream;
+    //CFWriteStreamRef writeStream;
 }
 
--(void)initNetworkCommunication;
--(int)sendLoginPackage:(NSString *)username password:(NSString *)password;
--(void)signupUser:(NSString *)username password:(NSString *)password email:(NSString *)email;
+
+//@property (strong) NSInputStream *inputStream;
+//@property (strong) NSOutputStream *outputStream;
+
++(void)initNetworkCommunication;
++(int)sendLoginPackage:(NSString *)username password:(NSString *)password;
++(int)signupUser:(NSString *)username password:(NSString *)password email:(NSString *)email;
 
 @end

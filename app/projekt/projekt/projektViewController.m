@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *wheel;
-@property (nonatomic,retain) NetworkConnectionClass *networkConnection;
 @end
 
 
@@ -24,10 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _networkConnection = [[NetworkConnectionClass alloc] init];
-    [_networkConnection initNetworkCommunication];
-    //[_networkConnection setDelegate:self];
-    
+    [NetworkConnectionClass initNetworkCommunication];
     
 	// Do any additional setup after loading the view, typically from a nib.
     
@@ -98,10 +94,10 @@
     
     
     
-    int *result = [_networkConnection sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
+    int result = [NetworkConnectionClass sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
     
     if (result == 0) {
-        [self performSegueWithIdentifier:@"login" sender:self];
+        [self performSegueWithIdentifier:@"login" sender:self.networkConnection];
     } else if (result == 1) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                         message:@"Wrong username"
@@ -116,66 +112,26 @@
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
+    } else if (result == 3) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Could not connect to server"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     }
     
     //[(NetworkConnectionClass *)self initNetworkCommunication];
     [_loginButton setTitle:@"" forState:UIControlStateNormal];
     [_passwordField resignFirstResponder];
     
-    //double delayInSeconds = 0.1;
-    //dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    //dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    //if (NSStreamEventErrorOccurred) {
-    //[self performSegueWithIdentifier:@"login" sender:self];
-    /*if
-     NSLog(@"stream failed");
-     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-     message:@"Could not connect to server"
-     delegate:self
-     cancelButtonTitle:@"OK"
-     otherButtonTitles:@"Retry",nil];
-     [alert show];
-     
-     } else {
-     */
-    //[self performSegueWithIdentifier:@"login" sender:self];
-    // }
-    
-    // });
-    /*
-     
-     const char *user = [_usernameField.text UTF8String];
-     const char *pass = [_passwordField.text UTF8String];
-     uint32_t structInfo = 0;
-     uint32_t myInt32AsABigEndianNumber2 = CFSwapInt32HostToBig(structInfo);
-     
-     uint32_t myInt32Value = 101;
-     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
-     
-     mystruct packet;
-     packet.length = myInt32AsABigEndianNumber;
-     packet.info = myInt32AsABigEndianNumber2;
-     memset(packet.username, 0, 50);
-     strcpy(packet.username, user);
-     memset(packet.password, 0, 50);
-     strcpy(packet.password, pass);
-     
-     loginOutput message;
-     
-     
-     //NSData *usernameData = [[NSData alloc] initWithData:
-     //char buffer[2];
-     //[inputStream read:((uint8_t *)&buffer) maxLength:sizeof(buffer)];
-     
-     NSInteger result;
-     uint8_t buffer[20]; // BUFFER_LEN can be any positive integer
-     //[inputStream read:buffer maxLength:sizeof(buffer)];
-     if(buffer) {
-     //login success
-     } else {
-     
-     }
-     */
+    double delayInSeconds = 0.3;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+    });
+
+
     _wheel.hidden=YES;
     [_wheel stopAnimating];
     [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
@@ -252,6 +208,14 @@
     
     if (buttonIndex == 1) {
         [self loginButtonPressed:self];
+    }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"signup"]) {
+        self.networkConnection = (NetworkConnectionClass *)sender;
+        SignupViewController *connection = (SignupViewController *) [segue destinationViewController];
+        connection.networkConnection = self.networkConnection;
     }
 }
 
