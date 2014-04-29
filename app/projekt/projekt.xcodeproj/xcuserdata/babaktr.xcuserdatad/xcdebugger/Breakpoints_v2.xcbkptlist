@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NetworkConnectionClass.m"
-            timestampString = "420382222.209728"
+            filePath = "projekt/RMSwipeTableViewCelliOS7UIDemoViewController.m"
+            timestampString = "420386505.469644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "+sendLoginPackage:password:"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "-scrollViewWillBeginDragging:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NetworkConnectionClass.m"
-            timestampString = "420382240.362041"
+            filePath = "projekt/RMSwipeTableViewCelliOS7UIDemoTableViewCell.m"
+            timestampString = "420386596.419486"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "+sendLoginPackage:password:"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "-deleteAction"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,13 +41,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NetworkConnectionClass.m"
-            timestampString = "420382368.894624"
+            filePath = "projekt/CompetitorTableViewController.m"
+            timestampString = "420451029.960995"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
-            landmarkName = "+sendLoginPackage:password:"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

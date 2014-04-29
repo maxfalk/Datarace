@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [NetworkConnectionClass initNetworkCommunication];
+    
     
 	// Do any additional setup after loading the view, typically from a nib.
     
@@ -89,6 +89,8 @@
 
 - (IBAction)loginButtonPressed:(id)sender {
     
+    
+    [NetworkConnectionClass initNetworkCommunication];
     _wheel.hidden = NO;
     [_wheel startAnimating];
     
@@ -135,6 +137,10 @@
     _wheel.hidden=YES;
     [_wheel stopAnimating];
     [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
+     
+    
+    
+     //[self performSegueWithIdentifier:@"login" sender:self];
 }
 
 
