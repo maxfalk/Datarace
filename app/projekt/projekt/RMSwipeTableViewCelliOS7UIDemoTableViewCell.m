@@ -52,6 +52,7 @@
 -(void)deleteAction {
     if ([self.demoDelegate respondsToSelector:@selector(swipeTableViewCellDidDelete:)]) {
         [self.demoDelegate swipeTableViewCellDidDelete:self];
+        NSLog(@"Challenge");
     }
 }
 

@@ -172,7 +172,7 @@
     int result = [NetworkConnectionClass signupUser:_usernameField.text password:_passwordField.text email:_emailField.text];
     
     if (result == 0) {
-        [self performSegueWithIdentifier:@"registerSuccess" sender:self];
+        [self performSegueWithIdentifier:@"signupSuccess" sender:self];
     } else if (result == 1) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                         message:@"Signup unsuccessful"
