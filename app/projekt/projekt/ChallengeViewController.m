@@ -33,6 +33,7 @@ typedef struct __attribute__ ((packed)) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _challenger.text = _challengerUsername;
     // Do any additional setup after loading the view.
 
     

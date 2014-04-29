@@ -40,7 +40,7 @@
         
         competitorLabel = [[UILabel alloc]init];
         competitorLabel.textAlignment = UITextAlignmentLeft;
-        competitorLabel.font = [UIFont boldSystemFontOfSize:19];
+        competitorLabel.font = [UIFont systemFontOfSize:19];
         competitorLabel.lineBreakMode = NSLineBreakByWordWrapping;
         
         primaryLabelTwo = [[UILabel alloc]init];
@@ -81,7 +81,7 @@
     frame= CGRectMake(boundsX+5 ,2, 50, 50);
     mySecondImageView.frame = frame;
     
-    frame= CGRectMake(boundsX+15 ,20, 250, 20);
+    frame= CGRectMake(boundsX+15 ,15, 250, 30);
     competitorLabel.frame = frame;
     
     frame= CGRectMake(boundsX+15 ,10, 250, 20);

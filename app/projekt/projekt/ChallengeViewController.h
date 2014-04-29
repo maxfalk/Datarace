@@ -13,5 +13,7 @@
 //@property (nonatomic) NSInputStream *inputStream;
 //@property (nonatomic) NSOutputStream *outputStream;
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
+@property (strong, nonatomic) IBOutlet UILabel *challenger;
+@property (strong, nonatomic) NSString *challengerUsername;
 
 @end
