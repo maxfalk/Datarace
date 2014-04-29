@@ -11,6 +11,7 @@
 @interface CompetitorTableViewController ()
 
 @property (strong, nonatomic) NSMutableArray *competitors;
+@property (nonatomic) UIButton *acceptButton;
 
 
 @end
@@ -81,16 +82,14 @@
     
     
 
-    UIButton *acceptButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 13, 34, 34)];
-    [acceptButton addTarget:self action:@selector(acceptButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [acceptButton setImage:[UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
+    _acceptButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 13, 34, 34)];
+    [_acceptButton addTarget:self action:@selector(acceptButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [_acceptButton setImage:[UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
     
     
-    
-    [cell addSubview:acceptButton];
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;;
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    [cell addSubview:_acceptButton];
+    _acceptButton.hidden=YES;
     
     return cell;
 }
@@ -107,6 +106,12 @@
     [self.tableView setTableFooterView:v];
 }
 
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    _acceptButton.hidden = NO;
+}
 //-(void)tableView(UITableView *) didsel
 
 /*
