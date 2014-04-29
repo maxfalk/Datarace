@@ -1,0 +1,60 @@
+%%Tests for the account module.
+%%
+%%
+%%
+-module(account_tests.erl).
+
+-include_lib("eunit/include/eunit.hrl").
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TESTS DESCRIPTIONS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%{setup, Where, Setup, Cleanup, Instantiator} 
+account_tests()->
+   {"Test registering, login and logout directly at the DB",
+    {setup, fun setup/0, fun cleanup/1,fun ()-> {inorder, [fun register_test/0,
+							   fun login_test/0, 
+							   fun logout_test/0]}}}.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SETUP FUNCTIONS    %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+setup()->
+    application:start(crypto),
+    application:start(emysql),
+    ok.
+
+cleanup(_)->
+    emysql:execute("DELETE FROM tUSers WHERE user_name = Autotest").
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ACTUAL TESTS       %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+login_test()->
+    [?_assertEqual(account:login("Autotest","Autotest"),{ok, _}),
+    ?_assertEqual(account:login("qpqpqp","test"), {error, no_user}),
+    ?_assertEqual(account:login("Autotest","ost"), {error, wrong_password})].
+
+logout_test()->
+    {ok, Id} = account:login("Autotest","Autotest") =:= {ok, Id},
+    [?_assertEqual(account:logout(Id), ok),
+    ?_assertEqual(account:logout(77), ok)].
+
+register_test()->
+    [?_assertEqual(account:register("Autotest","Autotest","AT@mail.com"), ok),
+    ?_assertEqual(account:register("Attotest","","testar",""), {error, user_already_exist})].
+    
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HELPER FUNCTIONS   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

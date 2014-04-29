@@ -23,7 +23,7 @@ login(User_name, Password)->
 
 %%@doc Looks at the users data from the database and matches it with the
 %%input data to se if it is vaild.
--spec login_helper(Password, User_data) ->  ok | {error, no_user} | {error, wrong_password} when
+-spec login_helper(Password, User_data) ->  {ok, integer()} | {error, no_user} | {error, wrong_password} when
       Password :: string(),
       User_data :: login_table(). 
 

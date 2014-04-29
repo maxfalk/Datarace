@@ -1,4 +1,4 @@
-
+%%Author:Max Falk
 %%@doc Log messages to file and if started as verbose to 
 %%the screen aswell.
 %%
@@ -15,13 +15,27 @@
 %% SERVER API
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%@doc Start log server with the specified options,verbose or normal.
+%%
+%%
+-spec start_link(Options :: normal | verbose)-> {ok, pid()} | ignore | {error, atom()}.
 
 start_link(Options)->
     gen_server:start_link({local, ?MODULE}, ?MODULE, Options, []).
 
+%%@doc stop the server.
+%%
+%%
+-spec stop()-> ok.
+
 stop()->
     gen_server:cast(?MODULE, stop).
 
+
+%%@doc log a message. Writes the message to fil and if started in verbose the the 
+%%screen.
+%%
+-spec log(Msg :: string()) -> ok.
 
 log(Msg)->
     gen_server:cast(?MODULE, Msg).
@@ -31,6 +45,12 @@ log(Msg)->
 %%%% SERVER PRIVATE FUNCTIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%@doc Formats the message for logging, adds timestamp in the beggining and ends 
+%%it with a new line.
+%%
+%%
+-spec make_log_msg(Msg :: string()) -> string().
+
 make_log_msg(Msg) ->
     {{Year, Month, Day}, {Hour, Minute, Seconds}} = calendar:local_time(),
     Date = integer_to_list(Year) ++ "-" ++ 
@@ -39,16 +59,37 @@ make_log_msg(Msg) ->
 			       integer_to_list(Minute) ++ ":" ++ integer_to_list(Seconds),
     "[" ++ Date ++ " " ++ Time  ++ "] " ++ Msg ++ "\n".
 
+%%@doc make a new filename for todays date
+%%
+%%
+-spec make_filename()-> string().
+
 make_filename()->
     {{Year, Month, Day}, _} = calendar:local_time(),
     ("datarace_log_" ++ integer_to_list(Year) ++ "_" ++ integer_to_list(Month) ++ 
 	 "_" ++ integer_to_list(Day) ++ ".log").
 
+%%@doc write to String to the file Filename with the mode Mode.
+%%
+%%
+-spec write(Filename :: string(), String :: string(), Mode :: [atom(), ...]) ->
+	       ok | {error, atom()}.
+
 write(Filename, String, Mode)->
     file:write_file(Filename, String, Mode).
 
+%%@doc open the file with path Filename with mode Mode
+%%
+%%
+-spec open(Filename :: string(), Mode :: [atom(), ...])-> {ok, term()} | {error, atom()}.
+
 open(Filename, Mode)->
     file:open(Filename, Mode).
+
+%%@doc Close the file with name Filename.
+%%
+
+-spec close(Filename :: string())-> ok | {error, atom()}.
 
 close(Filename)->
     file:close(Filename).
@@ -58,6 +99,11 @@ close(Filename)->
 %%% CALLBACK FUNCTIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%@doc initiate the server, start necassary help process and open the first file to
+%%write to, make the file if necassary.
+
+-spec init(Options :: atom())-> {ok, {string(), tuple(), atom()}}.
+
 init(Options)->
     {Current_date, _} = calendar:local_time(),
     Filename = make_filename(),
@@ -65,9 +111,22 @@ init(Options)->
     spawn_link(fun ()-> date_serv:start(self()) end),
     {ok, {Filename, Current_date, Options}}.
 
+%%@doc terminate the log server.
+%%
+-spec terminate(_Reason :: atom(), {Filename :: string(), _Options :: atom()})->
+    ok | {error, atom()}.
 
 terminate(_Reason, {Filename, _Options})->
     close(Filename).
+
+
+%%@doc handle casted message to the server. print recieved messages. Make a new
+%%file if the requested to.
+%%
+-spec handle_cast(term(),{string(), tuple(), atom()})-> 
+			 {noreply, tuple()} | 
+			 {stop, normal, tuple()}.
+	
 
 handle_cast(open_new_file, {Filename, _Old_date, Options})->
     New_filename = make_filename(),
