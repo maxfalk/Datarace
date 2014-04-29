@@ -3,7 +3,7 @@
 ##############
 
 PULL := git stash && git pull && git stash apply
-PUSH := git add -A && git commit && git push
+PUSH := git add -A && git commit -m "$(COMMENT)" && $(PULL) && git push
 
 #############
 
@@ -11,4 +11,4 @@ pull:
 	$(PULL)
 
 push: 
-	$(PULL) $(PUSH)
+	$(PUSH)
