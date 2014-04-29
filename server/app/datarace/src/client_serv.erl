@@ -7,7 +7,7 @@
 -behaviour(gen_fsm).
 
 -export([start_link/2, verify_control_transfer/1]).
--export([init/1, verify_login/2, main/2, handle_info/3, terminate/3]).
+-export([init/1, verify/2, main/2, handle_info/3, terminate/3]).
 
 -type socket() :: none().
 
@@ -62,12 +62,12 @@ init(Args) ->
 %% control_transferred event, informing the client about a successful 
 %% login attempt.
 
--spec verify_login(control_transferred, {UserId, Socket}) -> Result when
+-spec verify(control_transferred, {UserId, Socket}) -> Result when
       UserId :: integer(),
       Socket :: socket(),
       Result :: {next_state, main, {UserId, Socket}}.
 
-verify_login(control_transferred, {UserId, Socket}) ->
+verify(control_transferred, {UserId, Socket}) ->
     io:format("Yep~n"),
     gen_tcp:send(Socket, ?LOGIN_TRUE),
     {next_state, main, {UserId, Socket}}.

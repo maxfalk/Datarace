@@ -93,7 +93,8 @@ login({?LOGIN, Packet}, AcceptSocket) ->
 	    {ok, Pid} = client_serv_sup:start_client_serv(UserId, AcceptSocket),
 	    case gen_tcp:controlling_process(AcceptSocket, Pid) of
 		ok -> client_serv:verify_control_transfer(Pid);
-		{error, Reason} -> io:format("Socket control transfer failed: ~w~n~w~n~w~n", [Reason, inet:getstat(AcceptSocket), process_info(Pid)]) %% Log that shit
+		{error, Reason} -> io:format("Socket control transfer failed: ~w~n~w~n~w~n", 
+					     [Reason, inet:getstat(AcceptSocket), process_info(Pid)]) %% Log that shit
 	    end;
 	{error, no_user} -> 
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_USERNAME),
