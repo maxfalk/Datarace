@@ -27,7 +27,7 @@
       Result :: {ok, pid()} | ignore | {error, Error}.
 
 start_link(UserId, Socket) ->
-    gen_server:start_link(?MODULE, {UserId, Socket}, []).
+    gen_fsm:start_link(?MODULE, {UserId, Socket}, []).
 
 
 %% @doc Sends an asynchronous message to the Client_serv with pid Pid
@@ -39,7 +39,7 @@ start_link(UserId, Socket) ->
       Pid :: pid().
 
 verify_control_transfer(Pid) ->
-    gen_server:send_even(Pid, control_transferred).
+    gen_fsm:send_event(Pid, control_transferred).
 
 
 %%====================================================================
@@ -48,13 +48,14 @@ verify_control_transfer(Pid) ->
 
 %% @doc Initializes the Client_serv by doing nothing.
 
--spec init({UserId, Socket}) -> {ok, verify_login, {UserId, Socket}} when
+-spec init(Args) -> {ok, verify_login, Args} when
       UserId :: integer(),
-      Socket :: socket().
+      Socket :: socket(),
+      Args :: {UserId, Socket}.
 
-init({UserId, Socket}) ->
+init(Args) ->
     io:format("Spawned new client_serv.~n"),
-    {ok, verify_login, {UserId, Socket}}.
+    {ok, verify_login, Args}.
 
 
 %% @doc Sends a LOGIN_TRUE message to the client when receiving a 
