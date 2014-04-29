@@ -2,11 +2,17 @@
 GROUP_NUMBER := 17
 ####################
 
+
+PROP_ERL := erl -env ERL_LIBS ../../
 ERLC := erlc
 ERLC_FLAGS := -W -I include
 
+TEST_FILES := $(wildcard tests/*.erl)
 ERL_FILES := $(wildcard src/*.erl)
-BEAM_FILES := $(patsubst src/%.erl,ebin/%.beam,${ERL_FILES})
+BEAM_FILES :=$(patsubst  src/%.erl, ebin/%.beam, $(ERL_FILES))
+TEST_BEAM_FILES := $(patsubst tests/%.erl, ebin/%.beam, $(TEST_FILES))
+
+
 
 comma:= ,
 empty:=
@@ -23,16 +29,24 @@ USER=$(shell whoami)
 ARCHIVE_NAME :=  $(REQUIRED_DIR_NAME)_archive_$(USER)_$(shell date "+%Y-%m-%d__%H:%M:%S")__.tar.gz
 ARCHIVE_DIR := ..
 
-all: $(BEAM_FILES)
+all: source test_source
+
+source: $(BEAM_FILES)
 
 ebin/%.beam: src/%.erl
 	$(ERLC) $(ERLC_FLAGS) -o ebin $<
 
+test_source: $(TEST_BEAM_FILES)
+
+ebin/%.beam: tests/%.erl
+	$(ERLC) $(ERLC_FLAGS) -o ebin $<
+
+
 start: all
-	(cd ebin && erl -eval 'foo:start(), init:stop()')
+	(cd ebin && $(PROP_ERL) -eval 'server:start()')
 
 test: all
-	(cd ebin && erl -noinput -eval 'eunit:test({dir, "."}, [verbose]), init:stop()')
+	(cd ebin && $(PROP_ERL) -noinput -eval 'eunit:test({dir, "."}, [verbose]), init:stop()')
 
 doc: $(BEAM_FILES)
 	erl -noshell -eval "edoc:files($(EDOC_SRC_LIST), [{dir, 'doc/html'}])" -s init stop
@@ -40,6 +54,7 @@ doc: $(BEAM_FILES)
 clean:
 	rm -fr .#* *.dump
 	rm -fr ebin/*.beam
+	rm -fr *.erl~
 	(cd doc/html && find . -name "*" -a ! -name overview.edoc -exec rm -rf {} \;)
 
 remove_finderinfo:

@@ -8,18 +8,18 @@ Uppsala university
 
 ==== GROUP ==== 
 
-XX (change this to your group number).
+17 (change this to your group number).
 
 
 ==== PROJECT NAME ==== 
 
-Add your catchy project name here.
-
+Datarace
 
 ==== PROJECT DESCRIPTION ==== 
 
-Add a short description of your project here. 
-
+IOS app for challanging your friends to a running race. Where the app keeps track
+of the distance you have run and your time. Uses a server to store data and 
+to do the majority of the calculations. 
 
 ==== GROUP MEMBERS ==== 
 
@@ -37,8 +37,8 @@ directory.
 However, you might want to get the most up to date version of this
 directory. 
 
-Add a description here on how to use Subversion, Git or similar to get
-the most up to date version of this directory. 
+git pull - to get the latest version
+if you have commited changes and get a conflict try, git stash -> git pull -> git stash apply.
 
 ==== ERLANG VERSION ====
 
@@ -63,13 +63,8 @@ To compile the project, simply type make and press enter.
 
 ==== TO RUN AND TEST THE SYSTEM ==== 
 
-Add a short description on how to run and test your system. Here you
-might give pointers to more details in the doc/final_presentation.pdf
-document. 
+To run the tests for this application simple typ make test and all test will run.
 
-If possible, add targets to the Makefile that can be used to start the
-system (make start, make start_server, make start_client or similar as
-necessary). 
 
 ==== MORE INFORMATION (optional) ==== 
 
