@@ -7,7 +7,7 @@
 -behaviour(gen_fsm).
 
 -export([start_link/2, verify_control_transfer/1]).
--export([init/1, verify_login/2, main/2, handle_info/3, terminate/3]).
+-export([init/1, verify/2, main/2, handle_info/3, terminate/3]).
 
 -type socket() :: none().
 
@@ -27,7 +27,7 @@
       Result :: {ok, pid()} | ignore | {error, Error}.
 
 start_link(UserId, Socket) ->
-    gen_server:start_link(?MODULE, {UserId, Socket}, []).
+    gen_fsm:start_link(?MODULE, {UserId, Socket}, []).
 
 
 %% @doc Sends an asynchronous message to the Client_serv with pid Pid
@@ -39,7 +39,7 @@ start_link(UserId, Socket) ->
       Pid :: pid().
 
 verify_control_transfer(Pid) ->
-    gen_server:send_even(Pid, control_transferred).
+    gen_fsm:send_event(Pid, control_transferred).
 
 
 %%====================================================================
@@ -48,25 +48,26 @@ verify_control_transfer(Pid) ->
 
 %% @doc Initializes the Client_serv by doing nothing.
 
--spec init({UserId, Socket}) -> {ok, verify_login, {UserId, Socket}} when
+-spec init(Args) -> {ok, verify_login, Args} when
       UserId :: integer(),
-      Socket :: socket().
+      Socket :: socket(),
+      Args :: {UserId, Socket}.
 
-init({UserId, Socket}) ->
+init(Args) ->
     io:format("Spawned new client_serv.~n"),
-    {ok, verify_login, {UserId, Socket}}.
+    {ok, verify_login, Args}.
 
 
 %% @doc Sends a LOGIN_TRUE message to the client when receiving a 
 %% control_transferred event, informing the client about a successful 
 %% login attempt.
 
--spec verify_login(control_transferred, {UserId, Socket}) -> Result when
+-spec verify(control_transferred, {UserId, Socket}) -> Result when
       UserId :: integer(),
       Socket :: socket(),
       Result :: {next_state, main, {UserId, Socket}}.
 
-verify_login(control_transferred, {UserId, Socket}) ->
+verify(control_transferred, {UserId, Socket}) ->
     io:format("Yep~n"),
     gen_tcp:send(Socket, ?LOGIN_TRUE),
     {next_state, main, {UserId, Socket}}.
