@@ -10,6 +10,7 @@
 
 @interface CustomCell : UITableViewCell {
     
+    UILabel *competitorLabel;
     UILabel *primaryLabel;
     UILabel *primaryLabelTwo;
     UILabel *distanceLabel;
@@ -18,6 +19,7 @@
     
 }
 
+@property(nonatomic,retain)UILabel *competitorLabel;
 @property(nonatomic,retain)UILabel *primaryLabel;
 @property(nonatomic,retain)UILabel *primaryLabelTwo;
 @property(nonatomic,retain)UILabel *distanceLabel;

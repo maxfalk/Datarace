@@ -53,7 +53,7 @@ verify_control_transfer(Pid) ->
       Socket :: socket().
 
 init({UserId, Socket}) ->
-    io:format("Spawned new child."),
+    io:format("Spawned new client_serv.~n"),
     {ok, verify_login, {UserId, Socket}}.
 
 

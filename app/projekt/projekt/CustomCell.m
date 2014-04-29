@@ -11,7 +11,7 @@
 
 @implementation CustomCell
 
-@synthesize primaryLabel, primaryLabelTwo, distanceLabel, myImageView, mySecondImageView;
+@synthesize primaryLabel, primaryLabelTwo, distanceLabel, myImageView, mySecondImageView, competitorLabel;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -38,6 +38,11 @@
         primaryLabel.font = [UIFont boldSystemFontOfSize:18];
         primaryLabel.lineBreakMode = NSLineBreakByWordWrapping;
         
+        competitorLabel = [[UILabel alloc]init];
+        competitorLabel.textAlignment = UITextAlignmentLeft;
+        competitorLabel.font = [UIFont boldSystemFontOfSize:19];
+        competitorLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        
         primaryLabelTwo = [[UILabel alloc]init];
         primaryLabelTwo.textAlignment = UITextAlignmentLeft;
         primaryLabelTwo.font = [UIFont systemFontOfSize:12];
@@ -55,6 +60,7 @@
         
         [self.contentView addSubview:primaryLabel];
         [self.contentView addSubview:primaryLabelTwo];
+        [self.contentView addSubview:competitorLabel];
         [self.contentView addSubview:distanceLabel];
         [self.contentView addSubview:myImageView];
         [self.contentView addSubview:mySecondImageView];
@@ -74,6 +80,9 @@
     
     frame= CGRectMake(boundsX+5 ,2, 50, 50);
     mySecondImageView.frame = frame;
+    
+    frame= CGRectMake(boundsX+15 ,20, 250, 20);
+    competitorLabel.frame = frame;
     
     frame= CGRectMake(boundsX+15 ,10, 250, 20);
     primaryLabel.frame = frame;
