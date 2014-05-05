@@ -135,6 +135,7 @@
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		C7B7C7E218FD17EC0096DB88 /* projekt */ = {
 			isa = PBXGroup;
