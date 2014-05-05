@@ -1,14 +1,23 @@
 
 -module(date_serv).
 
--export([start_link/1]).
+-export([start/1]).
 
 start(Pid)->
-    {{Year, Month, Day} = Date, _} = calendar:local_time(),
-    loop(Date).
+    {Date, _} = calendar:local_time(),
+    loop(Pid, Date).
 
 send_msg(Pid)->
     gen_server:cast(Pid, open_new_file).
     
-loop(CurrentDate)->
+loop(Pid, CurrentDate)->
+    {Date, _} = calendar:local_time(),
+    case CurrentDate of 
+	Date ->
+	    loop(Pid, CurrentDate);
+	_ ->
+	    send_msg(Pid),
+	    loop(Pid, Date)
+    end.
+    
     
