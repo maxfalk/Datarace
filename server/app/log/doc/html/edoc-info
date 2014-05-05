@@ -1,0 +1,2 @@
+{packages,[]}.
+{modules,[date_serv,log,log_serv,log_sup]}.
