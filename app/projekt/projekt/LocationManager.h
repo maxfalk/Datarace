@@ -8,6 +8,6 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-@interface projekt : CLLocationManager
+@interface LocationManager : CLLocationManager
 
 @end

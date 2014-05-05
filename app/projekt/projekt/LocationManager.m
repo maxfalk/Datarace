@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 OSM-projekt. All rights reserved.
 //
 
-#import "projekt.h"
+#import "LocationManager.h"
 
-@implementation projekt
+@implementation LocationManager
 
 @end
