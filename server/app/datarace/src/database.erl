@@ -51,9 +51,13 @@ get_row(List, Num) when length(List) > 0->
 get_row(_List, _Num) ->
     {error, no_item}.
 
-%%@doc
+%%@doc Get the given result in a record specifed in the Record variable.
 %%
 %%
+-spec result_to_record(Sql_result, Record) -> record() when
+      Sql_result :: string(),
+      Record :: atom().
+
 result_to_record(Sql_result, Record)->
     case Record of
 	login_table ->

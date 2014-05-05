@@ -33,7 +33,7 @@ start_link(UserId, Socket) ->
 %% @doc Sends an asynchronous message to the Client_serv with pid Pid
 %% telling it that it has the contol over a socket and may use it. 
 %% Only relevant just after initialization, when Client_serv is in its
-%% verify_login state. 
+%% verify state. 
 
 -spec verify_control_transfer(Pid) -> ok when
       Pid :: pid().
@@ -46,16 +46,16 @@ verify_control_transfer(Pid) ->
 %% Callback functions
 %%====================================================================
 
-%% @doc Initializes the Client_serv by doing nothing.
+%% @doc Initialize the Client_serv by doing nothing.
 
--spec init(Args) -> {ok, verify_login, Args} when
+-spec init(Args) -> {ok, verify, Args} when
       UserId :: integer(),
       Socket :: socket(),
       Args :: {UserId, Socket}.
 
 init(Args) ->
     io:format("Spawned new client_serv.~n"),
-    {ok, verify_login, Args}.
+    {ok, verify, Args}.
 
 
 %% @doc Sends a LOGIN_TRUE message to the client when receiving a 
@@ -68,8 +68,8 @@ init(Args) ->
       Result :: {next_state, main, {UserId, Socket}}.
 
 verify(control_transferred, {UserId, Socket}) ->
-    io:format("Yep~n"),
-    gen_tcp:send(Socket, ?LOGIN_TRUE),
+    io:format("Control over socket transferred for UID: ~w~n", [UserId]),
+    ok = gen_tcp:send(Socket, ?LOGIN_TRUE),
     {next_state, main, {UserId, Socket}}.
 
 
@@ -82,10 +82,8 @@ verify(control_transferred, {UserId, Socket}) ->
       Socket :: integer(),
       Result :: {stop, normal, {UserId, Socket}}.
 
-main(?LOGIN_LOGOUT, {UserId, Socket}) ->
-    ok = account:logout(UserId),
-    io:format("Logged out: ~w~n", [UserId]),
-    {stop, normal, {UserId, Socket}}.
+main(?LOGIN_LOGOUT, LoopData) ->
+    {stop, normal, LoopData}.
 
 
 %% @doc Receives TCP packets and forwards them to the function 
@@ -103,13 +101,13 @@ main(?LOGIN_LOGOUT, {UserId, Socket}) ->
       Reason :: term(),
       Result :: none() | {stop, normal, LoopSocket}.
 
-handle_info({tcp, _, Packet}, State, AcceptSocket) ->
-    inet:setopts(AcceptSocket, [{active, once}]),
-    ?MODULE:State(Packet, AcceptSocket);
-handle_info({tcp_closed, _}, _State, Socket) ->
+handle_info({tcp, _, <<Packet/binary>>}, State, {UserId, Socket}) ->
+    inet:setopts(Socket, [{active, once}]),
+    ?MODULE:State(Packet, {UserId, Socket});
+handle_info({tcp_closed, _}, _State, {UserId, Socket}) ->
     io:format("Disconnected unexpectedly~n"),
     %% Connection was unexpectedly lost. Log this stuff.
-    {stop, normal, Socket};
+    {stop, normal, {UserId, Socket}};
 handle_info({tcp_error, _, _Reason}, _State, Socket) ->
     io:format("Unexpected TCP error~n"),
     %% A TPC error occurred. Log this stuff.
@@ -119,11 +117,13 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
 %% @doc The function is called upon termination and makes sure that
 %% the Socket is closed.
 
--spec terminate(Reason, State, Socket) -> none() when
+-spec terminate(Reason, State, {UserId, Socket}) -> none() when
       Reason :: term(),
       State :: atom(),
+      UserId :: integer(),
       Socket :: socket().
 
-terminate(_Reason, _State, Socket) ->
-    gen_tcp:close(Socket),
-    io:format("Terminating in client_serv~n").
+terminate(Reason, State, {UserId, _Socket}) ->
+    ok = account:logout(UserId),
+    io:format("Logged out: ~w~n", [UserId]),
+    io:format("Terminating client_serv: ~w ~w~n", [State, Reason]).

@@ -72,11 +72,10 @@ connect(initialized, ListenSocket) ->
 
 %% @doc Handles login and registration instructions sent from a 
 %% client. When a clients sends a valid user login packet, this 
-%% callback will make the login and spawn a new client_serv process 
+%% callback will make the login, spawn a new client_serv process 
 %% and transfer control over AcceptSocket to the spawned process, 
 %% then terminate. When a user register packet is sent, the 
-%% callback will try the registration and go back to its initial 
-%% state.
+%% callback will try the registration and terminate.
 
 -spec login(Event, AcceptSocket) -> Result when
       Type :: binary(),
@@ -92,9 +91,11 @@ login({?LOGIN, Packet}, AcceptSocket) ->
 	    io:format("Logged in~n"),
 	    {ok, Pid} = client_serv_sup:start_client_serv(UserId, AcceptSocket),
 	    case gen_tcp:controlling_process(AcceptSocket, Pid) of
-		ok -> client_serv:verify_control_transfer(Pid);
-		{error, Reason} -> io:format("Socket control transfer failed: ~w~n~w~n~w~n", 
-					     [Reason, inet:getstat(AcceptSocket), process_info(Pid)]) %% Log that shit
+		ok -> 
+		    client_serv:verify_control_transfer(Pid);
+		{error, _Reason} -> 
+		    io:format("Socket control transfer failed.~n"),
+		    account:logout(UserId)
 	    end;
 	{error, no_user} -> 
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_USERNAME),
@@ -114,12 +115,8 @@ login({?REGISTER, Packet}, AcceptSocket) ->
 	{error, user_already_exist} ->
 	    io:format("User not registered~n"),
 	    gen_tcp:send(AcceptSocket, ?REGISTER_FALSE)
-    end,		
-    {next_state, login, AcceptSocket};
-login(Packet, AcceptSocket) ->
-    %% Received an unknown packet, log it and stay in the state
-    io:format("Received weird message: ~w~n", [Packet]),
-    {next_state, login, AcceptSocket}.
+    end,
+    {stop, normal, AcceptSocket}.
 
 
 %% @doc Receives {tcp, Socket, Package} messages as events and 
@@ -139,9 +136,9 @@ login(Packet, AcceptSocket) ->
       Socket :: socket(),
       Result :: {stop, normal, Socket}.      
 
-handle_info({tcp, _, <<Type:1/binary, Packet/binary>>}, State, AcceptSocket) ->
-    inet:setopts(AcceptSocket, [{active, once}]),
-    ?MODULE:State({Type, Packet}, AcceptSocket);
+handle_info({tcp, _, <<Type:1/binary, Packet/binary>>}, State, Socket) ->
+    inet:setopts(Socket, [{active, once}]),
+    ?MODULE:State({Type, Packet}, Socket);
 handle_info({tcp_closed, _}, _State, Socket) ->
     io:format("Disconnected unexpectedly~n"),
     %% Connection was unexpectedly lost. Log this stuff.
@@ -152,16 +149,12 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
     {stop, normal, Socket}.
 
 
-%% @doc Executed when Listener is about to terminate. Socket is closed
-%% if State is not connect.
+%% @doc Executed when Listener is about to terminate.
 
 -spec terminate(Reason, State, Socket) -> undefined when
       Reason :: term(),
       State :: login | atom(),
       Socket :: socket().
 
-terminate(_Reason, login, AcceptSocket) ->
-    gen_tcp:close(AcceptSocket),
-    io:format("Terminating listener~n");
-terminate(_Reason, _State, _ListenSocket) ->
-    io:format("Terminating listener~n").
+terminate(Reason, State, _Socket) ->
+    io:format("Terminating listener: ~w ~w~n", [State, Reason]).
