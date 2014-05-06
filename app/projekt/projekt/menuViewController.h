@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NetworkConnectionClass.h"
 
 @interface menuViewController : UIViewController
 {
