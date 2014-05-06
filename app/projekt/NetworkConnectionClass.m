@@ -42,7 +42,7 @@ static NSOutputStream *outputStream;
     CFWriteStreamRef writeStream;
     
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.5.227", 8888, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.15.24", 8888, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *) readStream;
     outputStream = (__bridge NSOutputStream *) writeStream;
     
