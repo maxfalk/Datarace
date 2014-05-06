@@ -149,6 +149,15 @@
 
 }
 
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 1) {
+        [NetworkConnectionClass signOut];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        
+    }
+}
+
 
 /*
 #pragma mark - Navigation

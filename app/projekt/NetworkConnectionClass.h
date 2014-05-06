@@ -53,4 +53,6 @@
  */
 +(int)signupUser:(NSString *)username password:(NSString *)password email:(NSString *)email;
 
++(void)signOut;
+
 @end

@@ -142,6 +142,21 @@ static NSOutputStream *outputStream;
 
 }
 
++(void)signOut {
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    
+    loginOutput packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type = 0;
+    packet.message = (char)3;
+    
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(loginOutput)];
+
+    
+}
+
 
 
 @end
