@@ -255,6 +255,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "OSM-projekt";
 				TargetAttributes = {
+					C7B7C7D818FD17EC0096DB88 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					C7B7C7F918FD17EC0096DB88 = {
 						TestTargetID = C7B7C7D818FD17EC0096DB88;
 					};
