@@ -8,6 +8,9 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-@interface LocationManager : CLLocationManager
+@interface CLLocationManagerDelegate : CLLocationManager
+
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) CLLocation *currentLocation;
 
 @end

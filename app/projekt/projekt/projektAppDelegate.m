@@ -11,7 +11,7 @@
 @implementation projektAppDelegate
 
 @synthesize window = _window;
-
+/*
 @synthesize LocationManager = _LocationManager;
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocations:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
@@ -29,11 +29,10 @@
     }
 
 
-}
+} */
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    {
-        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+      /*  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         // Override point for customization after application launch.
         self.window.backgroundColor = [UIColor whiteColor];
         [self.window makeKeyAndVisible];
@@ -43,7 +42,7 @@
             //I'm using ARC with this project so no need to release
             
             _LocationManager.delegate=self;
-            _LocationManager.purpose = @"We will try to tell you where you are if you get lost";
+            //_LocationManager.purpose = @"We will try to tell you where you are if you get lost";
             _LocationManager.desiredAccuracy=kCLLocationAccuracyBest;
             _LocationManager.distanceFilter=10;
             self.LocationManager=_LocationManager;
@@ -52,11 +51,11 @@
         
             [self.LocationManager startUpdatingLocation];
         
-        }
+        }*/
         
     // Override point for customization after application launch.
     return YES;
-}
+
     }
 
 - (void)applicationWillResignActive:(UIApplication *)application
