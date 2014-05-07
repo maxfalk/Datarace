@@ -5,40 +5,17 @@
 -include_lib("eunit/include/eunit.hrl").
 
 
-
-%%====================================================================
-%% Test description
-%%====================================================================
-
-master_sup_test_() ->
-    {"Test master supervisor", 
-     {setup, fun start/0, fun stop/1, fun () ->
-					      {inorder, [fun start_link_test/1]}
-				      end}}.
-
-
-%%====================================================================
-%% Setup functions
-%%====================================================================
-
-start() ->
-    ok.
-
-stop(_) ->
-    ok.
-
-
 %%====================================================================
 %% Actual tests
 %%====================================================================
 
-start_link_test(_) ->
-    {StartRes, _} = master_sup:start_link(),
-    ?assertEqual(StartRes, ok),
+start_link_test() ->
+    process_flag(trap_exit, true),
+    {StartRes, Pid} = master_sup:start_link(),
+    ?assertEqual(ok, StartRes),
     ?assert(whereis(client_serv_sup) =/= undefined),
     ?assert(whereis(listener_sup) =/= undefined),
-    exit(whereis(master_sup), kill).
-    
+    exit(whereis(master_sup), shutdown).
 
 
 %%====================================================================
