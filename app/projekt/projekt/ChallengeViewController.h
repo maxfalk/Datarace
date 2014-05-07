@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface ChallengeViewController : UIViewController 
+@interface ChallengeViewController : UIViewController
 
 //@property (nonatomic) NSInputStream *inputStream;
 //@property (nonatomic) NSOutputStream *outputStream;
+
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
+@property (strong, nonatomic) IBOutlet UILabel *challenger;
+@property (strong, nonatomic) NSString *challengerUsername;
+@property (weak, nonatomic) IBOutlet UILabel *updateDistanceLabel;
+@property (weak, nonatomic) IBOutlet UISlider *updateDistanceSlider;
 
 @end

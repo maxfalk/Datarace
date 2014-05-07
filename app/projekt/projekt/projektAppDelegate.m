@@ -10,12 +10,54 @@
 
 @implementation projektAppDelegate
 
+@synthesize window = _window;
+/*
+@synthesize LocationManager = _LocationManager;
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocations:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    NSDate* eventDate = newLocation.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    if (abs(howRecent) < 15.0) {
+        if (newLocation.horizontalAccuracy < 35.0) {
+          //Location seems pretty accurate, let's use it!
+            NSLog(@"latitude %+.6f, longitude %+.6f\n",newLocation.coordinate.latitude,
+                  newLocation.coordinate.longitude);
+            NSLog(@"Horizontal Accuracy:%f", newLocation.horizontalAccuracy);
+        
+        //[manager stopUpdatingLocation];
+        }
+    }
+
+
+} */
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+      /*  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        // Override point for customization after application launch.
+        self.window.backgroundColor = [UIColor whiteColor];
+        [self.window makeKeyAndVisible];
+        
+        if(self.LocationManager==nil){
+            _LocationManager=[[CLLocationManager alloc] init];
+            //I'm using ARC with this project so no need to release
+            
+            _LocationManager.delegate=self;
+            //_LocationManager.purpose = @"We will try to tell you where you are if you get lost";
+            _LocationManager.desiredAccuracy=kCLLocationAccuracyBest;
+            _LocationManager.distanceFilter=10;
+            self.LocationManager=_LocationManager;
+        }
+        if([CLLocationManager locationServicesEnabled]) {
+        
+            [self.LocationManager startUpdatingLocation];
+        
+        }*/
+        
     // Override point for customization after application launch.
     return YES;
-}
-							
+
+    }
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

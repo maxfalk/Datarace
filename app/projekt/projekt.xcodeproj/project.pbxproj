@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D9F6B601917ABA300937D62 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */; };
+		5D9F6B631917AE3C00937D62 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D9F6B621917AE3C00937D62 /* LocationManager.m */; };
 		C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */; };
 		C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */; };
 		C7B7C7DD18FD17EC0096DB88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B7C7DC18FD17EC0096DB88 /* Foundation.framework */; };
@@ -43,6 +45,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		5D9F6B611917AE3C00937D62 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
+		5D9F6B621917AE3C00937D62 /* LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
 		C7A7ED3618FFD5BA00DE0740 /* requestTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = requestTableViewController.h; sourceTree = "<group>"; };
 		C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = requestTableViewController.m; sourceTree = "<group>"; };
 		C7A7ED3918FFD89E00DE0740 /* CustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCell.h; sourceTree = "<group>"; };
@@ -87,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D9F6B601917ABA300937D62 /* CoreLocation.framework in Frameworks */,
 				C7B7C7DF18FD17EC0096DB88 /* CoreGraphics.framework in Frameworks */,
 				C7B7C7E118FD17EC0096DB88 /* UIKit.framework in Frameworks */,
 				C7B7C7DD18FD17EC0096DB88 /* Foundation.framework in Frameworks */,
@@ -128,6 +134,7 @@
 		C7B7C7DB18FD17EC0096DB88 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */,
 				C7B7C7DC18FD17EC0096DB88 /* Foundation.framework */,
 				C7B7C7DE18FD17EC0096DB88 /* CoreGraphics.framework */,
 				C7B7C7E018FD17EC0096DB88 /* UIKit.framework */,
@@ -135,6 +142,7 @@
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		C7B7C7E218FD17EC0096DB88 /* projekt */ = {
 			isa = PBXGroup;
@@ -162,8 +170,10 @@
 				C7CC2395190A81D40040E8C1 /* SignupViewController.m */,
 				C7EB1190190E77C600861F26 /* RegisteredViewController.h */,
 				C7EB1191190E77C600861F26 /* RegisteredViewController.m */,
-				C7B7C7F418FD17EC0096DB88 /* Images.xcassets */,
+				5D9F6B611917AE3C00937D62 /* LocationManager.h */,
+				5D9F6B621917AE3C00937D62 /* LocationManager.m */,
 				C7B7C7E318FD17EC0096DB88 /* Supporting Files */,
+				C7B7C7F418FD17EC0096DB88 /* Images.xcassets */,
 			);
 			path = projekt;
 			sourceTree = "<group>";
@@ -245,6 +255,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "OSM-projekt";
 				TargetAttributes = {
+					C7B7C7D818FD17EC0096DB88 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					C7B7C7F918FD17EC0096DB88 = {
 						TestTargetID = C7B7C7D818FD17EC0096DB88;
 					};
@@ -257,6 +274,7 @@
 			knownRegions = (
 				en,
 				Base,
+				English,
 			);
 			mainGroup = C7B7C7D018FD17EC0096DB88;
 			productRefGroup = C7B7C7DA18FD17EC0096DB88 /* Products */;
@@ -305,6 +323,7 @@
 				C7F584B41906A47D0040254A /* GCDAsyncUdpSocket.m in Sources */,
 				C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */,
 				C7F584B71906A7F90040254A /* ChallengeViewController.m in Sources */,
+				5D9F6B631917AE3C00937D62 /* LocationManager.m in Sources */,
 				C7CC2396190A81D40040E8C1 /* SignupViewController.m in Sources */,
 				C7ECED5318FD4A0000C3EE81 /* menuViewController.m in Sources */,
 			);

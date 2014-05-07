@@ -11,7 +11,7 @@
 @interface CompetitorTableViewController ()
 
 @property (strong, nonatomic) NSMutableArray *competitors;
-@property (nonatomic) UIButton *acceptButton;
+//@property (nonatomic) UIButton *acceptButton;
 
 
 @end
@@ -82,14 +82,18 @@
     
     
 
-    _acceptButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 13, 34, 34)];
-    [_acceptButton addTarget:self action:@selector(acceptButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [_acceptButton setImage:[UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
+   // UIButton *acceptButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 13, 34, 34)];
+   // [acceptButton addTarget:self action:@selector(acceptButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    //[acceptButton setImage:[UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
     
     
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    [cell addSubview:_acceptButton];
-    _acceptButton.hidden=YES;
+    //[cell addSubview:acceptButton];
+   // acceptButton.hidden=YES;
+    //cell.contentView = acceptButton;
+    //acceptButton.hidden=YES;
+    //[cell addSubview:acceptButton];
+    //[cell.acceptButton setHidden:YES]:
     
     return cell;
 }
@@ -108,10 +112,57 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    _acceptButton.hidden = NO;
+    /*
+    //[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSIndexPath *selectedIndexPath = [tableView indexPathForSelectedRow];
+    CustomCell *cell = (CustomCell *)[tableView cellForRowAtIndexPath:indexPath];
+    CustomCell *selectedCell = (CustomCell *)[tableView cellForRowAtIndexPath:selectedIndexPath];
+    
+    //UITableViewCell *buttonCell = [tableView cellForRowAtIndexPath:indexPath];
+   // buttonCell.myButton.hidden = NO;
+    
+    UIButton *acceptButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 13, 34, 34)];
+    [acceptButton addTarget:self action:@selector(acceptButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [acceptButton setImage:[UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
+    [cell addSubview:acceptButton];
+    acceptButton.alpha = 0;
+
+   
+    if (indexPath.row == 0) {
+        
+        [UIView animateWithDuration:0.3
+                              delay: 0
+                            options: UIViewAnimationCurveLinear
+                         animations:^{
+                             acceptButton.alpha = 1;
+                         }
+                         completion:nil];
+        
+        
+        
+        
+    } else if (indexPath.row == 1) {
+        // _acceptButton.hidden = NO;
+    }
+    //_acceptButton.hidden = NO;
+
+    */
+    
+    [self performSegueWithIdentifier:@"challengeSettings" sender:indexPath];
 }
+
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"challengeSettings"]) {
+        
+        CustomCell *cell = (CustomCell *)[self.tableView cellForRowAtIndexPath:sender];
+        NSString *string = cell.competitorLabel.text;
+        ChallengeViewController *class = (ChallengeViewController *) [segue destinationViewController];
+        class.challengerUsername = string;
+    }
+}
+
 //-(void)tableView(UITableView *) didsel
 
 /*

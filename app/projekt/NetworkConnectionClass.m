@@ -42,7 +42,7 @@ static NSOutputStream *outputStream;
     CFWriteStreamRef writeStream;
     
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.5.227", 8888, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.15.24", 8888, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *) readStream;
     outputStream = (__bridge NSOutputStream *) writeStream;
     
@@ -140,6 +140,21 @@ static NSOutputStream *outputStream;
         NSLog(@"wrong package");
     return 3;
 
+}
+
++(void)signOut {
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    
+    loginOutput packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type = 0;
+    packet.message = (char)3;
+    
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(loginOutput)];
+
+    
 }
 
 

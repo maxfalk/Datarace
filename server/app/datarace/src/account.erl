@@ -5,9 +5,14 @@
 %% !! NOT FINISHED !!
 -module(account).
 
--export([login/2,logout/1,register/3]).
+-export([login/2,logout/1,register/3,delete/1]).
 
 -include("../include/database.hrl").
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%           LOGIN                  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%@doc Looks at the user and password combinations if it is valid 
@@ -69,13 +74,6 @@ check_password(Password_input,Password_stored) ->
 	    false
     end.
 
-%%@doc Hash a given password.
--spec crypt(Password) -> string() when
-      Password :: string().
-
-crypt(Password)->
-    base64:encode(crypto:sha(lists:sublist(Password,1,50))).
-
 
 %%@doc Mark user as loggedin in the database
 -spec set_loggedin(Userid) -> ok when
@@ -86,6 +84,10 @@ set_loggedin(Userid)->
 		   <<"INSERT INTO tLoginLog (userId,login) VALUES(?, now())">>,
 		   [Userid]),
     ok.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%           LOGOUT                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%@doc Logout user from database, makes appropriate calls to define user
@@ -127,6 +129,10 @@ set_logout_time(LoginlogId)->
 		   [LoginlogId]),
     ok.
     
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%           REGISTER               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%@doc Register a new user in the database, checks that the user doesn't already exist.
 -spec register(User_name, Password, Email) -> ok | {error, user_already_exist} when
@@ -182,8 +188,36 @@ get_user(User_name)->
 				<<"SELECT id FROM tUsers WHERE user_name = ?">>,
 				[User_name]),
     database:result_to_record(Sql_result, register_table).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%           DELETE                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%@doc Delete a user
+-spec delete(Userid)-> ok when 
+      Userid :: integer().
+
+delete(Userid)->    
+    database:db_query(delete_user,
+		      <<"CALL delete_user(?)">>,
+		      [Userid]),
+    ok.
+
+
+
     
-    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%           UTILS                  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%@doc Hash a given password.
+-spec crypt(Password) -> string() when
+      Password :: string().
+
+crypt(Password)->
+    base64:encode(crypto:sha(lists:sublist(Password,1,50))).
 
 
     

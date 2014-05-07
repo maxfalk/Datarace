@@ -6,17 +6,18 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% TESTS DESCRIPTIONS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%{setup, Where, Setup, Cleanup, Instantiator} 
 account_test_()->
    {"Test registering, login and logout directly at the DB",
-    {setup, fun start/0, fun stop/1,fun ()-> {inorder, [fun register_test/1,
-							   fun login_test/1, 
-							   fun logout_test/1]}
-						    end}}.
+    {setup, fun start/0, fun stop/1,
+     fun (Data) ->
+	     [db_register(Data),
+	     login(Data),
+	     logout(Data)]
+     end}}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -27,10 +28,11 @@ start()->
     application:start(crypto),
     application:start(emysql),
     database:init(),
-    ok.
+    account:register("Autotest","Autotest","AT@mail.com").
 
 stop(_)->
-    database:db_query("DELETE FROM tUsers WHERE user_name = ""Autotest"""),
+    {ok, Id} = account:login("Autotest","Autotest"),
+    account:delete(Id),
     database:stop(),
     application:stop(emysql),
     application:stop(crypto).
@@ -42,23 +44,22 @@ stop(_)->
 %%% ACTUAL TESTS       %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
+db_register(RegOut)->
+    [?_assertEqual(RegOut, ok),
+     ?_assertEqual(account:register("Autotest","o","testar"), {error, user_already_exist})].
 
-login_test(_)->
-    L1 = emysql:as_proplist(database:db_query(
-			      "SELECT id FROM tUsers WHERE user_name = ""Autotest""")),
-    Id = hd(L1),
-    ?assertEqual(account:login("Autotest","Autotest"), {ok, Id}),
-    ?assertEqual(account:login("qpqpqp","test"), {error, no_user}),
-    ?assertEqual(account:login("Autotest","ost"), {error, wrong_password}).
-
-logout_test(_)->
+login(_)-> 
     {ok, Id} = account:login("Autotest","Autotest"),
-    ?assertEqual(account:logout(Id), ok),
-    ?assertEqual(account:logout(77), ok).
+    [?_assertEqual(account:login("Autotest","Autotest"), {ok, Id}),
+    ?_assertEqual(account:login("qpqpqp","test"), {error,no_user}),
+    ?_assertEqual(account:login("Autotest","ost"), {error,wrong_password})].
 
-register_test(_)->
-    ?assertEqual(account:register("Autotest","Autotest","AT@mail.com"), ok),
-    ?assertEqual(account:register("Attotest","o","testar",""), {error, user_already_exist}).
+logout(_)->
+    {ok, Id} = account:login("Autotest","Autotest"),
+    [?_assertEqual(account:logout(Id), ok),
+    ?_assertEqual(account:logout(77), ok)].
+
+
     
 
 

@@ -89,7 +89,7 @@
 
 - (IBAction)loginButtonPressed:(id)sender {
     
-    
+    /*
     [NetworkConnectionClass initNetworkCommunication];
     _wheel.hidden = NO;
     [_wheel startAnimating];
@@ -99,6 +99,8 @@
     int result = [NetworkConnectionClass sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
     
     if (result == 0) {
+        _usernameField.text = @"";
+        _passwordField.text = @"";
         [self performSegueWithIdentifier:@"login" sender:self.networkConnection];
     } else if (result == 1) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
@@ -139,8 +141,8 @@
     [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
      
     
-    
-     //[self performSegueWithIdentifier:@"login" sender:self];
+    */
+     [self performSegueWithIdentifier:@"login" sender:self];
 }
 
 

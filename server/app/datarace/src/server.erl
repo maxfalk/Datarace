@@ -1,14 +1,22 @@
-
+%%@doc module for starting and stopping the servers applications
+%%
+%%
 
 -module(server).
 
 -export([start/0, stop/0]).
+
+%%@doc start the server
+%%
+-spec start()-> ok.
 
 start()->
     application:start(crypto),
     application:start(emysql),
     application:start(datarace).
 
+%%@doc Stop the server
+-spec stop()-> ok.
 
 stop()->
     application:stop(datarace),

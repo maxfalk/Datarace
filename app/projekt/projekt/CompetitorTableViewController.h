@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomCell.h"
+#import "ChallengeViewController.h"
 
 @interface CompetitorTableViewController : UITableViewController
 

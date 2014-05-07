@@ -1,9 +1,24 @@
+%%@doc Author: Marina Jaksic
+%% This module contains functions for calculating the distance with the points for longitude and latitude. 
+%% We can aswell get the speed of the race, average speed and average distance
+%% from this module.  
 -module(gps).
+
 -export([distance/4, speed/2, averagespeed/2, averagedistance/2]).
 
-%===============================================%
-%% calculates the distance between two points   %
-%===============================================%
+
+
+
+%%@doc===============================================================================%
+%% calculates the distance between two points and gives us the distance in km.  
+%====================================================================================%
+
+-spec distance(Long1, Lat1, Long2, Lat2) -> ok when
+	Long1 :: interger(),
+	Lat1 :: interget(),
+	Long2 :: interget(),
+	Lat2 :: interger ().
+
 distance(Long1, Lat1, Long2, Lat2) ->
     DegToRad = fun(Deg) -> math:pi()*Deg/180 end,
     [RLong1, RLat1, RLong2, RLat2] = [DegToRad(Deg) || Deg <- [Long1, Lat1, Long2, Lat2]],
@@ -20,19 +35,35 @@ distance(Long1, Lat1, Long2, Lat2) ->
     Km.
 
 
-%==================================================%
-%%calculates the speed from given time and distance%
-%==================================================%
+%%@doc==================================================%
+%%calculates the speed from given time and distance
+%=======================================================%
+
+-spec speed(Time, Distance) -> ok when
+	Time :: interger(),
+	Distance :: interger().
+
 speed(Time, Distance) ->
     Distance/Time.  
-%=============================================%
-%%calculates the average speed                %   
-%=============================================%
+%%@doc=============================================%
+%%calculates the average speed                
+%==================================================%
+
+-spec averagespeed(Totaldistance, Totaltime)-> ok when
+	Totaldistance :: interger(),
+	Totaltime :: interger(). 
+
 averagespeed(Totaldistance, Totaltime) ->
     Totaldistance/Totaltime. 
-%============================================%    
-%%calculates the average distance            %
-%============================================%
+%%@doc============================================%    
+%%calculates the average distance            
+%=================================================%
+
+-spec averagedistance(Totaltime, Totalspeed) -> ok when 
+
+	Totaltime :: interger(),
+	Totalspeed :: interger(). 
+
 averagedistance(Totaltime, Totalspeed) ->
    Totaltime*Totalspeed.
 
