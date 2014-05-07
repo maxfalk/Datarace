@@ -1,0 +1,9 @@
+-module(log_serv_test).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ACTUAL TESTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+log_test()->
+start_link(verbose),
+?assert(log("hej") =:= ok). 
+
