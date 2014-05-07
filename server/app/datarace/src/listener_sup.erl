@@ -27,10 +27,9 @@
 		ignore | 
 		{error, Error},
       Error :: {already_started, pid()} | 
-	       {shutdown, term()} | 
 	       term().
 
-start_link(Port, Listeners) ->
+start_link(Port, Listeners) when Listeners > 0 ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, {Port, Listeners}).
 
 

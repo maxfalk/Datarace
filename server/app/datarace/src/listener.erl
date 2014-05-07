@@ -23,7 +23,12 @@
 %% client to log in and spawn a new client_serv process to handle the
 %% connection.
 
--spec start_link(ListenSocket) -> undefined when
+-spec start_link(ListenSocket) -> Result when
+      Result :: {ok, pid()} | 
+		ignore | 
+		{error, Error},
+      Error :: {already_started, pid()} |
+	       term(),
       ListenSocket :: socket().
 
 start_link(ListenSocket) ->
