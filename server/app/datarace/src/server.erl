@@ -13,13 +13,16 @@
 start()->
     application:start(crypto),
     application:start(emysql),
+    application:start(log),
     application:start(datarace).
+
 
 %%@doc Stop the server
 -spec stop()-> ok.
 
 stop()->
     application:stop(datarace),
+    application:stop(log),
     application:stop(emysql),
     application:stop(crypto).
 

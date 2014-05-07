@@ -38,7 +38,6 @@ login_helper(_Password, [])->
 login_helper(Password, User_data)->
     Login_rec = database:get_row(User_data,1),
     Password_salt = Password ++ binary_to_list(Login_rec#login_table.salt),
-    io:format("User logging in: ~p , ~p~n",[Login_rec#login_table.id,Password_salt]),
     case check_password(Password_salt ,Login_rec#login_table.password) of
 	ok ->
 	    set_loggedin(Login_rec#login_table.id),

@@ -37,7 +37,7 @@ send_msg(Pid)->
 
 -spec loop(Pid, CurrentDate)-> ok when
 	Pid :: pid(),
-	Currentdate :: {interger, interger, interger}.
+	CurrentDate :: {integer(), integer(), integer()}.
 
 loop(Pid, CurrentDate)->
     {Date, _} = calendar:local_time(),

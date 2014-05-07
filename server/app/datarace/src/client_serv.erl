@@ -53,8 +53,8 @@ verify_control_transfer(Pid) ->
       Socket :: socket(),
       Args :: {UserId, Socket}.
 
-init(Args) ->
-    io:format("Spawned new client_serv.~n"),
+init({UserId, _Socket} = Args) ->
+    log_serv:log("Spawned new client_serv " ++ integer_to_list(UserId)),
     {ok, verify, Args}.
 
 
@@ -68,7 +68,7 @@ init(Args) ->
       Result :: {next_state, main, {UserId, Socket}}.
 
 verify(control_transferred, {UserId, Socket}) ->
-    io:format("Control over socket transferred for UID: ~w~n", [UserId]),
+    log_serv:log("Control over socket transferred for UID: " ++ integer_to_list(UserId)),
     ok = gen_tcp:send(Socket, ?LOGIN_TRUE),
     {next_state, main, {UserId, Socket}}.
 
@@ -105,12 +105,14 @@ handle_info({tcp, _, <<Packet/binary>>}, State, {UserId, Socket}) ->
     inet:setopts(Socket, [{active, once}]),
     ?MODULE:State(Packet, {UserId, Socket});
 handle_info({tcp_closed, _}, _State, {UserId, Socket}) ->
-    io:format("Disconnected unexpectedly~n"),
-    %% Connection was unexpectedly lost. Log this stuff.
+    {ok, [{Address, Port}]} = inet:peername(Socket),
+    log_serv:log("User disconnected unexpectedly: IP: " ++ inet_parse:ntoa(Address) ++ 
+		     ", Port: " ++ integer_to_list(Port)),    
     {stop, normal, {UserId, Socket}};
 handle_info({tcp_error, _, _Reason}, _State, Socket) ->
-    io:format("Unexpected TCP error~n"),
-    %% A TPC error occurred. Log this stuff.
+    {ok, [{Address, Port}]} = inet:peername(Socket),
+    log_serv:log("Tcp error: IP: " ++ inet_parse:ntoa(Address) ++ 
+		     ", Port: " ++ integer_to_list(Port)),  
     {stop, normal, Socket}.
 
 
@@ -123,7 +125,11 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
       UserId :: integer(),
       Socket :: socket().
 
-terminate(Reason, State, {UserId, _Socket}) ->
+terminate(Reason, State, {UserId, Socket}) ->
     ok = account:logout(UserId),
-    io:format("Logged out: ~w~n", [UserId]),
-    io:format("Terminating client_serv: ~w ~w~n", [State, Reason]).
+    log_serv:log("Logged out user:" ++ integer_to_list(UserId)),
+    {ok, [{Address, Port}]} = inet:peername(Socket),
+    log_serv:log("Terminating client server: IP: " ++ 
+		     inet_parse:ntoa(Address) ++ ":" ++ integer_to_list(Port) ++
+		     " Reason: " ++ atom_to_list(Reason) ++ 
+		     ", State: " ++ atom_to_list(State)).

@@ -47,7 +47,6 @@ start_link(ListenSocket) ->
       ListenSocket :: socket().
 
 init(ListenSocket) ->
-    io:format("Initializing~n"),
     gen_fsm:send_event(self(), initialized),
     {ok, connect, ListenSocket}.
 
@@ -66,7 +65,9 @@ init(ListenSocket) ->
 connect(initialized, ListenSocket) ->
     case gen_tcp:accept(ListenSocket) of
 	{ok, AcceptSocket} ->
-	    io:format("Connected~n"),
+	    {ok, [{Address, Port}]} = inet:peername(AcceptSocket),
+	    log_serv:log("User connected: IP: " ++ inet_parse:ntoa(Address) ++ 
+			     ", Port: " ++ integer_to_list(Port)),
 	    listener_sup:start_listener(),
 	    {next_state, login, AcceptSocket};
 	{error, Reason} ->
@@ -90,35 +91,35 @@ connect(initialized, ListenSocket) ->
 
 login({?LOGIN, Packet}, AcceptSocket) ->
     {UserName, Password} = packconv:convert_pack(?LOGIN, Packet),
-    io:format("UN: ~p, PW: ~p~n", [UserName, Password]),
     case account:login(UserName, Password) of
 	{ok, UserId} ->
-	    io:format("Logged in~n"),
+	    log_serv:log("Logged in userid: " ++ integer_to_list(UserId)),
 	    {ok, Pid} = client_serv_sup:start_client_serv(UserId, AcceptSocket),
 	    case gen_tcp:controlling_process(AcceptSocket, Pid) of
 		ok -> 
 		    client_serv:verify_control_transfer(Pid);
 		{error, _Reason} -> 
-		    io:format("Socket control transfer failed.~n"),
+		    log_serv:log(
+		      "Socket control transfer failed. UID " ++ integer_to_list(UserId)),
 		    account:logout(UserId)
 	    end;
 	{error, no_user} -> 
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_USERNAME),
-	    io:format("Login in failed: Wrong username~n");
+	    log_serv:log("Login in failed: Wrong username");
 	{error, wrong_password} ->
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_PASSWORD),
-	    io:format("Login in failed: Wrong password~n")
+	    log_serv:log("Login in failed: Wrong password")
     end,
     {stop, normal, AcceptSocket};
 login({?REGISTER, Packet}, AcceptSocket) ->
     {UserName, Password, Email} = packconv:convert_pack(?REGISTER, Packet),
-    io:format("UN: ~p, PW: ~p, EM: ~p~n", [UserName, Password, Email]),
+    log_serv:log("Registering user: " ++ UserName),  
     case account:register(UserName, Password, Email) of
 	ok ->
-	    io:format("User registered~n"),
+	    log_serv:log("User: " ++ UserName ++ " registered"),
 	    gen_tcp:send(AcceptSocket, ?REGISTER_TRUE);
 	{error, user_already_exist} ->
-	    io:format("User not registered~n"),
+	    log_serv:log("User: " ++ UserName ++ " already registered"),
 	    gen_tcp:send(AcceptSocket, ?REGISTER_FALSE)
     end,
     {stop, normal, AcceptSocket}.
@@ -145,12 +146,14 @@ handle_info({tcp, _, <<Type:1/binary, Packet/binary>>}, State, Socket) ->
     inet:setopts(Socket, [{active, once}]),
     ?MODULE:State({Type, Packet}, Socket);
 handle_info({tcp_closed, _}, _State, Socket) ->
-    io:format("Disconnected unexpectedly~n"),
-    %% Connection was unexpectedly lost. Log this stuff.
+      {ok, [{Address, Port}]} = inet:peername(Socket),
+	    log_serv:log("User disconnected unexpectedly: IP: " ++ inet_parse:ntoa(Address) ++ 
+			     ", Port: " ++ integer_to_list(Port)),
     {stop, normal, Socket};
 handle_info({tcp_error, _, _Reason}, _State, Socket) ->
-    io:format("Unexpected TCP error~n"),
-    %% A TPC error occurred. Log this stuff.
+    {ok, [{Address, Port}]} = inet:peername(Socket),
+	    log_serv:log("Tcp error: IP: " ++ inet_parse:ntoa(Address) ++ 
+			     ", Port: " ++ integer_to_list(Port)),  
     {stop, normal, Socket}.
 
 
@@ -161,5 +164,12 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
       State :: login | atom(),
       Socket :: socket().
 
-terminate(Reason, State, _Socket) ->
-    io:format("Terminating listener: ~w ~w~n", [State, Reason]).
+terminate(Reason, State, Socket) ->
+    {ok, [{Address, Port}]} = inet:peername(Socket),
+    log_serv:log("Terminating listener: IP: " ++ 
+		     inet_parse:ntoa(Address) ++ ":" ++ integer_to_list(Port) ++
+		     " Reason: " ++ atom_to_list(Reason) ++ 
+		     ", State: " ++ atom_to_list(State)).
+    
+
+
