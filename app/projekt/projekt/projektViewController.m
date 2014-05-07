@@ -89,7 +89,7 @@
 
 - (IBAction)loginButtonPressed:(id)sender {
     
-    
+    /*
     [NetworkConnectionClass initNetworkCommunication];
     _wheel.hidden = NO;
     [_wheel startAnimating];
@@ -141,8 +141,8 @@
     [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
      
     
-    
-     //[self performSegueWithIdentifier:@"login" sender:self];
+    */
+     [self performSegueWithIdentifier:@"login" sender:self];
 }
 
 

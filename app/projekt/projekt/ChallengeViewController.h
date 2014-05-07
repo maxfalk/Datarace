@@ -15,5 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 @property (strong, nonatomic) IBOutlet UILabel *challenger;
 @property (strong, nonatomic) NSString *challengerUsername;
+@property (weak, nonatomic) IBOutlet UILabel *updateDistanceLabel;
+@property (weak, nonatomic) IBOutlet UISlider *updateDistanceSlider;
 
 @end
