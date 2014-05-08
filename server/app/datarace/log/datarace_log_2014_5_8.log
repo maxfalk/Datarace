@@ -1,0 +1,9 @@
+[2014-5-8 11:26:28] User connected: IP: 127.0.0.1, Port: 39625
+[2014-5-8 11:33:49] User connected: IP: 127.0.0.1, Port: 57522
+[2014-5-8 11:35:6] User connected: IP: 130.238.247.162, Port: 57685
+[2014-5-8 11:35:7] Login in failed: Wrong username
+[2014-5-8 11:35:7] Terminating listener: Reason: normal, State: login
+[2014-5-8 11:35:20] User connected: IP: 127.0.0.1, Port: 52676
+[2014-5-8 11:36:50] User connected: IP: 130.238.247.162, Port: 57741
+[2014-5-8 11:36:50] Login in failed: Wrong username
+[2014-5-8 11:36:50] Terminating listener: Reason: normal, State: login

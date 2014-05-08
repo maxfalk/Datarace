@@ -11,6 +11,10 @@
 
 -include("../include/database.hrl").
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         REQUEST            %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%@doc Make a new request to a user
 -spec request(UserId, Ch_userId, Distance) -> ok when
       UserId :: integer(),
@@ -59,6 +63,11 @@ request_cancel(Request_id)->
 		   [Request_id]),
     ok.
     
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         MATCH              %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 %%@doc Create a new match and return the created match details
 -spec new_match(Request_id, Main_user, Sec_user)-> match_table() when
@@ -108,6 +117,11 @@ set_winner(MatchId, WinnerId)->
     
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         GPS                %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 %%@doc Save gps information to the db.
 -spec gps_save(User_id, Match_id, Longidtude, Latitude) -> ok when
       User_id :: integer(), 
@@ -124,3 +138,12 @@ gps_save(User_id, Match_id, Longidtude, Latitude)->
 		   [User_id, Match_id, Longidtude, Latitude]),
     ok.
     
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         STATISTICS         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%@doc Get the statistics that will be displayed in the home screen,
+%%for a specific user
+%%
+get_home_stats(Userid)->
+    tbi.
