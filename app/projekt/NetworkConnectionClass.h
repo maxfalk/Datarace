@@ -55,4 +55,6 @@
 
 +(void)signOut;
 
++(void)sendUpdatedCoordinates;
+
 @end

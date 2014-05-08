@@ -12,12 +12,14 @@
 #import "SignupViewController.h"
 
 
-@interface projektViewController : UIViewController  <CLLocationManagerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
+@interface projektViewController : UIViewController  <UITextFieldDelegate, UIAlertViewDelegate>
 {
-    CLLocationManager *locationManager;
+   // CLLocationManager *locationManager;
 }
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (strong) NetworkConnectionClass *networkConnection;
+
+//-(void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation;
 
 //-(void)signupUser:(NSString *)username password:(NSString *)password email:(NSString *)email;
 
