@@ -65,7 +65,7 @@ init(ListenSocket) ->
 connect(initialized, ListenSocket) ->
     case gen_tcp:accept(ListenSocket) of
 	{ok, AcceptSocket} ->
-	    {ok, [{Address, Port}]} = inet:peername(AcceptSocket),
+	    {ok, {Address, Port}} = inet:peername(AcceptSocket),
 	    log_serv:log("User connected: IP: " ++ inet_parse:ntoa(Address) ++ 
 			     ", Port: " ++ integer_to_list(Port)),
 	    listener_sup:start_listener(),
@@ -146,12 +146,13 @@ handle_info({tcp, _, <<Type:1/binary, Packet/binary>>}, State, Socket) ->
     inet:setopts(Socket, [{active, once}]),
     ?MODULE:State({Type, Packet}, Socket);
 handle_info({tcp_closed, _}, _State, Socket) ->
-      {ok, [{Address, Port}]} = inet:peername(Socket),
-	    log_serv:log("User disconnected unexpectedly: IP: " ++ inet_parse:ntoa(Address) ++ 
+    {ok, [{Address, Port}]} = inet:peername(Socket),
+	    log_serv:log("User disconnected unexpectedly: IP: " ++ 
+			     inet_parse:ntoa(Address) ++ 
 			     ", Port: " ++ integer_to_list(Port)),
     {stop, normal, Socket};
 handle_info({tcp_error, _, _Reason}, _State, Socket) ->
-    {ok, [{Address, Port}]} = inet:peername(Socket),
+    {ok, {Address, Port}} = inet:peername(Socket),
 	    log_serv:log("Tcp error: IP: " ++ inet_parse:ntoa(Address) ++ 
 			     ", Port: " ++ integer_to_list(Port)),  
     {stop, normal, Socket}.
@@ -164,10 +165,8 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
       State :: login | atom(),
       Socket :: socket().
 
-terminate(Reason, State, Socket) ->
-    {ok, [{Address, Port}]} = inet:peername(Socket),
-    log_serv:log("Terminating listener: IP: " ++ 
-		     inet_parse:ntoa(Address) ++ ":" ++ integer_to_list(Port) ++
+terminate(Reason, State, _Socket) ->
+    log_serv:log("Terminating listener:" ++
 		     " Reason: " ++ atom_to_list(Reason) ++ 
 		     ", State: " ++ atom_to_list(State)).
     

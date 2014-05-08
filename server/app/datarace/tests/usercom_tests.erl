@@ -12,14 +12,21 @@
 %%% TESTS DESCRIPTIONS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 request_test_()->
-    {"Test request functions",
-      {setup, fun start_request/0, fun stop_request/1, 
+    {"Test request function",
+     {setup, fun start_request/0, fun stop_request/1, 
+      fun (SetupData)->
+	      request(SetupData)
+      end}}. 
+
+request_util_test_()->
+      {"Test request functions lookup, accept and cancel",
+      {setup, fun start_request_util/0, fun stop_request_util/1, 
        fun (SetupData)->
-		[request(SetupData),
-		request_lookup(SetupData),
+		[request_lookup(SetupData),
 		request_accept(SetupData),
 		request_cancel(SetupData)]
        end}}.
+
 
 match_test_()->
     {"Test Match functions",
@@ -27,7 +34,8 @@ match_test_()->
        fun (SetupData)->
 		[create_match(SetupData),
 		 get_match(SetupData),
-		 new_match(SetupData)]
+		 new_match(SetupData),
+		 set_winner(SetupData)]
        end}}.
 
 
@@ -42,14 +50,12 @@ gps_test_()->
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SETUP FUNCTIONS    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%% Request setup cleanup
 start_request()->
     application:start(crypto),
     application:start(emysql),
     database:init(),
-    {U1, U2} = create_users(),
-    usercom:request(U1, U2, 23),
-    {U1, U2}.
+    create_users().
 
 stop_request({U1, U2})->
     delete_users({U1, U2}),
@@ -57,7 +63,22 @@ stop_request({U1, U2})->
     application:stop(emysql),
     application:stop(crypto).
 
+%% Request util setup cleanup
+start_request_util()->
+    application:start(crypto),
+    application:start(emysql),
+    database:init(),
+    {U1, U2} = create_users(),
+    usercom:request(U1, U2, 23),
+    {U1, U2}.
 
+stop_request_util({U1, U2})->
+    delete_users({U1, U2}),
+    database:stop(),
+    application:stop(emysql),
+    application:stop(crypto).
+
+%% Match setup cleanup
 start_match()->
     application:start(crypto),
     application:start(emysql),
@@ -74,7 +95,7 @@ stop_match({_ , U1, U2})->
     application:stop(emysql),
     application:stop(crypto).
 
-    
+%% Gps setup cleanup
 start_gps()->
     application:start(crypto),
     application:start(emysql),
@@ -137,7 +158,11 @@ get_match({RequestId, U1, U2})->
     ?_assertEqual(Result#match_table.requestId, RequestId)].
     
     
-    
+set_winner({RequestId, U1, U2})->
+    Result = hd(usercom:new_match(RequestId, U1, U2)),
+    usercom:set_winner(Result#match_table.id, U1),
+    Result1 = hd(usercom:get_match(RequestId)),
+    ?_assertEqual(Result1#match_table.winner, U1).
     
 %%Test gps
 gps_save({MatchId, U1, _U2})->

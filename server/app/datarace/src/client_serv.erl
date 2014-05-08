@@ -105,12 +105,12 @@ handle_info({tcp, _, <<Packet/binary>>}, State, {UserId, Socket}) ->
     inet:setopts(Socket, [{active, once}]),
     ?MODULE:State(Packet, {UserId, Socket});
 handle_info({tcp_closed, _}, _State, {UserId, Socket}) ->
-    {ok, [{Address, Port}]} = inet:peername(Socket),
+    {ok, {Address, Port}} = inet:peername(Socket),
     log_serv:log("User disconnected unexpectedly: IP: " ++ inet_parse:ntoa(Address) ++ 
 		     ", Port: " ++ integer_to_list(Port)),    
     {stop, normal, {UserId, Socket}};
 handle_info({tcp_error, _, _Reason}, _State, Socket) ->
-    {ok, [{Address, Port}]} = inet:peername(Socket),
+    {ok, {Address, Port}} = inet:peername(Socket),
     log_serv:log("Tcp error: IP: " ++ inet_parse:ntoa(Address) ++ 
 		     ", Port: " ++ integer_to_list(Port)),  
     {stop, normal, Socket}.
@@ -125,11 +125,9 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
       UserId :: integer(),
       Socket :: socket().
 
-terminate(Reason, State, {UserId, Socket}) ->
+terminate(Reason, State, {UserId, _Socket}) ->
     ok = account:logout(UserId),
-    log_serv:log("Logged out user:" ++ integer_to_list(UserId)),
-    {ok, [{Address, Port}]} = inet:peername(Socket),
-    log_serv:log("Terminating client server: IP: " ++ 
-		     inet_parse:ntoa(Address) ++ ":" ++ integer_to_list(Port) ++
+    log_serv:log("Logged out UID:" ++ integer_to_list(UserId)),
+    log_serv:log("Terminating client server: " ++
 		     " Reason: " ++ atom_to_list(Reason) ++ 
 		     ", State: " ++ atom_to_list(State)).

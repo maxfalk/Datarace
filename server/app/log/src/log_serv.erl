@@ -66,7 +66,7 @@ make_log_msg(Msg) ->
 
 make_filename()->
     {{Year, Month, Day}, _} = calendar:local_time(),
-    ("datarace_log_" ++ integer_to_list(Year) ++ "_" ++ integer_to_list(Month) ++ 
+    ("../log/datarace_log_" ++ integer_to_list(Year) ++ "_" ++ integer_to_list(Month) ++ 
 	 "_" ++ integer_to_list(Day) ++ ".log").
 
 %%@doc write to String to the file Filename with the mode Mode.
