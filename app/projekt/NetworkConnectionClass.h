@@ -53,6 +53,12 @@
  */
 +(int)signupUser:(NSString *)username password:(NSString *)password email:(NSString *)email;
 
+
+/**
+ This method is used when a user wants to sign out from the app
+ @method signOut 
+ @param no parameters
+ */
 +(void)signOut;
 
 @end
