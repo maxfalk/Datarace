@@ -73,17 +73,44 @@ verify(control_transferred, {UserId, Socket}) ->
     {next_state, main, {UserId, Socket}}.
 
 
-%% @doc Recieves a LOGIN_LOGOUT message from a client and logs out the
-%% user from the database. Stops the FSM.
+%% @doc Handles request messages from a client and, when it recieves 
+%% a logout message from a client, logs out the user from the 
+%% database and stops the FSM.
 
--spec main(LOGIN_LOGOUT, {UserId, Socket}) -> Result when
-      LOGIN_LOGOUT :: binary(),
+-spec main(Message, {UserId, Socket}) -> Result when
+      Type :: binary(),
+      Package :: binary(),
+      Message :: {Type, Package} | Type,
       UserId :: integer(),
       Socket :: integer(),
       Result :: {stop, normal, {UserId, Socket}}.
 
 main(?LOGIN_LOGOUT, LoopData) ->
-    {stop, normal, LoopData}.
+    {stop, normal, LoopData};
+main({?REQUEST, <<ChallengeId:32/integer, Distance:32/integer>>}, {UserId, Socket}) ->
+    %% Make request
+    usercom:request(UserId, ChallengeId, Distance),
+    {next_state, main, {UserId, Socket}};
+main(?REQUEST_LOOKUP, {UserId, Socket}) ->
+    %% Make request lookup - look for new requests
+    RequestTableTuple = usercom:request_lookup(UserId),
+    RequestTablePack = packconv:pack(?REQUEST_LOOKUP, RequestTableTuple),
+    %% Send back RequestTablePack (All in one or several packets)
+    {next_state, main, {UserId, Socket}};
+main({?REQUEST_ACCEPT, <<RequestId:32/integer>>}, LoopData) ->
+    %% Accept a request 
+    usercom:request_accept(RequestId),
+    {next_state, main, LoopData};
+main({?REQUEST_CANCEL, <<RequestId:32/integer>>}, LoopData) ->
+    %% Cancel a request
+    usercom:request_cancel(RequestId),
+    {next_state, main, LoopData};
+main(?GET_HOME_STATS, {UserId, Socket}) ->
+    %% Get home stats 
+    UserStatsTableTuple = usercom:request_cancel(UserId),
+    UserStatsTablePack = packconv:pack(?GET_HOME_STATS_REPLY, UserStatsTableTuple),
+    ok = gen_tcp:send(Socket, UserStatsTablePack),
+    {next_state, main, {UserId, Socket}}.
 
 
 %% @doc Receives TCP packets and forwards them to the function 
@@ -101,9 +128,12 @@ main(?LOGIN_LOGOUT, LoopData) ->
       Reason :: term(),
       Result :: none() | {stop, normal, LoopSocket}.
 
-handle_info({tcp, _, <<Packet/binary>>}, State, {UserId, Socket}) ->
+handle_info({tcp, _, <<Type:2/binary>>}, State, {UserId, Socket}) ->
     inet:setopts(Socket, [{active, once}]),
-    ?MODULE:State(Packet, {UserId, Socket});
+    ?MODULE:State(Type, {UserId, Socket});
+handle_info({tcp, _, <<Type:2/binary, Packet/binary>>}, State, {UserId, Socket}) ->
+    inet:setopts(Socket, [{active, once}]),
+    ?MODULE:State({Type, Packet}, {UserId, Socket});
 handle_info({tcp_closed, _}, _State, {UserId, Socket}) ->
     {ok, {Address, Port}} = inet:peername(Socket),
     log_serv:log("User disconnected unexpectedly: IP: " ++ inet_parse:ntoa(Address) ++ 
