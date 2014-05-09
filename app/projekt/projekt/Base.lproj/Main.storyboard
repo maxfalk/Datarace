@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Gzs-Nr-VEc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Gzs-Nr-VEc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -33,7 +33,7 @@
                                     <action selector="loginButtonPressed:" destination="V9P-fZ-dyb" eventType="touchUpInside" id="lgq-HG-qFU"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eXL-j5-aZ3">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="eXL-j5-aZ3">
                                 <rect key="frame" x="62" y="216" width="196" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -43,7 +43,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="next"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5KC-7i-48K">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="5KC-7i-48K">
                                 <rect key="frame" x="62" y="262" width="196" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -67,7 +67,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Jxu-4c-kQ1">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Jxu-4c-kQ1">
                                 <rect key="frame" x="150" y="325" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
@@ -91,11 +91,13 @@
                             <constraint firstAttribute="trailing" secondItem="0F6-9I-akO" secondAttribute="trailing" constant="120" id="BAs-0S-emK"/>
                             <constraint firstItem="eXL-j5-aZ3" firstAttribute="leading" secondItem="AHh-J0-wPn" secondAttribute="leading" constant="62" id="IJM-dd-uL6"/>
                             <constraint firstItem="B1I-2P-NuF" firstAttribute="top" secondItem="Sxo-8g-xLv" secondAttribute="bottom" constant="20" id="Ky9-Hs-oSr"/>
+                            <constraint firstItem="gOI-eO-MNY" firstAttribute="leading" secondItem="Jxu-4c-kQ1" secondAttribute="trailing" constant="-66" id="Vcu-SG-fmf"/>
                             <constraint firstItem="gOI-eO-MNY" firstAttribute="leading" secondItem="AHh-J0-wPn" secondAttribute="leading" constant="104" id="VuT-tb-Zz8"/>
                             <constraint firstItem="Sxo-8g-xLv" firstAttribute="leading" secondItem="AHh-J0-wPn" secondAttribute="leading" constant="134" id="YeU-kV-9ZS"/>
                             <constraint firstItem="gOI-eO-MNY" firstAttribute="top" secondItem="5KC-7i-48K" secondAttribute="bottom" constant="27" id="ZMz-I5-0m0"/>
                             <constraint firstItem="0F6-9I-akO" firstAttribute="top" secondItem="ccF-LO-y7i" secondAttribute="bottom" constant="64" id="cZO-9J-FPQ"/>
                             <constraint firstItem="5KC-7i-48K" firstAttribute="top" secondItem="eXL-j5-aZ3" secondAttribute="bottom" constant="16" id="iNe-PP-hql"/>
+                            <constraint firstItem="Jxu-4c-kQ1" firstAttribute="top" secondItem="5KC-7i-48K" secondAttribute="bottom" constant="33" id="s54-BQ-Aal"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="gJT-Pk-WcC"/>
@@ -645,7 +647,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RWe-2e-VOj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2204" y="-50"/>
+            <point key="canvasLocation" x="2548" y="-50"/>
         </scene>
         <!--Competitor Table View Controller-->
         <scene sceneID="hd7-jq-ypZ">
@@ -683,11 +685,12 @@
                     </navigationItem>
                     <connections>
                         <segue destination="WB7-au-axN" kind="push" identifier="challengeSettings" id="7qm-KA-zx8"/>
+                        <segue destination="g6R-qd-8MV" kind="push" identifier="startChallenge" id="Xur-tu-oK7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F6s-qh-YI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1387" y="-775"/>
+            <point key="canvasLocation" x="1597" y="-1111"/>
         </scene>
         <!--Challenge View Controller-->
         <scene sceneID="Xz8-ER-5RT">
@@ -764,7 +767,7 @@
                                 <rect key="frame" x="100" y="420" width="121" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.90588235289999997" green="0.40000000000000002" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
                                 <size key="titleShadowOffset" width="4" height="4"/>
                                 <state key="normal" title="Challenge">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -800,7 +803,90 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kga-DJ-Cvd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1796" y="-775"/>
+            <point key="canvasLocation" x="2072" y="-1517"/>
+        </scene>
+        <!--Countdown View Controller-->
+        <scene sceneID="leX-m6-2Cm">
+            <objects>
+                <viewController id="xt4-j6-T09" customClass="CountdownViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MLh-CH-8CD"/>
+                        <viewControllerLayoutGuide type="bottom" id="elR-eC-FZn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="DES-Gy-nJi">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dp-rv-LOg">
+                                <rect key="frame" x="60" y="217" width="200" height="134"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="134" id="QJu-mQ-PvE"/>
+                                    <constraint firstAttribute="width" constant="200" id="QZh-GA-JJG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="91"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="6dp-rv-LOg" firstAttribute="centerX" secondItem="DES-Gy-nJi" secondAttribute="centerX" id="Do9-uz-S2c"/>
+                            <constraint firstItem="6dp-rv-LOg" firstAttribute="centerY" secondItem="DES-Gy-nJi" secondAttribute="centerY" id="NaC-4o-YIl"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="6CS-W3-01F"/>
+                    <connections>
+                        <outlet property="countdownLabel" destination="6dp-rv-LOg" id="Mjr-oh-0k4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YNi-sc-V8Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2072" y="-703"/>
+        </scene>
+        <!--Race View Controller-->
+        <scene sceneID="XcL-7E-pzt">
+            <objects>
+                <viewController id="g6R-qd-8MV" customClass="RaceViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Yih-4m-Ks7"/>
+                        <viewControllerLayoutGuide type="bottom" id="TpX-uo-ciR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="IHs-rA-Xrb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wF4-CY-hkM">
+                                <rect key="frame" x="0.0" y="64" width="320" height="150"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </mapView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GeX-2O-Jfo">
+                                <rect key="frame" x="20" y="222" width="281" height="47"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Emz-Hr-Xy0">
+                        <nil key="title"/>
+                        <button key="titleView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Hru-zS-1zx">
+                            <rect key="frame" x="96" y="5" width="128" height="34"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <state key="normal" title="Race">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="drawpad" destination="GeX-2O-Jfo" id="Ne1-uh-Yrn"/>
+                        <outlet property="mapView" destination="wF4-CY-hkM" id="bGp-oj-quX"/>
+                        <segue destination="xt4-j6-T09" kind="modal" identifier="startCountdown" modalTransitionStyle="flipHorizontal" id="jdx-qu-TA8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xHk-3X-H9z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2648" y="-1111"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="FLD-l6-0bl">
