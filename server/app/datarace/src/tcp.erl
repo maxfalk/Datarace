@@ -30,7 +30,7 @@ recv(Socket) ->
     end.
 
 connect(Address, Port) ->
-    gen_tcp:connect(Address, Port, [{packet, 4}]).
+    gen_tcp:connect(Address, Port, [binary, inet, {packet, 4}, {active, true}]).
 
 send(Socket, Data) ->
     gen_tcp:send(Socket, Data).

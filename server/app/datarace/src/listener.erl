@@ -146,7 +146,7 @@ handle_info({tcp, _, <<Type:1/binary, Packet/binary>>}, State, Socket) ->
     inet:setopts(Socket, [{active, once}]),
     ?MODULE:State({Type, Packet}, Socket);
 handle_info({tcp_closed, _}, _State, Socket) ->
-    {ok, [{Address, Port}]} = inet:peername(Socket),
+    {ok, {Address, Port}} = inet:peername(Socket),
 	    log_serv:log("User disconnected unexpectedly: IP: " ++ 
 			     inet_parse:ntoa(Address) ++ 
 			     ", Port: " ++ integer_to_list(Port)),
