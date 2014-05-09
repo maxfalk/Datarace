@@ -51,7 +51,8 @@ stats_test_()->
     {"Test stats functions",
      {setup, fun start_stats/0, fun stop_stats/1, 
       fun (SetupData)->
-	      [stats_home(SetupData)]
+	      [stats_home(SetupData),
+	       get_num_pending_requests(SetupData)]
       end}}.
     
 
@@ -216,13 +217,25 @@ gps_save({MatchId, U1, _U2})->
 
 stats_home({UserId, _U2, UserName})->
     database:db_query("CALL insert_user_stats()"),
-    Result = hd(usercom:get_home_stats(UserId)),
+    Result = usercom:get_home_stats(UserId),
+    Result1 = usercom:get_home_stats(-1),
     [?_assertEqual(Result#user_stats_table.userName, UserName),
-    ?_assertEqual(Result#user_stats_table.averageDistance, 23),
-    ?_assert(Result#user_stats_table.averageSpeed > 0),
-    ?_assertEqual(Result#user_stats_table.wins, 1),
-    ?_assertEqual(Result#user_stats_table.matches, 1),
-    ?_assertEqual(Result#user_stats_table.requests, 1)].
+     ?_assertEqual(Result#user_stats_table.averageDistance, 23),
+     ?_assert(Result#user_stats_table.averageSpeed > 0),
+     ?_assertEqual(Result#user_stats_table.wins, 1),
+     ?_assertEqual(Result#user_stats_table.matches, 1),
+     ?_assertEqual(Result#user_stats_table.requests, 1),
+     ?_assertEqual(Result1#user_stats_table.userName, <<"">>),
+     ?_assertEqual(Result1#user_stats_table.averageDistance, 0),
+     ?_assertEqual(Result1#user_stats_table.averageSpeed, 0),
+     ?_assertEqual(Result1#user_stats_table.wins, 0),
+     ?_assertEqual(Result1#user_stats_table.matches, 0),
+     ?_assertEqual(Result1#user_stats_table.requests, 0)].
+
+
+get_num_pending_requests({UserId, _U2, UserName})->
+    [?_assertEqual(usercom:get_num_pending_requests(UserId),1),
+    ?_assertEqual(usercom:get_num_pending_requests(-1),0)].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
