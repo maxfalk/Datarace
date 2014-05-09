@@ -33,17 +33,17 @@
     
     //self.locationManager = [[CLLocationManager alloc] init];
     //self.locationManager.delegate = self;
-   // [self.locationManager startUpdatingLocation];
-
+    // [self.locationManager startUpdatingLocation];
+    
     
     //self.time = [NSTimer scheduledTimerWithTimeInterval:10 target: locationManager selector:@selector(startUpdatingLocation) userInfo:nil repeats:YES];
-
+    
     
     //[NetworkConnectionClass sendUpdatedCoordinates];
     
-   //
+    //
     
-        
+    
     [super viewDidLoad];
     
     UIColor *babyBlue = [UIColor colorWithRed:0.4 green:0.6 blue:0.72 alpha:1];
@@ -105,47 +105,48 @@
     [_wheel startAnimating];
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
-       //[NetworkConnectionClass initNetworkCommunication];
+        //[NetworkConnectionClass initNetworkCommunication];
         //int result = [NetworkConnectionClass sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
         int result = 0;
-
-
+        
+        
         dispatch_async( dispatch_get_main_queue(), ^{
-            // Add code here to update the UI/send notifications based on the
-            // results of the background processing
-            
-            if (result == 0) {
-                _usernameField.text = @"";
-                _passwordField.text = @"";
-                [self performSegueWithIdentifier:@"login" sender:self.networkConnection];
-            } else if (result == 1) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Wrong username"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            } else if (result == 2) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Wrong password"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            } else if (result == 3) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Could not connect to server"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            }
+        // Add code here to update the UI/send notifications based on the
+        // results of the background processing
+        
+        if (result == 0) {
+            _usernameField.text = @"";
+            _passwordField.text = @"";
+            [self performSegueWithIdentifier:@"login" sender:self.networkConnection];
+        } else if (result == 1) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Wrong username"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        } else if (result == 2) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Wrong password"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        } else if (result == 3) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Could not connect to server"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        
             _wheel.hidden=YES;
             [_wheel stopAnimating];
             [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
         });
     });
-
+    
     
     
     [_loginButton setTitle:@"" forState:UIControlStateNormal];
@@ -234,14 +235,22 @@
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"signup"]) {
-        self.networkConnection = (NetworkConnectionClass *)sender;
-        SignupViewController *connection = (SignupViewController *) [segue destinationViewController];
-        connection.networkConnection = self.networkConnection;
-    }
+   // dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if ([segue.identifier isEqualToString:@"signup"]) {
+            self.networkConnection = (NetworkConnectionClass *)sender;
+            SignupViewController *connection = (SignupViewController *) [segue destinationViewController];
+            connection.networkConnection = self.networkConnection;
+        }
+        
+      //  NSLog(@"Finished work in background");
+        //dispatch_async( dispatch_get_main_queue(), ^{
+          //  NSLog(@"Back on main thread");
+        //});
+                       
+    //});
 }
 
-
-@end
-
-
+    
+        @end
+                       
+                       

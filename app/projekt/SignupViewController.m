@@ -39,7 +39,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+    
     //_networkConnection = [[projektViewController alloc] init];
     //[_networkConnection initNetworkCommunication];
     //_signupButton.backgroundColor = [UIColor colorWithRed:0 green:205/255 blue:205/255 alpha:1];
@@ -96,7 +96,7 @@
             UIColor *orange = [UIColor colorWithRed:0.91 green:0.4 blue:0.36 alpha:1];
             [self.signupButton setBackgroundColor:orange];
         } else {
-             _passwordRepeatCheck.image = [UIImage imageNamed:@"decline"];
+            _passwordRepeatCheck.image = [UIImage imageNamed:@"decline"];
         }
         [theTextField resignFirstResponder];
     } else if (theTextField == _usernameField) {
@@ -104,7 +104,7 @@
         if ([_usernameField.text isEqual:@""]) {
             _usernameCheck.image = [UIImage imageNamed:@"decline"];
         } else {
-        _usernameCheck.image = [UIImage imageNamed:@"accept"];
+            _usernameCheck.image = [UIImage imageNamed:@"accept"];
         }
     } else if (theTextField == _emailField) {
         [_passwordField becomeFirstResponder];
@@ -113,7 +113,7 @@
         } else {
             _emailCheck.image = [UIImage imageNamed:@"accept"];
         }
-     
+        
     } else if (theTextField == _passwordField) {
         [_passwordRepeatField becomeFirstResponder];
         
@@ -143,13 +143,13 @@
         }
         
     } else if (theTextField == _usernameField) {
-               if ([_usernameField.text isEqual:@""]) {
+        if ([_usernameField.text isEqual:@""]) {
             _usernameCheck.image = [UIImage imageNamed:@"decline"];
         } else {
             _usernameCheck.image = [UIImage imageNamed:@"accept"];
         }
     } else if (theTextField == _emailField) {
-       
+        
         if ([_emailField.text isEqual:@""]) {
             _emailCheck.image = [UIImage imageNamed:@"decline"];
         } else {
@@ -157,42 +157,54 @@
         }
         
     } else if (theTextField == _passwordField) {
-                
+        
         if ([_passwordField.text isEqual:@""]) {
             _passwordCheck.image = [UIImage imageNamed:@"decline"];
         } else {
             _passwordCheck.image = [UIImage imageNamed:@"accept"];
         }
     }
-
+    
 }
 
 - (IBAction)signupButtonPressed:(id)sender {
     [NetworkConnectionClass initNetworkCommunication];
-    int result = [NetworkConnectionClass signupUser:_usernameField.text password:_passwordField.text email:_emailField.text];
     
-    if (result == 0) {
-        [self performSegueWithIdentifier:@"signupSuccess" sender:self];
-    } else if (result == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Signup unsuccessful"
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-    } else if (result == 2) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Wrong password"
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-    }
+    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        int result = [NetworkConnectionClass signupUser:_usernameField.text password:_passwordField.text email:_emailField.text];
+        
+        
+        dispatch_async( dispatch_get_main_queue(), ^{
+            if (result == 0) {
+                [self performSegueWithIdentifier:@"signupSuccess" sender:self];
+            } else if (result == 1) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Signup unsuccessful"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            } else if (result == 2) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Wrong password"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+                
+            }
+        });
+        
+    });
 }
+
+
+
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
-  
+    
 }
 
 /*
