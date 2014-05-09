@@ -6,6 +6,8 @@
 
 -module(database).
 
+-include("../include/database.hrl").
+
 %%@doc result of a database query.
 -type db_result() :: any().
 -type db_start() :: any().
@@ -13,7 +15,7 @@
 -export([init/0,stop/0, remote_connect/0]).
 -export([db_query/3,db_query/1,get_row/2,result_to_record/2]).
 
--include("../include/database.hrl").
+
 
 %%@doc Make a local connection to the database.
 -spec init()-> db_start().
@@ -92,6 +94,8 @@ result_to_record(Sql_result, Record)->
 	request_table ->
 	    emysql:as_record(Sql_result, request_table, record_info(fields, request_table));
 	match_table ->
-	    emysql:as_record(Sql_result, match_table, record_info(fields, match_table))
+	    emysql:as_record(Sql_result, match_table, record_info(fields, match_table));
+	user_stats_table ->
+	emysql:as_record(Sql_result, user_stats_table, record_info(fields, user_stats_table))
     end.
 	        
