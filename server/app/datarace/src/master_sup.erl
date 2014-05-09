@@ -36,6 +36,7 @@ start_link() ->
 %% Client_serv supervisor and the a Listener supervisor.
 
 init(_Args) ->
+    %%{Port, Listeners} = load_config(filename:absname("../configs/config")),
     Port = 8888,
     Listeners = 10,
     SuperSpec = {rest_for_one, 60, 3600},
@@ -46,3 +47,14 @@ init(_Args) ->
 		       {listener_sup, start_link, [Port, Listeners]}, 
 		       permanent, 10000, supervisor, [listener_sup]},
     {ok, {SuperSpec, [ClientServSuperSpec, ListenerSuperSpec]}}.
+
+
+%%====================================================================
+%% Helper functions
+%%====================================================================
+
+load_config(File) ->
+    {ok, Config} = file:consult(File),
+    {port, Port} = lists:keyfind(port, 1, Config),
+    {listeners, Listeners} = lists:keyfind(listeners, 1, Config),
+    {Port, Listeners}.
