@@ -14,13 +14,21 @@
 */
 #import <Foundation/Foundation.h>
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    char username[50];
+    double averageSpeed;
+    double averageDistance;
+    uint32_t wins;
+    uint32_t matches;
+    uint32_t request;
+} homeStats;
+
 @interface NetworkConnectionClass : NSObject <NSStreamDelegate>
-{
-    //NSInputStream *inputStream;
-    //NSOutputStream *outputStream;
-    //CFReadStreamRef readStream;
-    //CFWriteStreamRef writeStream;
-}
+
+@property (nonatomic) homeStats result;
+
 
 
 //@property (strong) NSInputStream *inputStream;
@@ -62,5 +70,7 @@
 +(void)signOut;
 
 +(void)sendUpdatedCoordinates;
+
++(void *)getHomeStats;
 
 @end

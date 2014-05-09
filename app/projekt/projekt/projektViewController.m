@@ -105,9 +105,9 @@
     [_wheel startAnimating];
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
-       //[NetworkConnectionClass initNetworkCommunication];
-        //int result = [NetworkConnectionClass sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
-        int result = 0;
+       [NetworkConnectionClass initNetworkCommunication];
+        int result = [NetworkConnectionClass sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
+        //int result = 0;
 
 
         dispatch_async( dispatch_get_main_queue(), ^{

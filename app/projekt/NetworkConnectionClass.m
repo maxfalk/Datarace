@@ -29,6 +29,7 @@ typedef struct __attribute__ ((packed)) {
     char message;
 } loginOutput;
 
+
 @implementation NetworkConnectionClass
 //@synthesize inputStream, outputStream;
 
@@ -41,13 +42,12 @@ static NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    
     CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.15.24", 8888, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *) readStream;
     outputStream = (__bridge NSOutputStream *) writeStream;
     
     //[inputStream setDelegate:self];
-   //[outputStream setDelegate:self];
+    //[outputStream setDelegate:self];
     [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
    
@@ -132,20 +132,20 @@ static NSOutputStream *outputStream;
         if (result.message == (char)0) {
             NSLog(@"signup successful");
             return 0;
+            
         } else if (result.message == (char)1) {
             NSLog(@"signup unsuccessful");
             return 1;
         }
+        
     } else
         NSLog(@"wrong package");
     return 3;
-
 }
 
 +(void)signOut {
     uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
-    
     
     loginOutput packet;
     packet.length = myInt32AsABigEndianNumber;
@@ -153,12 +153,34 @@ static NSOutputStream *outputStream;
     packet.message = (char)3;
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(loginOutput)];
-
-    
 }
 
 +(void)sendUpdatedCoordinates {
     NSLog(@"UPDATE!");
+}
+
++(void *)getHomeStats {
+    
+    
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+
+    homeStats packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 3;
+    packet.type[1] = 0;
+    
+    NSLog(@"%lu",sizeof(homeStats));
+
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
+    
+    homeStats *result = malloc(sizeof(homeStats));
+    [inputStream read:(uint8_t *)result maxLength:sizeof(*result)];
+    
+    NSLog(@"%lu",sizeof(homeStats));
+    
+    return result;
+    
 }
 
 

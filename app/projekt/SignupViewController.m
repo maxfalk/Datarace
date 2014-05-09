@@ -40,9 +40,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
    
-    //_networkConnection = [[projektViewController alloc] init];
-    //[_networkConnection initNetworkCommunication];
-    //_signupButton.backgroundColor = [UIColor colorWithRed:0 green:205/255 blue:205/255 alpha:1];
     _scrollView = [[UIScrollView  alloc] initWithFrame:CGRectMake(0, 50, self.view.frame.size.width, 300)];
     _scrollView.scrollEnabled=YES;
     _scrollView.showsVerticalScrollIndicator = YES;
