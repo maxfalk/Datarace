@@ -8,7 +8,7 @@
 -export([request/3,request_lookup/1,request_accept/1,request_cancel/1]).
 -export([create_match/3, get_match/1, new_match/3, set_winner/2]).
 -export([gps_save/4]).
--export([get_home_stats/1]).
+-export([get_home_stats/1,get_num_pending_requests/1]).
 
 -include("../include/database.hrl").
 
@@ -151,12 +151,54 @@ gps_save(User_id, Match_id, Longidtude, Latitude)->
 
 get_home_stats(UserId)->
     Sql_result = database:db_query(get_user_stats,
-				   <<"SELECT userName, averageSpeed, averageDistance, wins,
-                                             matches, requests
+				   <<"SELECT userName, averageSpeed, averageDistance, 
+                                             wins, matches, requests
                                       FROM
                                           tUserStatistics
                                       WHERE
                                           userId = ?">>,
 				   [UserId]),
-    database:result_to_record(Sql_result, user_stats_table).
+    pad_home_stats(
+      database:get_row(database:result_to_record(Sql_result, user_stats_table),1)).
+   
 
+%%@doc pad home_stats if it's empty with zero data.
+-spec pad_home_stats(Value)-> user_stats_table() when
+      Value :: user_stats_table() | {error, no_item}.
+
+pad_home_stats({error, no_item})->
+    #user_stats_table{userName = <<"">>, averageSpeed = 0, averageDistance = 0, wins = 0, 
+		      matches = 0, requests = 0};
+pad_home_stats(R) -> 
+    R.
+
+
+
+%%@doc get number of pending requests for a user.
+%%
+%%
+-spec get_num_pending_requests(UserId)-> integer() when
+      UserId :: integer().
+
+get_num_pending_requests(UserId)->
+    {_, _, _, R, _} = database:db_query(get_user_pending_requests,
+				   "SELECT count(t1.id) as pendingRequests
+                                    FROM
+                                      tRequest t1
+                                    WHERE
+                                      t1.userId = ? and
+                                      t1.state = 0
+                                   GROUP BY 
+                                      t1.id",
+				   [UserId]),
+    pad_num_pending_requests(database:get_row(R, 1)).
+
+
+%%@doc pad request to to always return a number
+%%
+-spec pad_num_pending_requests(R)-> integer() when
+      R :: {error, no_item} | [integer()].
+
+pad_num_pending_requests({error, no_item})->
+    0;
+pad_num_pending_requests(R) -> hd(R).
