@@ -8,6 +8,7 @@
 -export([request/3,request_lookup/1,request_accept/1,request_cancel/1]).
 -export([create_match/3, get_match/1, new_match/3, set_winner/2]).
 -export([gps_save/4]).
+-export([get_home_stats/1]).
 
 -include("../include/database.hrl").
 
@@ -145,5 +146,17 @@ gps_save(User_id, Match_id, Longidtude, Latitude)->
 %%@doc Get the statistics that will be displayed in the home screen,
 %%for a specific user
 %%
-get_home_stats(Userid)->
-    tbi.
+-spec get_home_stats(UserId)-> user_stats_table() when
+      UserId :: integer().
+
+get_home_stats(UserId)->
+    Sql_result = database:db_query(get_user_stats,
+				   <<"SELECT userName, averageSpeed, averageDistance, wins,
+                                             matches, requests
+                                      FROM
+                                          tUserStatistics
+                                      WHERE
+                                          userId = ?">>,
+				   [UserId]),
+    database:result_to_record(Sql_result, user_stats_table).
+

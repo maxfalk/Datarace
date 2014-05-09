@@ -92,6 +92,8 @@ result_to_record(Sql_result, Record)->
 	request_table ->
 	    emysql:as_record(Sql_result, request_table, record_info(fields, request_table));
 	match_table ->
-	    emysql:as_record(Sql_result, match_table, record_info(fields, match_table))
+	    emysql:as_record(Sql_result, match_table, record_info(fields, match_table));
+	user_stats_table ->
+        emysql:as_record(Sql_result, user_stats_table, record_info(fields, user_stats_table))
     end.
 	        
