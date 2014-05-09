@@ -24,6 +24,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.navigationItem.hidesBackButton = YES;
+    
     //fetch username from server
     _user.text = @"Joel Sandberg";
     
@@ -103,10 +105,7 @@
                                                      startAngle:0
                                                        endAngle:DEGREES_TO_RADIANS(135)
                                                       clockwise:YES];
-    
-    
     return aPath;
-
 }
 
 - (void)drawRect:(CGRect)rect
@@ -159,14 +158,4 @@
 }
 
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 @end

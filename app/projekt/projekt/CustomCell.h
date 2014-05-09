@@ -19,6 +19,7 @@
     
 }
 
+@property(nonatomic,retain)UILabel *statusLabel;
 @property(nonatomic,retain)UILabel *competitorLabel;
 @property(nonatomic,retain)UILabel *primaryLabel;
 @property(nonatomic,retain)UILabel *primaryLabelTwo;

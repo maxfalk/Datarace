@@ -157,6 +157,10 @@ static NSOutputStream *outputStream;
     
 }
 
++(void)sendUpdatedCoordinates {
+    NSLog(@"UPDATE!");
+}
+
 
 
 @end

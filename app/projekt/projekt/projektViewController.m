@@ -16,10 +16,14 @@
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *wheel;
+@property (strong, nonatomic) NSTimer *time;
+@property CLLocationCoordinate2D myCoordinate;
+
 @end
 
 
 @implementation projektViewController
+//@synthesize locationManager;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,11 +31,20 @@
     
 	// Do any additional setup after loading the view, typically from a nib.
     
-    locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
-    [locationManager startUpdatingLocation];
+    //self.locationManager = [[CLLocationManager alloc] init];
+    //self.locationManager.delegate = self;
+   // [self.locationManager startUpdatingLocation];
+
     
-    NSLog(@"latitude= %f longitude = %f",locationManager.location.coordinate.latitude, locationManager.location.coordinate.latitude);
+    //self.time = [NSTimer scheduledTimerWithTimeInterval:10 target: locationManager selector:@selector(startUpdatingLocation) userInfo:nil repeats:YES];
+
+    
+    //[NetworkConnectionClass sendUpdatedCoordinates];
+    
+   //
+    
+        
+    [super viewDidLoad];
     
     UIColor *babyBlue = [UIColor colorWithRed:0.4 green:0.6 blue:0.72 alpha:1];
     
@@ -47,6 +60,8 @@
     _passwordField.delegate = self;
     
     _wheel.hidden=YES;
+    
+    //[self updateLocation];
 }
 
 
@@ -68,9 +83,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    NSLog(@"lat:%f long:%f", manager.location.coordinate.latitude, manager.location.coordinate.latitude);
-}
+
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
@@ -88,44 +101,53 @@
 }
 
 - (IBAction)loginButtonPressed:(id)sender {
-    
-    /*
-    [NetworkConnectionClass initNetworkCommunication];
     _wheel.hidden = NO;
     [_wheel startAnimating];
+    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // Add code here to do background processing
+       //[NetworkConnectionClass initNetworkCommunication];
+        //int result = [NetworkConnectionClass sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
+        int result = 0;
+
+
+        dispatch_async( dispatch_get_main_queue(), ^{
+            // Add code here to update the UI/send notifications based on the
+            // results of the background processing
+            
+            if (result == 0) {
+                _usernameField.text = @"";
+                _passwordField.text = @"";
+                [self performSegueWithIdentifier:@"login" sender:self.networkConnection];
+            } else if (result == 1) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Wrong username"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            } else if (result == 2) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Wrong password"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            } else if (result == 3) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Could not connect to server"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            _wheel.hidden=YES;
+            [_wheel stopAnimating];
+            [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
+        });
+    });
+
     
     
-    
-    int result = [NetworkConnectionClass sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
-    
-    if (result == 0) {
-        _usernameField.text = @"";
-        _passwordField.text = @"";
-        [self performSegueWithIdentifier:@"login" sender:self.networkConnection];
-    } else if (result == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Wrong username"
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-    } else if (result == 2) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Wrong password"
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-    } else if (result == 3) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Could not connect to server"
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-    }
-    
-    //[(NetworkConnectionClass *)self initNetworkCommunication];
     [_loginButton setTitle:@"" forState:UIControlStateNormal];
     [_passwordField resignFirstResponder];
     
@@ -134,15 +156,7 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
     });
-
-
-    _wheel.hidden=YES;
-    [_wheel stopAnimating];
-    [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
-     
     
-    */
-     [self performSegueWithIdentifier:@"login" sender:self];
 }
 
 
