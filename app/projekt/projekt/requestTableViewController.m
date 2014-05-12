@@ -33,10 +33,19 @@
     [super viewDidLoad];
     
     //fetch requests from server
-    _requests = [[NSMutableArray alloc] initWithArray:@[@"Babak Toghiani-Rizi", @"Marina Jaksic", @"Max Falk Nilsson", @"Max Reeves"]];
+    //_requests = [[NSMutableArray alloc] initWithArray:@[@"Babak Toghiani-Rizi", @"Marina Jaksic", @"Max Falk Nilsson", @"Max Reeves"]];
     
     self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
     [self addFooter];
+    requestLookUpResult *lookUpResult = (requestLookUpResult *)[NetworkConnectionClass getRequests];;
+    _requests = [[NSMutableArray alloc] init];
+    
+    for(int i = 0; i < lookUpResult->requestLookUpMeta.length/(sizeof(requestLookUp)); i++){
+        NSString *username = [NSString stringWithFormat:@"%s",lookUpResult[i].requestLookUp->username];
+        [_requests addObject:username];
+    }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -247,11 +256,11 @@
 
 - (void)addFooter {
     
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
+    //CGRect screenRect = [[UIScreen mainScreen] bounds];
+    //CGFloat screenWidth = screenRect.size.width;
+    //CGFloat screenHeight = screenRect.size.height;
     
-    NSInteger height = (screenHeight - (50*[_requests count]*2)-44);
+    //NSInteger height = (screenHeight - (50*[_requests count]*2)-44);
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     v.backgroundColor = [UIColor clearColor];
     [self.tableView setTableFooterView:v];

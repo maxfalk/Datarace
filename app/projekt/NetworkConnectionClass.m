@@ -29,6 +29,11 @@ typedef struct __attribute__ ((packed)) {
     char message;
 } loginOutput;
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+} requestStats;
+
 
 @implementation NetworkConnectionClass
 //@synthesize inputStream, outputStream;
@@ -46,8 +51,6 @@ static NSOutputStream *outputStream;
     inputStream = (__bridge NSInputStream *) readStream;
     outputStream = (__bridge NSOutputStream *) writeStream;
     
-    //[inputStream setDelegate:self];
-    //[outputStream setDelegate:self];
     [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
    
@@ -68,7 +71,6 @@ static NSOutputStream *outputStream;
     uint32_t myInt32Value = 101;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
-    
     login packet;
     packet.length = myInt32AsABigEndianNumber;
     packet.type = 0;
@@ -80,7 +82,6 @@ static NSOutputStream *outputStream;
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(login)];
     
     //receive message
-    
     loginOutput result;
     result.type = (char)3;
     [inputStream read:(uint8_t *)&result maxLength:sizeof(result)];
@@ -161,28 +162,51 @@ static NSOutputStream *outputStream;
 
 +(void *)getHomeStats {
     
-    
     uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
 
-    homeStats packet;
+    requestStats packet;
     packet.length = myInt32AsABigEndianNumber;
     packet.type[0] = 3;
     packet.type[1] = 0;
-    
-    NSLog(@"%lu",sizeof(homeStats));
-
+ 
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
     homeStats *result = malloc(sizeof(homeStats));
     [inputStream read:(uint8_t *)result maxLength:sizeof(*result)];
     
-    NSLog(@"%lu",sizeof(homeStats));
-    
     return result;
-    
 }
 
++(void *)getRequests {
+    
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    requestStats packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 2;
+    packet.type[1] = 1;
+    requestLookUpResult *result = malloc(sizeof(requestLookUpResult));
+    
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
+    
+    [inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
+    [inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
+
+    result->requestLookUpMeta.length = ntohl(result->requestLookUpMeta.length)-2;
+    double numberOfPackages = (double)(result->requestLookUpMeta.length)/(double)(sizeof(requestLookUp));
+        
+    requestLookUp *reqLookUp = malloc(sizeof(numberOfPackages*sizeof(requestLookUp)));
+    
+    for(int i = 0; i < numberOfPackages; i++) {
+        [inputStream read:(uint8_t *)reqLookUp maxLength:sizeof(requestLookUp)];
+    }
+    result->requestLookUp = reqLookUp;
+    
+    return result;
+
+}
 
 
 @end

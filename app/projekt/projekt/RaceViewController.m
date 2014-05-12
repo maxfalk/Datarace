@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *yourSlider;
 @property (weak, nonatomic) IBOutlet UISlider *competitorSlider;
 @property (weak, nonatomic) IBOutlet UILabel *competitorName;
+@property (nonatomic) double totalDistance;
 
 
 @end
@@ -151,10 +152,7 @@
     _previousPosition.longitude = self.mapView.userLocation.location.coordinate.longitude;
     _previousPosition.latitude = self.mapView.userLocation.location.coordinate.latitude;
     
-    //firstLocation.coordinate.latitude = _firstPosition.latitude;
-    
-    // = CLLocationCoordinate2DMake(_firstPosition.latitude, _firstPosition.longitude);
-    //self.routeLine = [MKPolyline polylineWithPoints:@[self.mapView.userLocation] count:1];
+        [self calculateDistance];
     
 }
 
@@ -176,16 +174,11 @@
             _firstPosition = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:self.locationManager.location.coordinate.longitude];
             
         }
-        //CLLocationCoordinate2D lat = [self.locationManager.location.coordinate.latitude doubleValue];
-        // CLLocationDegrees lon = self.locationManager.location.coordinate.longitude;
-        //_firstPosition = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:self.locationManager.location.coordinate.longitude];
     }
     
-    //CLLocation *newLocation = [locations lastObject];
-    //NSLog(@"latitude= %f longitude = %f",self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.latitude);
     [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
     [NetworkConnectionClass sendUpdatedCoordinates];
-    //[self.mapView addOverlay:self.routeLine];
+    
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {
@@ -213,6 +206,28 @@
 
  [self.mapView addOverlay:polyLine];
     
+}
+
+-(void)calculateDistance {
+    
+    if ((self.mapView.userLocation != nil) && (_previousPosition.latitude != 0)) {
+        
+        double lat1rad = _previousPosition.latitude * M_PI/180;
+        double lon1rad = _previousPosition.longitude * M_PI/180;
+        double lat2rad = self.mapView.userLocation.coordinate.latitude * M_PI/180;
+        double lon2rad = self.mapView.userLocation.coordinate.longitude * M_PI/180;
+        
+        //deltas
+        double dLat = lat2rad - lat1rad;
+        double dLon = lon2rad - lon1rad;
+        
+        double a = sin(dLat/2) * sin(dLat/2) + sin(dLon/2) * sin(dLon/2) * cos(lat1rad) * cos(lat2rad);
+        double c = 2 * asin(sqrt(a));
+        double R = 6372.8;
+
+        _totalDistance = R * c;
+
+    }
 }
 
 
