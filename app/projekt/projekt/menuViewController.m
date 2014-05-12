@@ -16,7 +16,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *averageDistanceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *averageSpeedLabel;
 @property (nonatomic) double winRatio;
-
+@property (weak, nonatomic) IBOutlet UILabel *lossesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *winsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *noStatsLabel;
 @end
 
 @implementation menuViewController
@@ -116,35 +118,36 @@
     _user.text = string;
  
     //requests
-    int32_t requestBC = result->request;
-    int requestAC = CFSwapInt32BigToHost(requestBC);
-   // int requests = result->request;
+    int requestAC = result->request;
+    if (requestAC == 0) {
+        _requestLabel.hidden=YES;
+    } else {
     [_requestLabel setTitle:[NSString stringWithFormat:@"%i", requestAC] forState:UIControlStateNormal];
+    }
     
     //average speed
     double speedBC = result->averageSpeed;
-    double speedAC = CFSwapInt64BigToHost(speedBC);
-    //double avgSpeed = result->averageSpeed;
-    _averageSpeedLabel.text = [NSString stringWithFormat:@"%.1f", speedAC];
+    _averageSpeedLabel.text = [NSString stringWithFormat:@"%.1f km", speedBC];
     
     //average distance
     double distanceBC = result->averageDistance;
-    double distanceAC = CFSwapInt64BigToHost(distanceBC);
-    //double avgDistance = result->averageDistance;
-    _averageDistanceLabel.text = [NSString stringWithFormat:@"%0.1f", distanceAC];
+    _averageDistanceLabel.text = [NSString stringWithFormat:@"%0.1f km/h", distanceBC];
     
     //wins
-    uint32_t winsBC = result->wins;
-    int winsAC = CFSwapInt32BigToHost(winsBC);
+    double winsAC = result->wins;
     
     //matches
-    uint32_t matchesBC = result->matches;
-    int matchesAC = CFSwapInt32BigToHost(matchesBC);
+    double matchesAC = result->matches;
     
     //win ratio
-    _winRatio = winsAC/matchesAC - 0.1;
+    _winRatio = winsAC/matchesAC;
     
-    
+    if (matchesAC <= 0) {
+        _noStatsLabel.text = @"No stats yet";
+        _winsLabel.hidden=YES;
+        _lossesLabel.hidden=YES;
+    } else {
+        _noStatsLabel.hidden=YES;
     double winRatioToDegrees = (_winRatio * 360);
     
     UIBezierPath *path1 = [UIBezierPath bezierPathWithArcCenter:CGPointMake(60, 60)
@@ -178,7 +181,7 @@
     
     UIGraphicsEndImageContext();
     
-    
+    }
 }
 
 

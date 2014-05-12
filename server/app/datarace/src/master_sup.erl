@@ -36,9 +36,9 @@ start_link() ->
 %% Client_serv supervisor and the a Listener supervisor.
 
 init(_Args) ->
-    %%{Port, Listeners} = load_config(filename:absname("../configs/config")),
-    Port = 8888,
-    Listeners = 10,
+    {Port, Listeners} = load_config(filename:absname("../configs/config")),
+    %% Port = 8888,
+    %% Listeners = 10,
     SuperSpec = {rest_for_one, 60, 3600},
     ClientServSuperSpec = {client_serv_sup, 
 			   {client_serv_sup, start_link, []}, 
