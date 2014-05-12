@@ -12,7 +12,13 @@
 
 @interface menuViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *user;
-
+@property (weak, nonatomic) IBOutlet UIButton *requestLabel;
+@property (weak, nonatomic) IBOutlet UILabel *averageDistanceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *averageSpeedLabel;
+@property (nonatomic) double winRatio;
+@property (weak, nonatomic) IBOutlet UILabel *lossesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *winsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *noStatsLabel;
 @end
 
 @implementation menuViewController
@@ -26,70 +32,17 @@
     
     self.navigationItem.hidesBackButton = YES;
     
-    //fetch username from server
-    _user.text = @"Joel Sandberg";
-    
 
-    //fetch win ratio from server
-    double winRatio = 0.33;
+    //fetch username from server
+    //_user.text = @"Joel Sandberg";
     
-    double winRatioToDegrees = winRatio * 360;
-    
-    UIBezierPath *path1 = [UIBezierPath bezierPathWithArcCenter:CGPointMake(60, 60)
-                                                         radius:50
-                                                     startAngle:DEGREES_TO_RADIANS(0)+OFFSET
-                                                       endAngle:DEGREES_TO_RADIANS(winRatioToDegrees)-OFFSET
-                                                      clockwise:YES];
-    
-    UIBezierPath *path2 = [UIBezierPath bezierPathWithArcCenter:CGPointMake(60, 60)
-                                                         radius:50
-                                                     startAngle:DEGREES_TO_RADIANS(winRatioToDegrees)+OFFSET
-                                                       endAngle:DEGREES_TO_RADIANS(360)-OFFSET
-                                                      clockwise:YES];
-    
-    UIColor *green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
-    UIGraphicsBeginImageContext(CGSizeMake(120, 120));
-    [[UIColor blackColor] setStroke];
-    path1.lineCapStyle = kCGLineCapRound;
-    path1.lineWidth = 15.0f;
-    [green setStroke];
-    [path1 stroke];
-    
-    UIColor *red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
-    path2.lineWidth = 15.0f;
-    path2.lineCapStyle = kCGLineCapRound;
-    [red setStroke];
-    [path2 stroke];
-    self.drawpad.image = UIGraphicsGetImageFromCurrentImageContext();
-    
-    [self drawRect:CGRectMake(0, 0, 100, 100)];
-    
-    UIGraphicsEndImageContext();
-    
-   /* UIBezierPath *path = [[UIBezierPath alloc] init];
-    [path moveToPoint:CGPointMake(50.0f, 50.0f)];
-    [path addLineToPoint:CGPointMake(270.0f, 50.0f)];
-    [path addLineToPoint:CGPointMake(270.0f, 500.0f)];
-    [path addLineToPoint:CGPointMake(50.0f, 500.0f)];
-    [path closePath];
-    UIGraphicsBeginImageContext(self.view.frame.size);
-    path.lineCapStyle = kCGLineCapRound;
-    path.lineWidth = 1.0f;
-    [[UIColor blackColor] setStroke];
-    [[UIColor redColor] setFill];
-    [path stroke];
-    [path fill];
-    self.drawpad.image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    //[self.view addSubview:self.drawpad];
-    */
+            //fetch win ratio from server
+            _winRatio = 0.33;
+            
     
     
-    CABasicAnimation *animateStrokeEnd = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    animateStrokeEnd.duration  = 2;
-    animateStrokeEnd.fromValue = [NSNumber numberWithFloat:0.0f];
-    animateStrokeEnd.toValue   = [NSNumber numberWithFloat:1.0f];
-    [self.drawpad.layer addAnimation:animateStrokeEnd forKey:nil];
+    [self updateHomeStats];
+        
 }
 
 - (void)didReceiveMemoryWarning
@@ -145,7 +98,7 @@
                                           cancelButtonTitle:@"No"
                                           otherButtonTitles:@"Yes",nil];
     [alert show];
-
+    
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
@@ -156,6 +109,81 @@
         
     }
 }
+
+-(void)updateHomeStats {
+    homeStats *result = (homeStats *)[NetworkConnectionClass getHomeStats];
+    
+    //username
+    NSString *string = [NSString stringWithFormat:@"%s", result->username];
+    _user.text = string;
+ 
+    //requests
+    int requestAC = result->request;
+    if (requestAC == 0) {
+        _requestLabel.hidden=YES;
+    } else {
+    [_requestLabel setTitle:[NSString stringWithFormat:@"%i", requestAC] forState:UIControlStateNormal];
+    }
+    
+    //average speed
+    double speedBC = result->averageSpeed;
+    _averageSpeedLabel.text = [NSString stringWithFormat:@"%.1f km", speedBC];
+    
+    //average distance
+    double distanceBC = result->averageDistance;
+    _averageDistanceLabel.text = [NSString stringWithFormat:@"%0.1f km/h", distanceBC];
+    
+    //wins
+    double winsAC = result->wins;
+    
+    //matches
+    double matchesAC = result->matches;
+    
+    //win ratio
+    _winRatio = winsAC/matchesAC;
+    
+    if (matchesAC <= 0) {
+        _noStatsLabel.text = @"No stats yet";
+        _winsLabel.hidden=YES;
+        _lossesLabel.hidden=YES;
+    } else {
+        _noStatsLabel.hidden=YES;
+    double winRatioToDegrees = (_winRatio * 360);
+    
+    UIBezierPath *path1 = [UIBezierPath bezierPathWithArcCenter:CGPointMake(60, 60)
+                                                         radius:50
+                                                     startAngle:DEGREES_TO_RADIANS(0)+OFFSET
+                                                       endAngle:DEGREES_TO_RADIANS(winRatioToDegrees)-OFFSET
+                                                      clockwise:YES];
+    
+    UIBezierPath *path2 = [UIBezierPath bezierPathWithArcCenter:CGPointMake(60, 60)
+                                                         radius:50
+                                                     startAngle:DEGREES_TO_RADIANS(winRatioToDegrees)+OFFSET
+                                                       endAngle:DEGREES_TO_RADIANS(360)-OFFSET
+                                                      clockwise:YES];
+    
+    UIColor *green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
+    UIGraphicsBeginImageContext(CGSizeMake(120, 120));
+    [[UIColor blackColor] setStroke];
+    path1.lineCapStyle = kCGLineCapRound;
+    path1.lineWidth = 15.0f;
+    [green setStroke];
+    [path1 stroke];
+    
+    UIColor *red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
+    path2.lineWidth = 15.0f;
+    path2.lineCapStyle = kCGLineCapRound;
+    [red setStroke];
+    [path2 stroke];
+    self.drawpad.image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    [self drawRect:CGRectMake(0, 0, 100, 100)];
+    
+    UIGraphicsEndImageContext();
+    
+    }
+}
+
 
 
 @end
