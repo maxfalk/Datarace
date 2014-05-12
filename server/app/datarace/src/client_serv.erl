@@ -88,27 +88,27 @@ verify(control_transferred, {UserId, Socket}) ->
 main(?LOGIN_LOGOUT, LoopData) ->
     {stop, normal, LoopData};
 main({?REQUEST, <<ChallengeId:32/integer, Distance:32/integer>>}, {UserId, Socket}) ->
-    %% Make request
+    log_serv:log("A request was made by UID: " ++ integer_to_list(UserId)),
     usercom:request(UserId, ChallengeId, Distance),
     {next_state, main, {UserId, Socket}};
 main(?REQUEST_LOOKUP, {UserId, Socket}) ->
-    %% Make request lookup - look for new requests
+    log_serv:log("A request lokup was made by UID: " ++ integer_to_list(UserId)),
     RequestTableTuple = usercom:request_lookup(UserId),
     RequestTablePack = packconv:pack(?REQUEST_LOOKUP, RequestTableTuple),
     %% Send back RequestTablePack (All in one or several packets)
     {next_state, main, {UserId, Socket}};
-main({?REQUEST_ACCEPT, <<RequestId:32/integer>>}, LoopData) ->
-    %% Accept a request 
+main({?REQUEST_ACCEPT, <<RequestId:32/integer>>}, {UserId, Socket}) ->
+    log_serv:log("A request accept was made by UID: " ++ integer_to_list(UserId)),
     usercom:request_accept(RequestId),
-    {next_state, main, LoopData};
-main({?REQUEST_CANCEL, <<RequestId:32/integer>>}, LoopData) ->
-    %% Cancel a request
+    {next_state, main, {UserId, Socket}};
+main({?REQUEST_CANCEL, <<RequestId:32/integer>>}, {UserId, Socket}) ->
+    log_serv:log("A request cancellation was made by UID: " ++ integer_to_list(UserId)),
     usercom:request_cancel(RequestId),
-    {next_state, main, LoopData};
+    {next_state, main, {UserId, Socket}};
 main(?GET_HOME_STATS, {UserId, Socket}) ->
-    %% Get home stats 
-    UserStatsTableTuple = usercom:request_cancel(UserId),
-    UserStatsTablePack = packconv:pack(?GET_HOME_STATS_REPLY, UserStatsTableTuple),
+    log_serv:log("A get home stats for UID: " ++ integer_to_list(UserId)),
+    UserStatsTableTuple = usercom:get_home_stats(UserId),
+    UserStatsTablePack = packconv:pack(?GET_HOME_STATS, UserStatsTableTuple),
     ok = gen_tcp:send(Socket, UserStatsTablePack),
     {next_state, main, {UserId, Socket}}.
 
@@ -135,9 +135,7 @@ handle_info({tcp, _, <<Type:2/binary, Packet/binary>>}, State, {UserId, Socket})
     inet:setopts(Socket, [{active, once}]),
     ?MODULE:State({Type, Packet}, {UserId, Socket});
 handle_info({tcp_closed, _}, _State, {UserId, Socket}) ->
-    {ok, {Address, Port}} = inet:peername(Socket),
-    log_serv:log("User disconnected unexpectedly: IP: " ++ inet_parse:ntoa(Address) ++ 
-		     ", Port: " ++ integer_to_list(Port)),    
+    log_serv:log("User disconnected unexpectedly, UID: " ++ integer_to_list(UserId)),    
     {stop, normal, {UserId, Socket}};
 handle_info({tcp_error, _, _Reason}, _State, Socket) ->
     {ok, {Address, Port}} = inet:peername(Socket),

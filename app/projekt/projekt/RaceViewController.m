@@ -44,73 +44,83 @@
     [self performSegueWithIdentifier:@"startCountdown" sender:self];
     [super viewDidLoad];
     
-    self.mapView.delegate = self;
-    //self.mapView.userInteractionEnabled=NO;
-    self.mapView.showsUserLocation=YES;
-    self.mapView.tintColor = [UIColor blackColor];
-    
-    // if location services are on
-    if([CLLocationManager locationServicesEnabled])
-    {
-        // if location services are restricted do nothing
-        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
-            [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted )
-        {
-            NSLog(@"Location tracking disabled.");
-        }
-        else
-        {
-            NSLog(@"all ok");
-            self.locationManager = [[CLLocationManager alloc] init];
-            self.locationManager.delegate = self;
-            [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
-            [self.locationManager startUpdatingLocation];
-            NSLog(@"latitude= %f longitude = %f",self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.latitude);
-        }
-    }
-    
-    
-    [self.mapView setVisibleMapRect:[self.routeLine boundingMapRect]]; //If you want the route to be visible
-    
-    self.routeLineView = [[MKPolylineView alloc] init];
-    self.routeLine = [[MKPolyline alloc] init];
-    [self.mapView addOverlay:self.routeLine];
-    // Do any additional setup after loading the view.
-    /*
-     UIBezierPath *path1 = [UIBezierPath bezierPath];
-     [path1 moveToPoint:CGPointMake(10,10)];
-     [path1 addLineToPoint:CGPointMake(70,10)];
-     [path1 stroke];
-     
-     
-     
-     
-     UIBezierPath *path2 = [UIBezierPath bezierPath];
-     [path2 moveToPoint:CGPointMake(70,10)];
-     [path2 addLineToPoint:CGPointMake(140,10)];
-     [path2 stroke];
-     
-     
-     UIColor *green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
-     UIGraphicsBeginImageContext(CGSizeMake(120, 120));
-     [[UIColor blackColor] setStroke];
-     path1.lineCapStyle = kCGLineCapRound;
-     path1.lineWidth = 15.0f;
-     [green setStroke];
-     [path1 stroke];
-     
-     UIColor *red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
-     path2.lineWidth = 15.0f;
-     path2.lineCapStyle = kCGLineCapRound;
-     [red setStroke];
-     [path2 stroke];
-     self.drawpad.image = UIGraphicsGetImageFromCurrentImageContext();
-     
-     //[self drawRect:CGRectMake(0, 0, 100, 100)];
-     
-     UIGraphicsEndImageContext();
-     */
+    NSOperationQueue *myQueue = [[NSOperationQueue alloc] init];
+    [myQueue addOperationWithBlock:^{
+        
+        
+        self.mapView.delegate = self;
+        //self.mapView.userInteractionEnabled=NO;
+        self.mapView.showsUserLocation=YES;
+        self.mapView.tintColor = [UIColor blackColor];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            // if location services are on
+            if([CLLocationManager locationServicesEnabled])
+            {
+                // if location services are restricted do nothing
+                if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
+                    [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted )
+                {
+                    NSLog(@"Location tracking disabled.");
+                }
+                else
+                {
+                    NSLog(@"all ok");
+                    self.locationManager = [[CLLocationManager alloc] init];
+                    self.locationManager.delegate = self;
+                    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+                    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+                    [self.locationManager startUpdatingLocation];
+                    NSLog(@"latitude= %f longitude = %f",self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.latitude);
+                }
+            }
+            
+            [self.mapView setVisibleMapRect:[self.routeLine boundingMapRect]]; //If you want the route to be visible
+            
+            self.routeLineView = [[MKPolylineView alloc] init];
+            self.routeLine = [[MKPolyline alloc] init];
+            [self.mapView addOverlay:self.routeLine];
+           
+            
+            
+            // Do any additional setup after loading the view.
+            /*
+             UIBezierPath *path1 = [UIBezierPath bezierPath];
+             [path1 moveToPoint:CGPointMake(10,10)];
+             [path1 addLineToPoint:CGPointMake(70,10)];
+             [path1 stroke];
+             
+             
+             
+             
+             UIBezierPath *path2 = [UIBezierPath bezierPath];
+             [path2 moveToPoint:CGPointMake(70,10)];
+             [path2 addLineToPoint:CGPointMake(140,10)];
+             [path2 stroke];
+             
+             
+             UIColor *green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
+             UIGraphicsBeginImageContext(CGSizeMake(120, 120));
+             [[UIColor blackColor] setStroke];
+             path1.lineCapStyle = kCGLineCapRound;
+             path1.lineWidth = 15.0f;
+             [green setStroke];
+             [path1 stroke];
+             
+             UIColor *red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
+             path2.lineWidth = 15.0f;
+             path2.lineCapStyle = kCGLineCapRound;
+             [red setStroke];
+             [path2 stroke];
+             self.drawpad.image = UIGraphicsGetImageFromCurrentImageContext();
+             
+             //[self drawRect:CGRectMake(0, 0, 100, 100)];
+             
+             UIGraphicsEndImageContext();
+             */
+        }];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -146,7 +156,7 @@
     
     //NSLog(@"acc: %f", self.mapView.userLocation.location.horizontalAccuracy);
     if (_firstPosition != nil) {
-    [self drawRoute:@[self.mapView.userLocation, prev]];
+        [self drawRoute:@[self.mapView.userLocation, prev]];
     }
     
     _previousPosition.longitude = self.mapView.userLocation.location.coordinate.longitude;
@@ -203,8 +213,8 @@
     }
     
     MKPolyline *polyLine = [MKPolyline polylineWithCoordinates:coordinates count:numberOfSteps];
-
- [self.mapView addOverlay:polyLine];
+    
+    [self.mapView addOverlay:polyLine];
     
 }
 

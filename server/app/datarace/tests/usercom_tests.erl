@@ -95,8 +95,9 @@ start_match()->
     database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
-    Result = hd(usercom:request_lookup(U1)),
-    usercom:create_match(Result#request_table.id, U1, U2),
+    {R, R1} = usercom:request_lookup(U1),
+    Result = hd(R), 
+   usercom:create_match(Result#request_table.id, U1, U2),
     {Result#request_table.id, U1, U2}.
 
 stop_match({_ , U1, U2})->
@@ -112,7 +113,8 @@ start_gps()->
     database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
-    Result = hd(usercom:request_lookup(U1)),
+    {R, R1} = usercom:request_lookup(U1),
+    Result = hd(R),
     Result2 = hd(usercom:new_match(Result#request_table.id, U1, U2)),
     {Result2#match_table.id, U1, U2}.   
 
@@ -134,7 +136,8 @@ start_stats()->
     database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
-    Result = hd(usercom:request_lookup(U1)),
+    {R, R1} = usercom:request_lookup(U1),
+    Result = hd(R),
     Result2 = hd(usercom:new_match(Result#request_table.id, U1, U2)),
     usercom:set_winner(Result2#match_table.id, U1),
     usercom:gps_save(U1, Result2#match_table.id, 2345678.4567890, 5678.5678),
@@ -163,20 +166,25 @@ request({U1, U2})->
     ?_assertEqual(ok, usercom:request(U1, U2, 23)).
 
 request_lookup({U1, U2})->
-    Result = hd(usercom:request_lookup(U1)),
+    {R, R1} = usercom:request_lookup(U1),
+    Result = hd(R),
     [?_assertEqual(Result#request_table.challenged_userId, U2),
     ?_assertEqual(Result#request_table.state, 0)].
 
 request_accept({U1, _U2})->
-    Result = hd(usercom:request_lookup(U1)),
+    {R, R1} = usercom:request_lookup(U1),
+    Result = hd(R),   
     usercom:request_accept(Result#request_table.id),
-    Result_after = hd(usercom:request_lookup(U1)),
+    {R2, R3} = usercom:request_lookup(U1),
+    Result_after = hd(R2),
     ?_assertEqual(Result_after#request_table.state, 1).
 
 request_cancel({U1, _U2})->
-    Result = hd(usercom:request_lookup(U1)),
+    {R, R1} = usercom:request_lookup(U1),
+    Result = hd(R),  
     usercom:request_cancel(Result#request_table.id),
-    Result_after = hd(usercom:request_lookup(U1)),
+    {R2, R3} = usercom:request_lookup(U1),
+    Result_after = hd(R2),  
     ?_assertEqual(Result_after#request_table.state, 2).
     
 %%Test match    
@@ -245,6 +253,7 @@ get_num_pending_requests({UserId, _U2, UserName})->
 create_user(Username, Password)->
     ok = account:register(Username,Password, Username ++ "@mail.com"),
     {ok, U1} = account:login(Username, Password),
+    account:logout(U1),
     U1.
 
 create_users()->
