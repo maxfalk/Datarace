@@ -30,7 +30,7 @@ login(User_name, Password)->
 %%input data to se if it is vaild.
 -spec login_helper(Password, User_data) ->  {ok, integer()} | {error, no_user} | {error, wrong_password} when
       Password :: string(),
-      User_data :: login_table(). 
+      User_data :: [login_table(), ...]. 
 
 login_helper(_Password, [])->
     %%logg attempeted loggin?
@@ -83,6 +83,16 @@ set_loggedin(Userid)->
 		   <<"INSERT INTO tLoginLog (userId,login) VALUES(?, now())">>,
 		   [Userid]),
     ok.
+
+%%@doc Check if user is already loggedin.
+
+
+check_user_already_login(Userid)-> tbi.
+ %%   Loginlogrec = get_user_lastlogin(Userid), 
+   %% database:db_query(login_log_check,
+%%		     "Select id, login, logout")    
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%           LOGOUT                 %%
@@ -179,7 +189,7 @@ check_user_exists(User_name)->
 	    
 %%@doc Get users information, for checking that no other user is already regisered
 %%with the given name.
--spec get_user(User_name) -> register_table() when
+-spec get_user(User_name) -> [register_table(), ...] when
       User_name :: string().
 
 get_user(User_name)->

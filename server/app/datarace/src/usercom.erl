@@ -29,19 +29,52 @@ request(UserId, Ch_userId, Distance)->
 		  [UserId, Ch_userId, Distance]),
     ok.
 
-%%@doc Lookup users requests active and inactive.
--spec request_lookup(UserId) -> request_table() when
+
+
+%%@doc Lookup a users made requests and requests made against the user. 
+%% Gives the result in a tuple with requests made first and requests made against the
+%% user second.
+-spec request_lookup(UserId) -> {[request_table(), ...], [request_table(), ...]} when
+      UserId :: integer().
+
+request_lookup(UserId)->
+    {request_lookup_made(UserId), request_lookup_challenged(UserId)}.
+
+%%@doc Lookup users requests made by userId. Including requests that are 
+%% active, inactive and pending.
+-spec request_lookup_made(UserId) -> [request_table(), ...] when
       UserId :: integer().
 
 
-request_lookup(UserId) ->
+request_lookup_made(UserId) ->
     Sql_result = database:db_query(request_select, 
 				   <<"SELECT t1.id, t1.challenged_userId, t2.user_name, 
-                                      t1.time, t1.state FROM 
-                                      tRequest t1 inner join tUsers t2 on 
-                                      t1.challenged_userId = t2.id WHERE t1.userId = ?;">>,
-		   [UserId]),
+                                       t1.time, t1.state 
+                                      FROM 
+                                       tRequest t1 inner join 
+                                       tUsers t2 on t1.challenged_userId = t2.id 
+                                      WHERE 
+                                       t1.userId = ?;">>,
+				   [UserId]),
     database:result_to_record(Sql_result, request_table).
+
+%%@doc Lookup requests that have been made against Userid. Including active, inactive
+%% and pending.
+-spec request_lookup_challenged(UserId)-> [request_table(), ...] when
+      UserId :: integer().
+
+request_lookup_challenged(UserId)->
+    Sql_result = database:db_query(request_select, 
+				   <<"SELECT t1.id, t2.id, t2.user_name, 
+                                       t1.time, t1.state 
+                                      FROM 
+                                       tRequest t1 inner join 
+                                       tUsers t2 on t1.userId = t2.id 
+                                      WHERE 
+                                       t1.challenged_userId = ?;">>,
+				   [UserId]),
+    database:result_to_record(Sql_result, request_table).
+    
 
 
 %%@doc Accept a request with a given request id.
@@ -71,7 +104,7 @@ request_cancel(Request_id)->
 
 
 %%@doc Create a new match and return the created match details
--spec new_match(Request_id, Main_user, Sec_user)-> match_table() when
+-spec new_match(Request_id, Main_user, Sec_user)-> [match_table()] when
       Request_id :: integer(),
       Main_user :: integer(),
       Sec_user :: integer().
@@ -95,7 +128,7 @@ create_match(Request_id, Main_user, Sec_user)->
     ok.
     
 %%@doc Get match from request id
--spec get_match(Request_id :: integer())-> match_table().
+-spec get_match(Request_id :: integer())-> [match_table()].
 
 get_match(Request_id)->
     Sql_result = database:db_query(match_select,
@@ -139,6 +172,25 @@ gps_save(User_id, Match_id, Longidtude, Latitude)->
 		   [User_id, Match_id, Longidtude, Latitude]),
     ok.
     
+%%@doc Get gps coordinates for a user in a specific match.
+-spec gps_get(User_id, Match_id) -> [gps_table(), ...] when
+      User_id :: integer(),
+      Match_id :: integer().
+
+gps_get(User_id,Match_id)->
+    Sql_result = database:db_query(gps_get,
+				   <<"SELECT longitude, latitude
+                                      FROM
+                                        tgps
+                                      WHERE
+                                        userId = ? and
+                                        matchId = ?">>,
+				   [User_id, Match_id]),
+    database:result_to_record(Sql_result, gps_table).
+    
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%         STATISTICS         %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -194,7 +246,7 @@ get_num_pending_requests(UserId)->
     pad_num_pending_requests(database:get_row(R, 1)).
 
 
-%%@doc pad request to to always return a number
+%%@doc pad request to always return a number
 %%
 -spec pad_num_pending_requests(R)-> integer() when
       R :: {error, no_item} | [integer()].
