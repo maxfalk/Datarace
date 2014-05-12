@@ -43,32 +43,37 @@
     [self performSegueWithIdentifier:@"startCountdown" sender:self];
     [super viewDidLoad];
     
-    self.mapView.delegate = self;
-    //self.mapView.userInteractionEnabled=NO;
-    self.mapView.showsUserLocation=YES;
-    self.mapView.tintColor = [UIColor blackColor];
     
-    // if location services are on
-    if([CLLocationManager locationServicesEnabled])
-    {
-        // if location services are restricted do nothing
-        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
-            [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted )
-        {
-            NSLog(@"Location tracking disabled.");
-        }
-        else
-        {
-            NSLog(@"all ok");
-            self.locationManager = [[CLLocationManager alloc] init];
-            self.locationManager.delegate = self;
-            [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-            [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
-            [self.locationManager startUpdatingLocation];
-            NSLog(@"latitude= %f longitude = %f",self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.latitude);
-        }
-    }
-    
+    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        self.mapView.delegate = self;
+        //self.mapView.userInteractionEnabled=NO;
+        self.mapView.showsUserLocation=YES;
+        self.mapView.tintColor = [UIColor blackColor];
+        
+        dispatch_async( dispatch_get_main_queue(), ^{
+            // if location services are on
+            if([CLLocationManager locationServicesEnabled])
+            {
+                // if location services are restricted do nothing
+                if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
+                    [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted )
+                {
+                    NSLog(@"Location tracking disabled.");
+                }
+                else
+                {
+                    NSLog(@"all ok");
+                    self.locationManager = [[CLLocationManager alloc] init];
+                    self.locationManager.delegate = self;
+                    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+                    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+                    [self.locationManager startUpdatingLocation];
+                    NSLog(@"latitude= %f longitude = %f",self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.latitude);
+                }
+            }
+        });
+    });
     
     [self.mapView setVisibleMapRect:[self.routeLine boundingMapRect]]; //If you want the route to be visible
     
