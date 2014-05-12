@@ -32,6 +32,7 @@ start()->
 
 stop(_)->
     {ok, Id} = account:login("Autotest","Autotest"),
+    account:logout(Id),
     account:delete(Id),
     database:stop(),
     application:stop(emysql),
@@ -49,10 +50,10 @@ db_register(RegOut)->
      ?_assertEqual(account:register("Autotest","o","testar"), {error, user_already_exist})].
 
 login(_)-> 
-    {ok, Id} = account:login("Autotest","Autotest"),
-    [?_assertEqual(account:login("Autotest","Autotest"), {ok, Id}),
-    ?_assertEqual(account:login("qpqpqp","test"), {error,no_user}),
-    ?_assertEqual(account:login("Autotest","ost"), {error,wrong_password})].
+    [?_assert(account:login("Autotest","Autotest") =/= {error, already_loggedin}),
+     ?_assertEqual(account:login("Autotest","Autotest"),{error, already_loggedin}),
+     ?_assertEqual(account:login("qpqpqp","test"), {error,no_user}),
+     ?_assertEqual(account:login("Autotest","ost"), {error,wrong_password})].
 
 logout(_)->
     {ok, Id} = account:login("Autotest","Autotest"),

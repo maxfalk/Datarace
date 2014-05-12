@@ -1,6 +1,6 @@
 %%@doc Author: Max Falk Nilsson
 %%This module holds functions for 
-%%making requests and saving challenge data.
+%%making requests and saving challange data.
 %%!!!!!! Not finished !!!!!!!!
 
 -module(usercom).
@@ -47,7 +47,7 @@ request_lookup(UserId)->
 
 
 request_lookup_made(UserId) ->
-    Sql_result = database:db_query(request_select, 
+    Sql_result = database:db_query(request_select_made, 
 				   <<"SELECT t1.id, t1.challenged_userId, t2.user_name, 
                                        t1.time, t1.state 
                                       FROM 
@@ -64,9 +64,9 @@ request_lookup_made(UserId) ->
       UserId :: integer().
 
 request_lookup_challenged(UserId)->
-    Sql_result = database:db_query(request_select, 
-				   <<"SELECT t1.id, t2.id, t2.user_name, 
-                                       t1.time, t1.state 
+    Sql_result = database:db_query(request_select_challanged, 
+				   <<"SELECT t1.id, t2.id as challenged_userId, 
+                                             t2.user_name, t1.time, t1.state 
                                       FROM 
                                        tRequest t1 inner join 
                                        tUsers t2 on t1.userId = t2.id 
