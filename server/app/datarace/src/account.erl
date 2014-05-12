@@ -5,7 +5,7 @@
 %% !! NOT FINISHED !!
 -module(account).
 
--export([login/2,logout/1,register/3,delete/1]).
+-export([get_user_lastlogin/1,login/2,logout/1,register/3,delete/1]).
 
 -include("../include/database.hrl").
 
@@ -30,7 +30,7 @@ login(User_name, Password)->
 %%input data to se if it is vaild.
 -spec login_helper(Password, User_data) ->  {ok, integer()} | {error, no_user} | {error, wrong_password} when
       Password :: string(),
-      User_data :: login_table(). 
+      User_data :: [login_table(), ...]. 
 
 login_helper(_Password, [])->
     %%logg attempeted loggin?
@@ -38,10 +38,15 @@ login_helper(_Password, [])->
 login_helper(Password, User_data)->
     Login_rec = database:get_row(User_data,1),
     Password_salt = Password ++ binary_to_list(Login_rec#login_table.salt),
-    case check_password(Password_salt ,Login_rec#login_table.password) of
+    case check_password(Password_salt, Login_rec#login_table.password) of
 	ok ->
-	    set_loggedin(Login_rec#login_table.id),
-	    {ok, Login_rec#login_table.id};
+	    (case check_user_already_login(Login_rec#login_table.id) of
+		false ->
+		     {error, already_loggedin};
+		true->
+		     set_loggedin(Login_rec#login_table.id),
+		     {ok, Login_rec#login_table.id}
+	     end);
 	false ->
 	    %%Set login attempt?
 	    {error, wrong_password}
@@ -84,6 +89,33 @@ set_loggedin(Userid)->
 		   [Userid]),
     ok.
 
+%%@doc Check if user is already loggedin.
+-spec check_user_already_login(Userid) -> boolean() when
+      Userid :: integer().
+
+check_user_already_login(Userid)-> 
+    Loginlogrec = get_user_lastlogin(Userid),
+    case Loginlogrec#loginlog_table.id of
+	{error, no_item}->
+	    true;
+	undefined ->
+	    true;
+	_Num ->
+	    {_, _, _, R, _} = database:db_query(login_log_check,
+						<<"SELECT id, login, logout
+                                                   FROM
+                                                    tLoginLog t1
+                                                   WHERE
+                                                     t1.id = ? and
+                                                     t1.logout is not null">>,
+						[Loginlogrec#loginlog_table.id]),
+	    R =/= []
+    end.
+	
+    
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%           LOGOUT                 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -107,7 +139,7 @@ set_loggedout(Userid)->
     set_logout_time(Loginlog_rec#loginlog_table.id).
 
 %%@doc Get the last time the user logged in.
--spec get_user_lastlogin(Userid) ->loginlog_table() when
+-spec get_user_lastlogin(Userid) ->loginlog_table() | {error, no_item} when
       Userid :: integer().
     
 get_user_lastlogin(Userid)->
@@ -179,7 +211,7 @@ check_user_exists(User_name)->
 	    
 %%@doc Get users information, for checking that no other user is already regisered
 %%with the given name.
--spec get_user(User_name) -> register_table() when
+-spec get_user(User_name) -> [register_table(), ...] when
       User_name :: string().
 
 get_user(User_name)->
