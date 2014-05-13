@@ -5,10 +5,8 @@
 //  Created by Babak Toghiani-Rizi on 25/04/14.
 //  Copyright (c) 2014 OSM-projekt. All rights reserved.
 //
-#define PORT 8888
-#define ADDRESS @"83.253.15.24"
+
 #import "NetworkConnectionClass.h"
-#import "sys/socket.h"
 
 typedef struct __attribute__ ((packed)) {
     uint32_t length;
@@ -62,7 +60,7 @@ static NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)ADDRESS, PORT, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.15.24", 8888, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *) readStream;
     outputStream = (__bridge NSOutputStream *) writeStream;
     
@@ -220,9 +218,8 @@ static NSOutputStream *outputStream;
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
-    
-    [self readStream:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
-    [self readStream:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
+    [inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
+    [inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
     
     if ((result->requestLookUpMeta.type[0] == type1) && (result->requestLookUpMeta.type[1] == type2)) {
         
@@ -272,5 +269,6 @@ static NSOutputStream *outputStream;
 
 
 }
+
 
 @end
