@@ -138,11 +138,10 @@
 
 - (void)addFooter {
     
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
+    //CGRect screenRect = [[UIScreen mainScreen] bounds];
+    //CGFloat screenHeight = screenRect.size.height;
     
-    NSInteger height = (screenHeight - (50*[_competitors count]*2)-44);
+    //NSInteger height = (screenHeight - (50*[_competitors count]*2)-44);
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     v.backgroundColor = [UIColor clearColor];
     [self.tableView setTableFooterView:v];

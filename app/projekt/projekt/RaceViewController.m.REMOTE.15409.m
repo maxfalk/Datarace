@@ -21,12 +21,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *yourSlider;
 @property (weak, nonatomic) IBOutlet UISlider *competitorSlider;
 @property (weak, nonatomic) IBOutlet UILabel *competitorName;
-@property (nonatomic) double totalDistance;
-@property (nonatomic) double totalCompetitorDistance;
-@property (weak, nonatomic) IBOutlet UILabel *toGoalLabel;
-@property (weak, nonatomic) IBOutlet UILabel *betweenPlayersLabel;
-@property (nonatomic) NSInteger distance;
-@property (weak, nonatomic) IBOutlet UILabel *differenceLabel;
+
 
 @end
 
@@ -125,20 +120,6 @@
              */
         }];
     }];
-    
-    _distance = 5000;
-    _yourSlider.minimumValue = 0;
-    _yourSlider.maximumValue = _distance;
-    
-    _competitorSlider.minimumValue = 0;
-    _competitorSlider.maximumValue = _distance;
-    
-    [_yourSlider setThumbImage:[UIImage imageNamed:@"slider"]
-                                forState:UIControlStateNormal];
-    [_competitorSlider setThumbImage:[UIImage imageNamed:@"slider"]
-                      forState:UIControlStateNormal];
-    _totalCompetitorDistance = 2500;
-    _competitorSlider.value = _totalCompetitorDistance;
 }
 
 - (void)didReceiveMemoryWarning
@@ -167,9 +148,7 @@
         _previousPosition.longitude = self.mapView.userLocation.coordinate.longitude;
     }
     
-    
     CLLocation *prev = [[CLLocation alloc] initWithLatitude:_previousPosition.latitude longitude:_previousPosition.longitude];
-    [self calculateDistance];
     
     [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
     [self.points addObject:self.mapView.userLocation];
@@ -179,12 +158,13 @@
         [self drawRoute:@[self.mapView.userLocation, prev]];
     }
     
-    
-    
     _previousPosition.longitude = self.mapView.userLocation.location.coordinate.longitude;
     _previousPosition.latitude = self.mapView.userLocation.location.coordinate.latitude;
     
+    //firstLocation.coordinate.latitude = _firstPosition.latitude;
     
+    // = CLLocationCoordinate2DMake(_firstPosition.latitude, _firstPosition.longitude);
+    //self.routeLine = [MKPolyline polylineWithPoints:@[self.mapView.userLocation] count:1];
     
 }
 
@@ -206,11 +186,16 @@
             _firstPosition = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:self.locationManager.location.coordinate.longitude];
             
         }
+        //CLLocationCoordinate2D lat = [self.locationManager.location.coordinate.latitude doubleValue];
+        // CLLocationDegrees lon = self.locationManager.location.coordinate.longitude;
+        //_firstPosition = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:self.locationManager.location.coordinate.longitude];
     }
     
+    //CLLocation *newLocation = [locations lastObject];
+    //NSLog(@"latitude= %f longitude = %f",self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.latitude);
     [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
     [NetworkConnectionClass sendUpdatedCoordinates];
-    
+    //[self.mapView addOverlay:self.routeLine];
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {
@@ -238,40 +223,6 @@
     
     [self.mapView addOverlay:polyLine];
     
-}
-
--(void)calculateDistance {
-    
-    if ((self.mapView.userLocation != nil) && (_previousPosition.latitude != 0)) {
-        
-        double lat1rad = _previousPosition.latitude * M_PI/180;
-        double lon1rad = _previousPosition.longitude * M_PI/180;
-        double lat2rad = self.mapView.userLocation.coordinate.latitude * M_PI/180;
-        double lon2rad = self.mapView.userLocation.coordinate.longitude * M_PI/180;
-        
-        //deltas
-        double dLat = lat2rad - lat1rad;
-        double dLon = lon2rad - lon1rad;
-        
-        double a = sin(dLat/2) * sin(dLat/2) + sin(dLon/2) * sin(dLon/2) * cos(lat1rad) * cos(lat2rad);
-        double c = 2 * asin(sqrt(a));
-        double R = 6372.8;
-        
-        double prevTotalDistance = _totalDistance;
-
-        _totalDistance = (R * c * 1000) + prevTotalDistance;
-        _yourSlider.value = _totalDistance;
-        _toGoalLabel.text = [NSString stringWithFormat:@"%0.1f", (_distance - _totalDistance)/1000];
-        _betweenPlayersLabel.text = [NSString stringWithFormat:@"%ld", (long)_distance];
-        _differenceLabel.text = [NSString stringWithFormat:@"%0.1f km", (_totalDistance - _totalCompetitorDistance)/1000];
-        if ((_totalDistance - _totalCompetitorDistance) < 0) {
-            _differenceLabel.textColor = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
-        } else if ((_totalDistance - _totalCompetitorDistance) > 0) {
-            _differenceLabel.textColor = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
-        }
-        
-
-    }
 }
 
 
