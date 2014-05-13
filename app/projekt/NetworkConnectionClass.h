@@ -31,6 +31,7 @@ typedef struct __attribute__ ((packed)) {
     char username[50];
     int date[6];
     int state;
+    int distance;
 } requestLookUp;
 
 typedef struct __attribute__ ((packed)) {
@@ -91,6 +92,6 @@ typedef struct __attribute__ ((packed)) {
 
 +(void *)getHomeStats;
 
-+(void *)getRequests;
++(void *)getRequests:(int)type1 type2:(int)type2;
 
 @end
