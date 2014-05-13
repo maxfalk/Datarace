@@ -5,10 +5,8 @@
 //  Created by Babak Toghiani-Rizi on 25/04/14.
 //  Copyright (c) 2014 OSM-projekt. All rights reserved.
 //
-#define PORT 8888
-#define ADDRESS "83.253.15.24"
+
 #import "NetworkConnectionClass.h"
-#import "sys/socket.h"
 
 typedef struct __attribute__ ((packed)) {
     uint32_t length;
@@ -49,9 +47,9 @@ static NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)ADDRESS, PORT, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.15.24", 8888, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *) readStream;
-    inputStream = (__bridge NSOutputStream *) writeStream;
+    outputStream = (__bridge NSOutputStream *) writeStream;
     
     [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -180,20 +178,6 @@ static NSOutputStream *outputStream;
     return result;
 }
 
-+(void) readStream:(void *)buffer waitLength:(NSUInteger *)waitLength{
-    
-    uint8_t **length = 0;
-    
-    while ([inputStream getBuffer:length length:waitLength]) {
-        <#statements#>
-    }
-
-
-
-    
-}
-
-
 +(void *)getRequests:(int)type1 type2:(int)type2 {
     
     uint32_t myInt32Value = 2;
@@ -208,10 +192,8 @@ static NSOutputStream *outputStream;
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
-    recv(inputStream, &result->requestLookUpMeta.length, sizeof(int),MSG_WAITALL);
-    [inputStream ]
-    //[inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
-    //[inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
+    [inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
+    [inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
     
     if ((result->requestLookUpMeta.type[0] == type1) && (result->requestLookUpMeta.type[1] == type2)) {
         
@@ -232,5 +214,6 @@ static NSOutputStream *outputStream;
     return result;
     
 }
+
 
 @end
