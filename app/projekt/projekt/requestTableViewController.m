@@ -37,25 +37,38 @@
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
         
-        requestLookUpResult *lookUpResult = [NetworkConnectionClass getRequests:2 type2:4];
-        [NetworkConnectionClass getRequests:2 type2:5];
-        //[NetworkConnectionClass getRequests];
+        requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
+        requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
         _requests = [[NSMutableArray alloc] init];
+        int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
+        int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
         
-        if (lookUpResult != nil) {
-            for(int i = 0; i < lookUpResult->requestLookUpMeta.length/(sizeof(requestLookUp)); i++){
-                NSString *username = [NSString stringWithFormat:@"%s",lookUpResult[i].requestLookUp->username];
-                [_requests addObject:username];
+        if (lookUpResultMade != nil) {
+            for(int i = 0; i < numOfPackesMade; i++){
+                NSString *usernameMade =
+                [NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
+                [_requests addObject:usernameMade];
             }
         }
+        
+        if (lookUpResultGot != nil) {
+            for(int i = 0; i < numOfPackesGot; i++){
+                NSString *usernameGot =
+                [NSString stringWithFormat:@"%s",
+                 lookUpResultGot->requestLookUp[i].username];
+                [_requests addObject:usernameGot];
+            }
+        }
+        
+        
         [self.tableView reloadData];
+        free(lookUpResultMade);
+        free(lookUpResultGot);	
         
         dispatch_async( dispatch_get_main_queue(), ^{
             // Add code here to update the UI/send notifications based on the
             // results of the background processing
             self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
-            
-            
             
             [self addFooter];
             

@@ -35,6 +35,19 @@ typedef struct __attribute__ ((packed)) {
 } requestStats;
 
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    uint32_t msg;
+} requestAccept;
+
+
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    uint32_t msg;
+} requestCancel;
+
 @implementation NetworkConnectionClass
 //@synthesize inputStream, outputStream;
 
@@ -61,6 +74,19 @@ static NSOutputStream *outputStream;
     //self.outputStream = outputStream;
     
 }
++(void) readStream:(uint8_t *) buffer maxLength:(int)maxLength {
+    int bytesRead = 0;
+    char tmpBuffer[1024];
+    
+    while((bytesRead += [inputStream read:(uint8_t *)&tmpBuffer[bytesRead] maxLength:maxLength]) < maxLength){
+    
+    }
+    NSLog(@"Bytes read %d", bytesRead);
+    memcpy(buffer, tmpBuffer, maxLength);
+    
+    
+}
+
 
 +(int)sendLoginPackage:(NSString *)username password:(NSString *)password {
     
@@ -162,7 +188,7 @@ static NSOutputStream *outputStream;
 
 +(void *)getHomeStats {
     
-    uint32_t myInt32Value = 2;
+    	uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
     requestStats packet;
@@ -200,11 +226,16 @@ static NSOutputStream *outputStream;
         result->requestLookUpMeta.length = ntohl(result->requestLookUpMeta.length)-2;
         double numberOfPackages = (double)(result->requestLookUpMeta.length)/(double)(sizeof(requestLookUp));
         
-        requestLookUp *reqLookUp = malloc(sizeof(numberOfPackages*sizeof(requestLookUp)));
+        requestLookUp *reqLookUp = malloc(numberOfPackages*sizeof(requestLookUp));
+        if(reqLookUp == nil){
+            NSLog(@"Out of space");
+            return 0;
+        }
         memset(reqLookUp, 0, sizeof(requestLookUp));
         
         for(int i = 0; i < numberOfPackages; i++) {
-            [inputStream read:(uint8_t *)reqLookUp maxLength:sizeof(requestLookUp)];
+            [self readStream:(uint8_t *)(reqLookUp+i) maxLength:sizeof(requestLookUp)];
+            	
         }
         result->requestLookUp = reqLookUp;
         
@@ -213,6 +244,30 @@ static NSOutputStream *outputStream;
     NSLog(@"result %i", (int)result);
     return result;
     
+}
++(int) acceptRequest:(uint32_t) requestId {
+    
+    requestAccept packet;
+    packet.length = CFSwapInt32HostToBig(6);
+    packet.type[0] = 2;
+    packet.type[1] = 2;
+    packet.msg = requestId;
+    
+    return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestAccept)];
+
+}
+
++(int) cancelRequest:(uint32_t) requestId{
+
+    requestCancel packet;
+    packet.length = CFSwapInt32HostToBig(6);
+    packet.type[0] = 2;
+    packet.type[1] = 2;
+    packet.msg = requestId;
+    
+    return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestCancel)];
+
+
 }
 
 
