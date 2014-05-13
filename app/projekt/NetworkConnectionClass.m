@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 OSM-projekt. All rights reserved.
 //
 #define PORT 8888
-#define ADDRESS "83.253.15.24"
+#define ADDRESS @"83.253.15.24"
 #import "NetworkConnectionClass.h"
 #import "sys/socket.h"
 
@@ -37,6 +37,19 @@ typedef struct __attribute__ ((packed)) {
 } requestStats;
 
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    uint32_t msg;
+} requestAccept;
+
+
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    uint32_t msg;
+} requestCancel;
+
 @implementation NetworkConnectionClass
 //@synthesize inputStream, outputStream;
 
@@ -51,7 +64,7 @@ static NSOutputStream *outputStream;
     
     CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)ADDRESS, PORT, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *) readStream;
-    inputStream = (__bridge NSOutputStream *) writeStream;
+    outputStream = (__bridge NSOutputStream *) writeStream;
     
     [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -63,6 +76,19 @@ static NSOutputStream *outputStream;
     //self.outputStream = outputStream;
     
 }
++(void) readStream:(uint8_t *) buffer maxLength:(int)maxLength {
+    int bytesRead = 0;
+    char tmpBuffer[1024];
+    
+    while((bytesRead += [inputStream read:(uint8_t *)&tmpBuffer[bytesRead] maxLength:maxLength]) < maxLength){
+    
+    }
+    NSLog(@"Bytes read %d", bytesRead);
+    memcpy(buffer, tmpBuffer, maxLength);
+    
+    
+}
+
 
 +(int)sendLoginPackage:(NSString *)username password:(NSString *)password {
     
@@ -164,7 +190,7 @@ static NSOutputStream *outputStream;
 
 +(void *)getHomeStats {
     
-    uint32_t myInt32Value = 2;
+    	uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
     requestStats packet;
@@ -180,20 +206,6 @@ static NSOutputStream *outputStream;
     return result;
 }
 
-+(void) readStream:(void *)buffer waitLength:(NSUInteger *)waitLength{
-    
-    uint8_t **length = 0;
-    
-    while ([inputStream getBuffer:length length:waitLength]) {
-        <#statements#>
-    }
-
-
-
-    
-}
-
-
 +(void *)getRequests:(int)type1 type2:(int)type2 {
     
     uint32_t myInt32Value = 2;
@@ -208,21 +220,25 @@ static NSOutputStream *outputStream;
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
-    recv(inputStream, &result->requestLookUpMeta.length, sizeof(int),MSG_WAITALL);
-    [inputStream ]
-    //[inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
-    //[inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
+    
+    [self readStream:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
+    [self readStream:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
     
     if ((result->requestLookUpMeta.type[0] == type1) && (result->requestLookUpMeta.type[1] == type2)) {
         
         result->requestLookUpMeta.length = ntohl(result->requestLookUpMeta.length)-2;
         double numberOfPackages = (double)(result->requestLookUpMeta.length)/(double)(sizeof(requestLookUp));
         
-        requestLookUp *reqLookUp = malloc(sizeof(numberOfPackages*sizeof(requestLookUp)));
+        requestLookUp *reqLookUp = malloc(numberOfPackages*sizeof(requestLookUp));
+        if(reqLookUp == nil){
+            NSLog(@"Out of space");
+            return 0;
+        }
         memset(reqLookUp, 0, sizeof(requestLookUp));
         
         for(int i = 0; i < numberOfPackages; i++) {
-            [inputStream read:(uint8_t *)reqLookUp maxLength:sizeof(requestLookUp)];
+            [self readStream:(uint8_t *)(reqLookUp+i) maxLength:sizeof(requestLookUp)];
+            	
         }
         result->requestLookUp = reqLookUp;
         
@@ -231,6 +247,30 @@ static NSOutputStream *outputStream;
     NSLog(@"result %i", (int)result);
     return result;
     
+}
++(int) acceptRequest:(uint32_t) requestId {
+    
+    requestAccept packet;
+    packet.length = CFSwapInt32HostToBig(6);
+    packet.type[0] = 2;
+    packet.type[1] = 2;
+    packet.msg = requestId;
+    
+    return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestAccept)];
+
+}
+
++(int) cancelRequest:(uint32_t) requestId{
+
+    requestCancel packet;
+    packet.length = CFSwapInt32HostToBig(6);
+    packet.type[0] = 2;
+    packet.type[1] = 2;
+    packet.msg = requestId;
+    
+    return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestCancel)];
+
+
 }
 
 @end
