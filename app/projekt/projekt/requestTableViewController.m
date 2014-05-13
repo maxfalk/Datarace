@@ -14,6 +14,7 @@
 
 @interface requestTableViewController ()
 @property (strong, nonatomic) NSMutableArray *requests;
+@property (strong, nonatomic) NSMutableArray *distances;
 
 @end
 
@@ -40,23 +41,23 @@
         requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
         requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
         _requests = [[NSMutableArray alloc] init];
+        _distances  = [[NSMutableArray alloc] init];
         int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
         int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
         
         if (lookUpResultMade != nil) {
             for(int i = 0; i < numOfPackesMade; i++){
-                NSString *usernameMade =
-                [NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
+                NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
                 [_requests addObject:usernameMade];
             }
         }
         
         if (lookUpResultGot != nil) {
             for(int i = 0; i < numOfPackesGot; i++){
-                NSString *usernameGot =
-                [NSString stringWithFormat:@"%s",
-                 lookUpResultGot->requestLookUp[i].username];
+                NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
+                int distance = lookUpResultGot->requestLookUp[i].distance;
                 [_requests addObject:usernameGot];
+                [_distances addObject:[NSNumber numberWithInt:distance]];
             }
         }
         
@@ -109,9 +110,9 @@
         
         
         cell.primaryLabelTwo.text = @"Distance";
-        cell.distanceLabel.text = @"5 km";
+        cell.distanceLabel.text = [_distances objectAtIndex:indexPath.row];
     }
-    /*
+    
      NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
      [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
      [formatter setMaximumFractionDigits:2];
@@ -170,7 +171,7 @@
      
      [cell addSubview:declineButton];
      [cell addSubview:acceptButton];
-     */
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;;
     
     
