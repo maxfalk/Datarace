@@ -23,7 +23,7 @@
 
   
 login(User_name, Password)->
-    User_data = get_login_data(User_name),  
+    User_data = get_user_data(User_name),  
     login_helper(Password, User_data).
 
 %%@doc Looks at the users data from the database and matches it with the
@@ -54,10 +54,10 @@ login_helper(Password, User_data)->
     
     
 %%@doc Get necessary data about the user from the database
--spec get_login_data(User_name) -> [login_table(), ...] when
+-spec get_user_data(User_name) -> [login_table(), ...] when
       User_name :: string().
 
-get_login_data(User_name)->
+get_user_data(User_name)->
     Sql_result = database:db_query(login_user_info, 
 			    <<"SELECT id, salt, password from tUsers WHERE user_name = ?">>,
 		 [User_name]),
@@ -96,9 +96,9 @@ set_loggedin(Userid)->
 check_user_already_login(Userid)-> 
     Loginlogrec = get_user_lastlogin(Userid),
     case Loginlogrec#loginlog_table.id of
-	{error, no_item}->
-	    true;
 	undefined ->
+	    true;
+	{error, no_item}->
 	    true;
 	_Num ->
 	    {_, _, _, R, _} = database:db_query(login_log_check,
@@ -123,11 +123,16 @@ check_user_already_login(Userid)->
 
 %%@doc Logout user from database, makes appropriate calls to define user
 %% as logged out.
--spec logout(Userid) -> ok when
-      Userid :: integer().
+-spec logout(Userid | Username) -> ok when
+      Userid :: integer(),
+      Username :: string().
 
-logout(Userid)->
+logout(Userid) when is_integer(Userid) ->
     set_loggedout(Userid),
+    ok;
+logout(Username) when is_list(Username) ->
+    Userdata = database:get_row(get_user_data(Username),1),
+    set_loggedout(Userdata#login_table.id),
     ok.
 
 %@doc Mark user as logged out in the database.

@@ -56,6 +56,7 @@ login(_)->
      ?_assertEqual(account:login("Autotest","ost"), {error,wrong_password})].
 
 logout(_)->
+    ok = account:logout("Autotest"),
     {ok, Id} = account:login("Autotest","Autotest"),
     [?_assertEqual(account:logout(Id), ok),
     ?_assertEqual(account:logout(77), ok)].
