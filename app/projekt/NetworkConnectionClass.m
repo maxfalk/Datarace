@@ -5,8 +5,10 @@
 //  Created by Babak Toghiani-Rizi on 25/04/14.
 //  Copyright (c) 2014 OSM-projekt. All rights reserved.
 //
-
+#define PORT 8888
+#define ADDRESS "83.253.15.24"
 #import "NetworkConnectionClass.h"
+#import "sys/socket.h"
 
 typedef struct __attribute__ ((packed)) {
     uint32_t length;
@@ -47,13 +49,13 @@ static NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.15.24", 8888, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)ADDRESS, PORT, &readStream, &writeStream);
     inputStream = (__bridge NSInputStream *) readStream;
-    outputStream = (__bridge NSOutputStream *) writeStream;
+    inputStream = (__bridge NSOutputStream *) writeStream;
     
     [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-   
+    
     [inputStream open];
     [outputStream open];
     
@@ -164,12 +166,12 @@ static NSOutputStream *outputStream;
     
     uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
-
+    
     requestStats packet;
     packet.length = myInt32AsABigEndianNumber;
     packet.type[0] = 3;
     packet.type[1] = 0;
- 
+    
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
     homeStats *result = malloc(sizeof(homeStats));
@@ -178,7 +180,21 @@ static NSOutputStream *outputStream;
     return result;
 }
 
-+(void *)getRequests {
++(void) readStream:(void *)buffer waitLength:(NSUInteger *)waitLength{
+    
+    uint8_t **length = 0;
+    
+    while ([inputStream getBuffer:length length:waitLength]) {
+        <#statements#>
+    }
+
+
+
+    
+}
+
+
++(void *)getRequests:(int)type1 type2:(int)type2 {
     
     uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
@@ -188,25 +204,33 @@ static NSOutputStream *outputStream;
     packet.type[0] = 2;
     packet.type[1] = 1;
     requestLookUpResult *result = malloc(sizeof(requestLookUpResult));
+    memset(result, 0, sizeof(requestLookUpResult));
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
-    [inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
-    [inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
-
-    result->requestLookUpMeta.length = ntohl(result->requestLookUpMeta.length)-2;
-    double numberOfPackages = (double)(result->requestLookUpMeta.length)/(double)(sizeof(requestLookUp));
+    recv(inputStream, &result->requestLookUpMeta.length, sizeof(int),MSG_WAITALL);
+    [inputStream ]
+    //[inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
+    //[inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
+    
+    if ((result->requestLookUpMeta.type[0] == type1) && (result->requestLookUpMeta.type[1] == type2)) {
         
-    requestLookUp *reqLookUp = malloc(sizeof(numberOfPackages*sizeof(requestLookUp)));
-    
-    for(int i = 0; i < numberOfPackages; i++) {
-        [inputStream read:(uint8_t *)reqLookUp maxLength:sizeof(requestLookUp)];
+        result->requestLookUpMeta.length = ntohl(result->requestLookUpMeta.length)-2;
+        double numberOfPackages = (double)(result->requestLookUpMeta.length)/(double)(sizeof(requestLookUp));
+        
+        requestLookUp *reqLookUp = malloc(sizeof(numberOfPackages*sizeof(requestLookUp)));
+        memset(reqLookUp, 0, sizeof(requestLookUp));
+        
+        for(int i = 0; i < numberOfPackages; i++) {
+            [inputStream read:(uint8_t *)reqLookUp maxLength:sizeof(requestLookUp)];
+        }
+        result->requestLookUp = reqLookUp;
+        
     }
-    result->requestLookUp = reqLookUp;
     
+    NSLog(@"result %i", (int)result);
     return result;
-
+    
 }
-
 
 @end

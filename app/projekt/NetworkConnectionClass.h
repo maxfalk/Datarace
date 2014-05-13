@@ -91,6 +91,6 @@ typedef struct __attribute__ ((packed)) {
 
 +(void *)getHomeStats;
 
-+(void *)getRequests;
++(void *)getRequests:(int)type1 type2:(int)type2;
 
 @end
