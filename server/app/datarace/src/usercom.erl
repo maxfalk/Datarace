@@ -6,8 +6,8 @@
 -module(usercom).
 
 -export([request/3,request_lookup/1,request_accept/1,request_cancel/1]).
--export([create_match/3, get_match/1, new_match/3, set_winner/2]).
--export([gps_save/4]).
+-export([match/1, set_winner/2]).
+-export([gps_save/4, gps_get/2]).
 -export([get_home_stats/1,get_num_pending_requests/1]).
 
 -include("../include/database.hrl").
@@ -49,7 +49,7 @@ request_lookup(UserId)->
 request_lookup_made(UserId) ->
     Sql_result = database:db_query(request_select_made, 
 				   <<"SELECT t1.id, t1.challenged_userId, t2.user_name, 
-                                       t1.time, t1.state 
+                                       t1.time, t1.state, t1.distance 
                                       FROM 
                                        tRequest t1 inner join 
                                        tUsers t2 on t1.challenged_userId = t2.id 
@@ -66,7 +66,7 @@ request_lookup_made(UserId) ->
 request_lookup_challenged(UserId)->
     Sql_result = database:db_query(request_select_challanged, 
 				   <<"SELECT t1.id, t2.id as challenged_userId, 
-                                             t2.user_name, t1.time, t1.state 
+                                             t2.user_name, t1.time, t1.state, t1.distance 
                                       FROM 
                                        tRequest t1 inner join 
                                        tUsers t2 on t1.userId = t2.id 
@@ -97,45 +97,67 @@ request_cancel(Request_id)->
 		   [Request_id]),
     ok.
     
+
+
+%%@doc Get information about a request.
+-spec get_request_info(Request_id)-> request_table() when
+      Request_id :: integer().
+
+
+get_request_info(Request_id)->
+    Sql_result = database:db_query(request_get_users,
+				   <<"SELECT userId, challenged_userId
+                                      FROM
+                                       tRequest t1
+                                      WHERE
+                                        t1.id = ?">>,
+				   [Request_id]),
+    database:get_row(database:result_to_record(Sql_result,request_info_table),1).
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%         MATCH              %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%%@doc Create a new match for the given request id if there isn't already a match
+%% made for the request id. If the match is already created that match will be returned.
+-spec match(Request_id)-> match_table() when
+      Request_id :: integer().
 
-%%@doc Create a new match and return the created match details
--spec new_match(Request_id, Main_user, Sec_user)-> [match_table()] when
-      Request_id :: integer(),
-      Main_user :: integer(),
-      Sec_user :: integer().
-
-new_match(Request_id, Main_user, Sec_user)->
-    create_match(Request_id, Main_user, Sec_user),
-    get_match(Request_id).
+match(Request_id)->
+    Matchdata = get_match(Request_id),
+    case Matchdata of
+	{error, no_item} ->
+	    create_match(Request_id),
+	    get_match(Request_id);
+	_ ->
+	    Matchdata
+    end.
 
 
 %%doc Create a new match
--spec create_match(Request_id, Main_user, Sec_user)-> ok when
-      Request_id :: integer(),
-      Main_user :: integer(),
-      Sec_user :: integer().
+-spec create_match(Request_id)-> ok when
+      Request_id :: integer().
 
-create_match(Request_id, Main_user, Sec_user)->
+create_match(Request_id)->
+    Request_table = get_request_info(Request_id),
     database:db_query(match_insert,
 		   <<"INSERT INTO tMatch (main_userId, sec_userId, winner, requestId)
                    VALUES(?, ?, ?, ?)">>,
-		   [Main_user, Sec_user, 0, Request_id]),
+		   [Request_table#request_info_table.userId, 
+		    Request_table#request_info_table.challenged_userId, 0, Request_id]),
     ok.
     
 %%@doc Get match from request id
--spec get_match(Request_id :: integer())-> [match_table()].
+-spec get_match(Request_id :: integer())-> match_table().
 
 get_match(Request_id)->
     Sql_result = database:db_query(match_select,
 		   <<"SELECT id, main_userId, sec_userId, winner, requestId
                       FROM tMatch WHERE requestId = ?">>,
 		   [Request_id]),
-    database:result_to_record(Sql_result, match_table).
+    database:get_row(database:result_to_record(Sql_result, match_table), 1).
     
 
 %%@doc set match winner
