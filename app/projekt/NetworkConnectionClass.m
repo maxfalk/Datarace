@@ -48,6 +48,14 @@ typedef struct __attribute__ ((packed)) {
     uint32_t msg;
 } requestCancel;
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    uint32_t userId;
+    uint32_t distance;
+} requestMake;
+
+
 @implementation NetworkConnectionClass
 //@synthesize inputStream, outputStream;
 
@@ -76,7 +84,7 @@ static NSOutputStream *outputStream;
 }
 +(void) readStream:(uint8_t *) buffer maxLength:(int)maxLength {
     int bytesRead = 0;
-    char tmpBuffer[1024];
+    char tmpBuffer[maxLength];
     
     while((bytesRead += [inputStream read:(uint8_t *)&tmpBuffer[bytesRead] maxLength:maxLength]) < maxLength){
     
@@ -270,5 +278,20 @@ static NSOutputStream *outputStream;
 
 }
 
++(int) makeRequest:(uint32_t) userId distance:(uint32_t)distance {
+
+    
+    requestMake packet;
+    packet.length = CFSwapInt32HostToBig(10);
+    packet.type[0] = 2;
+    packet.type[1] = 0;
+    packet.userId = userId;
+    packet.distance = distance;
+    
+    return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestMake)];
+
+    
+
+}
 
 @end
