@@ -87,11 +87,12 @@ static NSOutputStream *outputStream;
 +(void) readStream:(uint8_t *) buffer maxLength:(int)maxLength {
     int bytesRead = 0;
     char tmpBuffer[maxLength];
+    memset(tmpBuffer, 0, sizeof(char)*maxLength);
     
     while((bytesRead += [inputStream read:(uint8_t *)&tmpBuffer[bytesRead] maxLength:maxLength]) < maxLength){
     
     }
-    NSLog(@"Bytes read %d", bytesRead);
+    //NSLog(@"Bytes read %d", bytesRead);
     memcpy(buffer, tmpBuffer, maxLength);
     
     
@@ -242,7 +243,7 @@ static NSOutputStream *outputStream;
             NSLog(@"Out of space");
             return 0;
         }
-        memset(reqLookUp, 0, sizeof(requestLookUp));
+        memset(reqLookUp, 0, numberOfPackages*sizeof(requestLookUp));
         
         for(int i = 0; i < numberOfPackages; i++) {
             [self readStream:(uint8_t *)(reqLookUp+i) maxLength:sizeof(requestLookUp)];
@@ -252,7 +253,7 @@ static NSOutputStream *outputStream;
         
     }
     
-    NSLog(@"result %i", (int)result);
+  
     return result;
     
 }
