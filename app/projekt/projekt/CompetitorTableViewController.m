@@ -45,7 +45,7 @@
     _requestIDs = [[NSMutableArray alloc] init];
     _competitors = [[NSMutableArray alloc] initWithArray:@[@"Babak Toghiani-Rizi", @"Marina Jaksic", @"Namn Namnsson"]];
     self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
-
+    
     
     _green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
     _red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
@@ -60,16 +60,7 @@
         
         if (lookUpResultMade != nil) {
             for(int i = 0; i < numOfPackesMade; i++){
-                
-                if (lookUpResultMade->requestLookUp[i].state == 0) { //pending
-                    NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
-                    int distance = lookUpResultMade->requestLookUp[i].distance;
-                    int requestID = lookUpResultMade->requestLookUp[i].requestID;
-                    [_requests addObject:usernameMade];
-                    [_distances addObject:[NSNumber numberWithInt:distance]];
-                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
-                    
-                } else if (lookUpResultMade->requestLookUp[i].state == 1) { //ready
+                if (lookUpResultMade->requestLookUp[i].state == 1) { //ready
                     NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
                     int distance = lookUpResultMade->requestLookUp[i].distance;
                     int requestID = lookUpResultMade->requestLookUp[i].requestID;
@@ -82,15 +73,7 @@
         
         if (lookUpResultGot != nil) {
             for(int i = 0; i < numOfPackesGot; i++){
-                if (lookUpResultGot->requestLookUp[i].state == 0) { //pending
-                    NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
-                    int distance = lookUpResultGot->requestLookUp[i].distance;
-                    int requestID = lookUpResultGot->requestLookUp[i].requestID;
-                    [_requests addObject:usernameGot];
-                    [_distances addObject:[NSNumber numberWithInt:distance]];
-                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
-                    
-                } else if (lookUpResultGot->requestLookUp[i].state == 1) { //ready
+                if (lookUpResultGot->requestLookUp[i].state == 1) { //ready
                     NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
                     int distance = lookUpResultGot->requestLookUp[i].distance;
                     int requestID = lookUpResultGot->requestLookUp[i].requestID;
@@ -104,6 +87,10 @@
         
         [self.tableView reloadData];
         
+        free(lookUpResultGot->requestLookUp);
+        free(lookUpResultMade->requestLookUp);
+        free(lookUpResultGot);
+        free(lookUpResultMade);
         
         dispatch_async( dispatch_get_main_queue(), ^{
             // Add code here to update the UI/send notifications based on the

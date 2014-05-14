@@ -54,7 +54,7 @@
         primaryLabelTwo.lineBreakMode = NSLineBreakByWordWrapping;
         
         distanceLabel = [[UILabel alloc]init];
-        distanceLabel.textAlignment = UITextAlignmentLeft;
+        distanceLabel.textAlignment = UITextAlignmentCenter;
         distanceLabel.font = [UIFont boldSystemFontOfSize:20];
         distanceLabel.lineBreakMode = NSLineBreakByWordWrapping;
 
@@ -96,10 +96,10 @@
     frame= CGRectMake(boundsX+15 ,10, 250, 20);
     primaryLabel.frame = frame;
     
-    frame= CGRectMake(boundsX+160-35 ,30, 70, 25);
+    frame= CGRectMake(boundsX+160-35 ,30, 50, 25);
     primaryLabelTwo.frame = frame;
     
-    frame= CGRectMake(boundsX+160-35 ,50, 70, 25);
+    frame= CGRectMake(boundsX+160-35 ,50, 50, 25);
     distanceLabel.frame = frame;
 
     

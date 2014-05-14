@@ -91,7 +91,7 @@ static NSOutputStream *outputStream;
     while((bytesRead += [inputStream read:(uint8_t *)&tmpBuffer[bytesRead] maxLength:maxLength]) < maxLength){
     
     }
-    NSLog(@"Bytes read %d", bytesRead);
+    //NSLog(@"Bytes read %d", bytesRead);
     memcpy(buffer, tmpBuffer, maxLength);
     
     
@@ -236,13 +236,13 @@ static NSOutputStream *outputStream;
         
         result->requestLookUpMeta.length = ntohl(result->requestLookUpMeta.length)-2;
         double numberOfPackages = (double)(result->requestLookUpMeta.length)/(double)(sizeof(requestLookUp));
-        
+         NSLog(@"numberOfPackages: %f", numberOfPackages);
         requestLookUp *reqLookUp = malloc(numberOfPackages*sizeof(requestLookUp));
         if(reqLookUp == nil){
             NSLog(@"Out of space");
             return 0;
         }
-        memset(reqLookUp, 0, sizeof(requestLookUp));
+        memset(reqLookUp, 0, numberOfPackages*sizeof(requestLookUp));
         
         for(int i = 0; i < numberOfPackages; i++) {
             [self readStream:(uint8_t *)(reqLookUp+i) maxLength:sizeof(requestLookUp)];
@@ -252,7 +252,7 @@ static NSOutputStream *outputStream;
         
     }
     
-    NSLog(@"result %i", (int)result);
+   
     return result;
     
 }
@@ -273,7 +273,7 @@ static NSOutputStream *outputStream;
     requestCancel packet;
     packet.length = CFSwapInt32HostToBig(6);
     packet.type[0] = 2;
-    packet.type[1] = 2;
+    packet.type[1] = 3;
     packet.msg = requestId;
     
     return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestCancel)];

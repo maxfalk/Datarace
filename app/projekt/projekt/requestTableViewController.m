@@ -15,6 +15,8 @@
 @interface requestTableViewController ()
 @property (strong, nonatomic) NSMutableArray *requests;
 @property (strong, nonatomic) NSMutableArray *myRequests;
+@property (strong, nonatomic) NSMutableArray *myRequestsDistances;
+@property (strong, nonatomic) NSMutableArray *myRequestsIDs;
 @property (strong, nonatomic) NSMutableArray *distances;
 @property (strong, nonatomic) NSMutableArray *requestIDs;
 
@@ -39,6 +41,8 @@
     _distances  = [[NSMutableArray alloc] init];
     _requestIDs = [[NSMutableArray alloc] init];
     _myRequests = [[NSMutableArray alloc] init];
+    _myRequestsDistances= [[NSMutableArray alloc] init];
+    _myRequestsIDs = [[NSMutableArray alloc] init];
     
     self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
     
@@ -59,16 +63,10 @@
                     NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
                     int distance = lookUpResultMade->requestLookUp[i].distance;
                     int requestID = lookUpResultMade->requestLookUp[i].requestID;
-                    [_requests addObject:usernameMade];
-                    [_distances addObject:[NSNumber numberWithInt:distance]];
-                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
-                } else if (lookUpResultMade->requestLookUp[i].state == 1) {
-                    NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
-                    int distance = lookUpResultMade->requestLookUp[i].distance;
-                    int requestID = lookUpResultMade->requestLookUp[i].requestID;
                     [_myRequests addObject:usernameMade];
-                    [_distances addObject:[NSNumber numberWithInt:distance]];
-                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
+                    [_myRequestsDistances addObject:[NSNumber numberWithInt:distance]];
+                    [_myRequestsIDs addObject:[NSNumber numberWithInt:requestID]];
+                    
                 }
             }
         }
@@ -82,21 +80,18 @@
                     [_requests addObject:usernameGot];
                     [_distances addObject:[NSNumber numberWithInt:distance]];
                     [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
-                }  else if (lookUpResultMade->requestLookUp[i].state == 1) {
-                    NSString *usernameGot =[NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
-                    int distance = lookUpResultGot->requestLookUp[i].distance;
-                    int requestID = lookUpResultGot->requestLookUp[i].requestID;
-                    [_myRequests addObject:usernameGot];
-                    [_distances addObject:[NSNumber numberWithInt:distance]];
-                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
-                }
-                
+                    
+                }                  
             }
         }
         
         
         [self.tableView reloadData];
         
+        free(lookUpResultGot->requestLookUp);
+        free(lookUpResultMade->requestLookUp);
+        free(lookUpResultGot);
+        free(lookUpResultMade);
         
         dispatch_async( dispatch_get_main_queue(), ^{
             // Add code here to update the UI/send notifications based on the
@@ -109,7 +104,9 @@
     });
 }
 
-
+-(void)viewDidDisappear:(BOOL)animated {
+    NSLog(@"wooohooo");
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -117,8 +114,10 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (indexPath.section == 0) {
     return 100;
+    } else
+        return 44;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -151,7 +150,7 @@
     cell.backgroundColor = [UIColor colorWithRed:0.96 green:0.96 blue:0.96 alpha:1];
     
     if (indexPath.section == 0) {
-        if (_requests != nil) {
+        if (_requests != nil)  {
             cell.primaryLabel.text = [_requests objectAtIndex:indexPath.row];
             
             
@@ -203,6 +202,7 @@
         UIGraphicsEndImageContext();
         [cell addSubview:drawpad];
         
+        if (indexPath.section == 0) {
         UIButton *declineButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 35, 34, 34)];
         //[closeBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [declineButton addTarget:self action:@selector(declineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -213,19 +213,23 @@
         [acceptButton addTarget:self action:@selector(acceptButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [acceptButton setImage:[UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
         
-        
-        
         [cell addSubview:declineButton];
         [cell addSubview:acceptButton];
+            
+        }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;;
         
     } else if (indexPath.section == 1) {
-        cell.primaryLabel.text = [_requests objectAtIndex:indexPath.row];
+        if (_myRequests != nil) {
+            cell.primaryLabel.text = [NSString stringWithFormat:@"%li", (long)indexPath.row+1];
+            //[_myRequests objectAtIndex:indexPath.row];
         
         
-        cell.primaryLabelTwo.text = @"Distance";
-        cell.distanceLabel.text = [NSString stringWithFormat:@"%@", [_distances objectAtIndex:indexPath.row]];
+        //cell.primaryLabelTwo.text = @"Distance";
+       // cell.distanceLabel.text = [NSString stringWithFormat:@"%@", [_myRequestsDistances objectAtIndex:indexPath.row]];
+        cell.distanceLabel.textAlignment = NSTextAlignmentCenter;
+        } 
     }
     
     return cell;
@@ -234,20 +238,25 @@
 -(void)declineButtonPressed:(id)sender {
     NSLog(@"declined!");
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
-    
-    [NetworkConnectionClass acceptRequest:(uint32_t)[_requestIDs objectAtIndex:indexPath.row]];
+    int reqID = [[_requestIDs objectAtIndex:indexPath.row] integerValue];
+
+    [NetworkConnectionClass cancelRequest:reqID];
     
     [_requests removeObjectAtIndex:indexPath.row];
     [_requestIDs removeObjectAtIndex:indexPath.row];
     [_distances removeObjectAtIndex:indexPath.row];
+    NSLog(@"Declined with req id: %d", reqID);
     
     [self.tableView reloadData];
 }
 
 -(void)acceptButtonPressed:(id)sender {
-    NSLog(@"accepted!");
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
-    [NetworkConnectionClass acceptRequest:(uint32_t)[_requestIDs objectAtIndex:indexPath.row]];
+    int reqID = [[_requestIDs objectAtIndex:indexPath.row] integerValue];
+    [NetworkConnectionClass acceptRequest:reqID];
+    NSLog(@"Accepted with req id: %d", reqID);
+    
+    [self.tableView reloadData];
     
 }
 
