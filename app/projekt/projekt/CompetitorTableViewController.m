@@ -38,18 +38,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _competitorsPending = [[NSMutableArray alloc] init];
+    _competitorsReady = [[NSMutableArray alloc] init];
+    _requests = [[NSMutableArray alloc] init];
+    _distances  = [[NSMutableArray alloc] init];
+    _requestIDs = [[NSMutableArray alloc] init];
+    _competitors = [[NSMutableArray alloc] initWithArray:@[@"Babak Toghiani-Rizi", @"Marina Jaksic", @"Namn Namnsson"]];
+    self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
+
     
+    _green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
+    _red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
     
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
         
         requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
         requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
-        _competitorsPending = [[NSMutableArray alloc] init];
-        _competitorsReady = [[NSMutableArray alloc] init];
-        _requests = [[NSMutableArray alloc] init];
-        _distances  = [[NSMutableArray alloc] init];
-        _requestIDs = [[NSMutableArray alloc] init];
         int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
         int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
         
@@ -103,15 +108,7 @@
         dispatch_async( dispatch_get_main_queue(), ^{
             // Add code here to update the UI/send notifications based on the
             // results of the background processing
-            self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
-            //fetch requests from server
-            
-            //_competitorsReady = [[NSMutableArray alloc] initWithArray:@[@"Max Falk Nilsson", @"Max Reeves", @"Hallå Därsson", @"Okreativ Kille"]];
-            _competitors = [[NSMutableArray alloc] initWithArray:@[@"Babak Toghiani-Rizi", @"Marina Jaksic", @"Namn Namnsson"]];
-            
-            _green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
-            _red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
-            //[self addFooter];
+            [self addFooter];
             
             
         });
@@ -200,16 +197,7 @@
     return cell;
 }
 
-- (void)addFooter {
-    
-    //CGRect screenRect = [[UIScreen mainScreen] bounds];
-    //CGFloat screenHeight = screenRect.size.height;
-    
-    //NSInteger height = (screenHeight - (50*[_competitors count]*2)-44);
-    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-    v.backgroundColor = [UIColor clearColor];
-    [self.tableView setTableFooterView:v];
-}
+
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -246,6 +234,11 @@
     }
 }
 
+- (void)addFooter {
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    v.backgroundColor = [UIColor clearColor];
+    [self.tableView setTableFooterView:v];
+}
 
 
 @end
