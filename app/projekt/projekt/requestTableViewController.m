@@ -52,11 +52,19 @@
         
         requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
         requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
+
+        _requests = [[NSMutableArray alloc] init];
+        _distances  = [[NSMutableArray alloc] init];
+        _requestIDs = [[NSMutableArray alloc] init];
+        
+
         
         int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
         int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
         
         if (lookUpResultMade != nil) {
+            int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
+            
             for(int i = 0; i < numOfPackesMade; i++){
                 
                 if (lookUpResultMade->requestLookUp[i].state == 0) {
@@ -72,6 +80,8 @@
         }
         
         if (lookUpResultGot != nil) {
+            int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
+            
             for(int i = 0; i < numOfPackesGot; i++){
                 if (lookUpResultGot->requestLookUp[i].state == 0) {
                     NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
@@ -102,6 +112,7 @@
             
         });
     });
+    
 }
 
 -(void)viewDidDisappear:(BOOL)animated {

@@ -87,6 +87,7 @@ static NSOutputStream *outputStream;
 +(void) readStream:(uint8_t *) buffer maxLength:(int)maxLength {
     int bytesRead = 0;
     char tmpBuffer[maxLength];
+    memset(tmpBuffer, 0, sizeof(char)*maxLength);
     
     while((bytesRead += [inputStream read:(uint8_t *)&tmpBuffer[bytesRead] maxLength:maxLength]) < maxLength){
     
@@ -252,7 +253,6 @@ static NSOutputStream *outputStream;
         
     }
     
-   
     return result;
     
 }
