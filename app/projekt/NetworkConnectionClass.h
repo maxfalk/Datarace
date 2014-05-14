@@ -94,4 +94,9 @@ typedef struct __attribute__ ((packed)) {
 
 +(void *)getRequests:(int)type1 type2:(int)type2;
 
++(int) acceptRequest:(uint32_t) requestId;
++(int) cancelRequest:(uint32_t) requestId;
+
++(int)makeRequest:(uint32_t) userId distance:(uint32_t)distance;
+
 @end

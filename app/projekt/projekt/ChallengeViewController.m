@@ -31,6 +31,12 @@ typedef struct __attribute__ ((packed)) {
     return self;
 }
 
+- (IBAction)sendChallengeRequest:(id)sender {
+    //requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
+
+    [NetworkConnectionClass makeRequest:40 distance:_distanceSlider.value];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _challenger.text = _challengerUsername;
@@ -82,17 +88,5 @@ typedef struct __attribute__ ((packed)) {
     }
 }
 
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

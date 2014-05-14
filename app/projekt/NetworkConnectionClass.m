@@ -256,7 +256,7 @@ static NSOutputStream *outputStream;
     return result;
     
 }
-+(int) acceptRequest:(uint32_t) requestId {
++(int)acceptRequest:(uint32_t) requestId {
     
     requestAccept packet;
     packet.length = CFSwapInt32HostToBig(6);
@@ -268,7 +268,7 @@ static NSOutputStream *outputStream;
 
 }
 
-+(int) cancelRequest:(uint32_t) requestId{
++(int)cancelRequest:(uint32_t) requestId{
 
     requestCancel packet;
     packet.length = CFSwapInt32HostToBig(6);
@@ -282,9 +282,8 @@ static NSOutputStream *outputStream;
 }
 
 
-+(int) makeRequest:(uint32_t) userId distance:(uint32_t)distance {
++(int)makeRequest:(uint32_t) userId distance:(uint32_t)distance {
 
-    
     requestMake packet;
     packet.length = CFSwapInt32HostToBig(10);
     packet.type[0] = 2;
