@@ -31,6 +31,7 @@ typedef struct __attribute__ ((packed)) {
     char username[50];
     int date[6];
     int state;
+    int distance;
 } requestLookUp;
 
 typedef struct __attribute__ ((packed)) {

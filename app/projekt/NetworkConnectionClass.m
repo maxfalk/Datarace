@@ -5,8 +5,10 @@
 //  Created by Babak Toghiani-Rizi on 25/04/14.
 //  Copyright (c) 2014 OSM-projekt. All rights reserved.
 //
-
+#define PORT 8888
+#define ADDRESS @"83.253.15.24"
 #import "NetworkConnectionClass.h"
+#import "sys/socket.h"
 
 typedef struct __attribute__ ((packed)) {
     uint32_t length;
@@ -226,8 +228,9 @@ static NSOutputStream *outputStream;
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
-    [inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
-    [inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
+    
+    [self readStream:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
+    [self readStream:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
     
     if ((result->requestLookUpMeta.type[0] == type1) && (result->requestLookUpMeta.type[1] == type2)) {
         
@@ -277,6 +280,7 @@ static NSOutputStream *outputStream;
 
 
 }
+
 
 +(int) makeRequest:(uint32_t) userId distance:(uint32_t)distance {
 
