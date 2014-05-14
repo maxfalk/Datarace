@@ -32,9 +32,7 @@ match_test_()->
     {"Test Match functions",
       {setup, fun start_match/0, fun stop_match/1, 
        fun (SetupData)->
-		[create_match(SetupData),
-		 get_match(SetupData),
-		 new_match(SetupData),
+		[match(SetupData),
 		 set_winner(SetupData)]
        end}}.
 
@@ -95,9 +93,9 @@ start_match()->
     database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
-    {R, R1} = usercom:request_lookup(U1),
+    {R, _R1} = usercom:request_lookup(U1),
     Result = hd(R), 
-   usercom:create_match(Result#request_table.id, U1, U2),
+    usercom:match(Result#request_table.id),
     {Result#request_table.id, U1, U2}.
 
 stop_match({_ , U1, U2})->
@@ -113,9 +111,9 @@ start_gps()->
     database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
-    {R, R1} = usercom:request_lookup(U1),
+    {R, _R1} = usercom:request_lookup(U1),
     Result = hd(R),
-    Result2 = hd(usercom:new_match(Result#request_table.id, U1, U2)),
+    Result2 = usercom:match(Result#request_table.id),
     {Result2#match_table.id, U1, U2}.   
 
     
@@ -138,7 +136,7 @@ start_stats()->
     usercom:request(U1, U2, 23),
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),
-    Result2 = hd(usercom:new_match(Result#request_table.id, U1, U2)),
+    Result2 = usercom:match(Result#request_table.id),
     usercom:set_winner(Result2#match_table.id, U1),
     usercom:gps_save(U1, Result2#match_table.id, 2345678.4567890, 5678.5678),
     timer:sleep(1000),
@@ -169,7 +167,8 @@ request_lookup({U1, U2})->
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),
     [?_assertEqual(Result#request_table.challenged_userId, U2),
-    ?_assertEqual(Result#request_table.state, 0)].
+     ?_assertEqual(Result#request_table.state, 0),
+     ?_assertEqual(Result#request_table.distance, 23)].
 
 request_accept({U1, _U2})->
     {R, R1} = usercom:request_lookup(U1),
@@ -189,26 +188,17 @@ request_cancel({U1, _U2})->
     
 %%Test match    
 
-new_match({RequestId, U1, U2})->
-    Result = hd(usercom:new_match(RequestId, U1, U2)),
+match({RequestId, U1, U2})->
+    Result = usercom:match(RequestId),
     [?_assertEqual(Result#match_table.main_userId, U1),
     ?_assertEqual(Result#match_table.sec_userId, U2),
     ?_assertEqual(Result#match_table.requestId, RequestId)].
 
-create_match({RequestId, U1, U2})->
-    ?_assertEqual(ok, usercom:create_match(RequestId, U1, U2)).
-
-get_match({RequestId, U1, U2})->
-    Result = hd(usercom:get_match(RequestId)),
-    [?_assertEqual(Result#match_table.main_userId, U1),
-    ?_assertEqual(Result#match_table.sec_userId, U2),
-    ?_assertEqual(Result#match_table.requestId, RequestId)].
-    
     
 set_winner({RequestId, U1, U2})->
-    Result = hd(usercom:new_match(RequestId, U1, U2)),
+    Result = usercom:match(RequestId),
     usercom:set_winner(Result#match_table.id, U1),
-    Result1 = hd(usercom:get_match(RequestId)),
+    Result1 = usercom:match(RequestId),
     ?_assertEqual(Result1#match_table.winner, U1).
     
 %%Test gps

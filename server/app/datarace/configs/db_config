@@ -1,0 +1,5 @@
+{size, 1}.
+{user, "logger"}.
+{password, "squats1991"}.
+{database, "datarace"}.
+{encoding, utf8}.

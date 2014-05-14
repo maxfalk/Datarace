@@ -7,7 +7,8 @@
 -record(login_table, {id, salt, password}).
 -record(loginlog_table, {id}).
 -record(register_table,{id}).
--record(request_table,{id, challenged_userId, user_name, time, state}).
+-record(request_table,{id, challenged_userId, user_name, time, state, distance}).
+-record(request_info_table, {userId, challenged_userId}).
 -record(match_table,{id, main_userId, sec_userId, winner, requestId}).
 -record(user_stats_table,{userName, averageSpeed, averageDistance, wins, matches, requests}).
 -record(gps_table,{longitude, latitude}).
@@ -16,7 +17,8 @@
 -type login_table() :: {integer(), string(), string()}.
 -type loginlog_table() :: {integer()}.
 -type register_table() :: {integer()}.
--type request_table() :: {integer(), string(), integer(), integer()}.
+-type request_table() :: {integer(), string(), integer(), integer(), integer()}.
+-type request_info_table() :: {integer(), integer()}.
 -type match_table() :: {integer(), integer(), integer(), integer(), integer()}.
 -type user_stats_table() :: {string(), float(), float(), integer(), integer(), integer()}.
 -type gps_table() :: {float(), float()}.

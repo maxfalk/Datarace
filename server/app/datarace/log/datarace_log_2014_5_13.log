@@ -1,0 +1,24 @@
+[2014-5-13 15:38:3] User connected: IP: 127.0.0.1, Port: 49514
+[2014-5-13 15:38:3] User connected: IP: 127.0.0.1, Port: 56187
+[2014-5-13 15:38:3] Login in failed: Wrong username
+[2014-5-13 15:38:3] Terminating listener: Reason: normal, State: login
+[2014-5-13 15:43:40] User connected: IP: 127.0.0.1, Port: 48999
+[2014-5-13 15:43:40] User connected: IP: 127.0.0.1, Port: 47742
+[2014-5-13 15:43:41] Login in failed: Wrong username
+[2014-5-13 15:43:41] Terminating listener: Reason: normal, State: login
+[2014-5-13 15:49:36] User connected: IP: 127.0.0.1, Port: 54427
+[2014-5-13 15:49:36] User connected: IP: 127.0.0.1, Port: 53735
+[2014-5-13 15:49:36] Login in failed: Wrong username
+[2014-5-13 15:49:37] Terminating listener: Reason: normal, State: login
+[2014-5-13 15:59:19] User connected: IP: 127.0.0.1, Port: 51556
+[2014-5-13 15:59:19] User connected: IP: 127.0.0.1, Port: 51641
+[2014-5-13 15:59:19] Login in failed: Wrong username
+[2014-5-13 15:59:19] Terminating listener: Reason: normal, State: login
+[2014-5-13 16:21:18] User connected: IP: 127.0.0.1, Port: 59829
+[2014-5-13 16:21:18] User connected: IP: 127.0.0.1, Port: 35969
+[2014-5-13 16:21:18] Login in failed: Wrong username
+[2014-5-13 16:21:19] Terminating listener: Reason: normal, State: login
+[2014-5-13 16:28:1] User connected: IP: 127.0.0.1, Port: 52788
+[2014-5-13 16:28:1] User connected: IP: 127.0.0.1, Port: 34288
+[2014-5-13 16:28:1] Login in failed: Wrong username
+[2014-5-13 16:28:1] Terminating listener: Reason: normal, State: login
