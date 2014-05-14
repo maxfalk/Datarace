@@ -12,8 +12,12 @@
 
 @property (strong, nonatomic) NSMutableArray *competitors;
 @property (strong, nonatomic) NSMutableArray *competitorsReady;
+@property (strong, nonatomic) NSMutableArray *competitorsPending;
 @property (nonatomic, strong) UIColor *green;
 @property (nonatomic, strong) UIColor *red;
+@property (strong, nonatomic) NSMutableArray *requests;
+@property (strong, nonatomic) NSMutableArray *distances;
+@property (strong, nonatomic) NSMutableArray *requestIDs;
 
 //@property (nonatomic) UIButton *acceptButton;
 
@@ -35,25 +39,85 @@
 {
     [super viewDidLoad];
     
-    self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
-    //fetch requests from server
     
-    _competitorsReady = [[NSMutableArray alloc] initWithArray:@[@"Max Falk Nilsson", @"Max Reeves", @"Hallå Därsson", @"Okreativ Kille"]];
-    _competitors = [[NSMutableArray alloc] initWithArray:@[@"Babak Toghiani-Rizi", @"Marina Jaksic", @"Namn Namnsson"]];
+    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // Add code here to do background processing
+        
+        requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
+        requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
+        _competitorsPending = [[NSMutableArray alloc] init];
+        _competitorsReady = [[NSMutableArray alloc] init];
+        _requests = [[NSMutableArray alloc] init];
+        _distances  = [[NSMutableArray alloc] init];
+        _requestIDs = [[NSMutableArray alloc] init];
+        int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
+        int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
+        
+        if (lookUpResultMade != nil) {
+            for(int i = 0; i < numOfPackesMade; i++){
+                
+                if (lookUpResultMade->requestLookUp[i].state == 0) { //pending
+                    NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
+                    int distance = lookUpResultMade->requestLookUp[i].distance;
+                    int requestID = lookUpResultMade->requestLookUp[i].requestID;
+                    [_requests addObject:usernameMade];
+                    [_distances addObject:[NSNumber numberWithInt:distance]];
+                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
+                    
+                } else if (lookUpResultMade->requestLookUp[i].state == 1) { //ready
+                    NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
+                    int distance = lookUpResultMade->requestLookUp[i].distance;
+                    int requestID = lookUpResultMade->requestLookUp[i].requestID;
+                    [_competitorsReady addObject:usernameMade];
+                    [_distances addObject:[NSNumber numberWithInt:distance]];
+                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
+                }
+            }
+        }
+        
+        if (lookUpResultGot != nil) {
+            for(int i = 0; i < numOfPackesGot; i++){
+                if (lookUpResultGot->requestLookUp[i].state == 0) { //pending
+                    NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
+                    int distance = lookUpResultGot->requestLookUp[i].distance;
+                    int requestID = lookUpResultGot->requestLookUp[i].requestID;
+                    [_requests addObject:usernameGot];
+                    [_distances addObject:[NSNumber numberWithInt:distance]];
+                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
+                    
+                } else if (lookUpResultGot->requestLookUp[i].state == 1) { //ready
+                    NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
+                    int distance = lookUpResultGot->requestLookUp[i].distance;
+                    int requestID = lookUpResultGot->requestLookUp[i].requestID;
+                    [_competitorsReady addObject:usernameGot];
+                    [_distances addObject:[NSNumber numberWithInt:distance]];
+                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
+                    
+                }
+            }
+        }
+        
+        [self.tableView reloadData];
+        
+        
+        dispatch_async( dispatch_get_main_queue(), ^{
+            // Add code here to update the UI/send notifications based on the
+            // results of the background processing
+            self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
+            //fetch requests from server
+            
+            //_competitorsReady = [[NSMutableArray alloc] initWithArray:@[@"Max Falk Nilsson", @"Max Reeves", @"Hallå Därsson", @"Okreativ Kille"]];
+            _competitors = [[NSMutableArray alloc] initWithArray:@[@"Babak Toghiani-Rizi", @"Marina Jaksic", @"Namn Namnsson"]];
+            
+            _green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
+            _red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
+            //[self addFooter];
+            
+            
+        });
+    });
     
-    _green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
-    _red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
-    
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    [self addFooter];
 }
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -83,7 +147,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section==0)
     {
-        return [_competitorsReady count];
+        return ([_competitorsReady count]+[_competitorsPending count]);
     }
     else {
         return [_competitors count];
@@ -102,7 +166,7 @@
             cell.statusLabel.text = @"READY";
             cell.statusLabel.textColor = _green;
         } else { //pending
-            cell. statusLabel.text = @"Pending";
+            cell.statusLabel.text = @"Pending";
             cell.statusLabel.textColor = _red;
         }
     } else {
@@ -157,7 +221,7 @@
         if ([cell.statusLabel.text isEqualToString:@"READY"]) {
             NSLog(@"Pressed on a READY cell");
             [self performSegueWithIdentifier:@"startChallenge" sender:nil];
-
+            
             
         } else if ([cell.statusLabel.text isEqualToString:@"Pending"]) {
             NSLog(@"Pressed on a Pending cell");
@@ -183,67 +247,5 @@
 }
 
 
-
-//-(void)tableView(UITableView *) didsel
-
-/*
- - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
- {
- UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
- 
- // Configure the cell...
- 
- return cell;
- }
- */
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

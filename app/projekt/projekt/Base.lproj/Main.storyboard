@@ -779,6 +779,7 @@
                                 </state>
                                 <connections>
                                     <action selector="loginButtonPressed:" destination="V9P-fZ-dyb" eventType="touchUpInside" id="MJo-5e-GlT"/>
+                                    <action selector="sendChallengeRequest:" destination="WB7-au-axN" eventType="touchUpInside" id="qwA-2V-kFz"/>
                                 </connections>
                             </button>
                         </subviews>

@@ -139,6 +139,13 @@
                                                   cancelButtonTitle:@"OK"
                                                   otherButtonTitles:nil];
             [alert show];
+        } else if (result == 4) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Already signed in on another device"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
         }
         
             _wheel.hidden=YES;

@@ -15,6 +15,7 @@
 @interface requestTableViewController ()
 @property (strong, nonatomic) NSMutableArray *requests;
 @property (strong, nonatomic) NSMutableArray *distances;
+@property (strong, nonatomic) NSMutableArray *requestIDs;
 
 @end
 
@@ -33,8 +34,6 @@
 {
     [super viewDidLoad];
     
-    
-    
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
         
@@ -42,29 +41,41 @@
         requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
         _requests = [[NSMutableArray alloc] init];
         _distances  = [[NSMutableArray alloc] init];
+        _requestIDs = [[NSMutableArray alloc] init];
         int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
         int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
         
         if (lookUpResultMade != nil) {
             for(int i = 0; i < numOfPackesMade; i++){
+                
+                if (lookUpResultMade->requestLookUp[i].state == 0) {
                 NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
+                int distance = lookUpResultMade->requestLookUp[i].distance;
+                int requestID = lookUpResultMade->requestLookUp[i].requestID;
                 [_requests addObject:usernameMade];
+                [_distances addObject:[NSNumber numberWithInt:distance]];
+                [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
+            }
             }
         }
         
         if (lookUpResultGot != nil) {
             for(int i = 0; i < numOfPackesGot; i++){
+                if (lookUpResultGot->requestLookUp[i].state == 0) {
                 NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
                 int distance = lookUpResultGot->requestLookUp[i].distance;
+                int requestID = lookUpResultGot->requestLookUp[i].requestID;
                 [_requests addObject:usernameGot];
                 [_distances addObject:[NSNumber numberWithInt:distance]];
+                [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
+                }
+
             }
         }
         
         
         [self.tableView reloadData];
-        free(lookUpResultMade);
-        free(lookUpResultGot);	
+        
         
         dispatch_async( dispatch_get_main_queue(), ^{
             // Add code here to update the UI/send notifications based on the
@@ -92,32 +103,47 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_requests != nil) {
-        return [_requests count];
+    if (section==0) {
+        return [_requestIDs count];
+    } else if (section==1){
+        return 4;
     } else
-        
         return 0;
+}
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
+    if(section == 0) {
+        return @"Requests sent to you";
+    } else {
+        return @"Waiting for...";
+    }
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CustomCell *cell = [[CustomCell alloc] initWithFrame:CGRectZero];
     cell.backgroundColor = [UIColor colorWithRed:0.96 green:0.96 blue:0.96 alpha:1];
-    
+        
+    if (indexPath.section == 0) {
     if (_requests != nil) {
         cell.primaryLabel.text = [_requests objectAtIndex:indexPath.row];
         
         
         cell.primaryLabelTwo.text = @"Distance";
-        cell.distanceLabel.text = [_distances objectAtIndex:indexPath.row];
+        cell.distanceLabel.text = [NSString stringWithFormat:@"%@", [_distances objectAtIndex:indexPath.row]];
     }
     
      NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
      [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
      [formatter setMaximumFractionDigits:2];
      [formatter setRoundingMode: NSNumberFormatterRoundDown];
-     
+    
      
      float winRatio = (float)(arc4random() % ((unsigned)RAND_MAX + 1)) / (float)((unsigned)RAND_MAX + 1);
      double winRatioToDegrees = winRatio * 360.0;
@@ -174,36 +200,29 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;;
     
+    }
     
     return cell;
 }
 
 -(void)declineButtonPressed:(id)sender {
     NSLog(@"declined!");
-    
-    /*
-     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Huh?!"
-     message:@"Do you really wanna chicken out on this one?"
-     delegate:self
-     cancelButtonTitle:@"Yes..."
-     otherButtonTitles:@"NO!!", nil];
-     [alert show];
-     */
-    
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
+    
+    [NetworkConnectionClass acceptRequest:(uint32_t)[_requestIDs objectAtIndex:indexPath.row]];
+    
     [_requests removeObjectAtIndex:indexPath.row];
+    [_requestIDs removeObjectAtIndex:indexPath.row];
+    [_distances removeObjectAtIndex:indexPath.row];
+
     [self.tableView reloadData];
 }
 
 -(void)acceptButtonPressed:(id)sender {
     NSLog(@"accepted!");
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
+    [NetworkConnectionClass acceptRequest:(uint32_t)[_requestIDs objectAtIndex:indexPath.row]];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"WHOOP!"
-                                                    message:@"Are you ready?"
-                                                   delegate:self
-                                          cancelButtonTitle:@"YES!"
-                                          otherButtonTitles:@"No... not yet...", nil];
-    [alert show];
 }
 
 - (void)drawRect:(CGRect)rect
