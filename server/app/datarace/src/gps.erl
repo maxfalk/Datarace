@@ -1,7 +1,7 @@
 -module(gps).
--export([distance/4, speed/2, averagespeed/2, averagedistance/2]).
-
-%===============================================%
+-export([distance/4, speed/2, averagespeed/2, averagedistance/2, statistics_compare/3]).
+-include_lib("../include/database.hrl").
+%%@doc===============================================%
 %% calculates the distance between two points   %
 %===============================================%
 distance(Long1, Lat1, Long2, Lat2) ->
@@ -20,19 +20,55 @@ distance(Long1, Lat1, Long2, Lat2) ->
     Km.
 
 
-%==================================================%
+%%@doc==================================================%
 %%calculates the speed from given time and distance%
 %==================================================%
 speed(Time, Distance) ->
     Distance/Time.  
-%=============================================%
+%%@doc=============================================%
 %%calculates the average speed                %   
 %=============================================%
 averagespeed(Totaldistance, Totaltime) ->
     Totaldistance/Totaltime. 
-%============================================%    
-%%calculates the average distance            %
+%%@doc============================================%    
+%% calculates the average distance            %
 %============================================%
 averagedistance(Totaltime, Totalspeed) ->
    Totaltime*Totalspeed.
 
+%%getgps i usercom
+%%listan med gps kooridnaer ska till distance sen
+calc_totaldistance(User_id1, Match_id) ->
+   Gps1 =  usercom:gps_get(User_id1, Match_id), 
+    calc_totaldistancehelp(Gps1, 0).
+    
+    
+calc_totaldistancehelp([], Distance) ->
+    Distance;
+
+calc_totaldistancehelp([Last], Distance) ->
+    Distance;
+    
+calc_totaldistancehelp([First,Sec | Tl], Distance) ->
+  Sum_distance =  distance(First#gps_table.longitude, First#gps_table.latitude, Sec#gps_table.longitude, Sec#gps_table.latitude),
+    
+calc_totaldistancehelp([Sec|Tl], Sum_distance + Distance).
+
+
+
+
+%%@doc==============================================%
+%% get the gps coordinates and speed from the other %
+%% competitor at a chosen time.                     %
+%===================================================%
+statistics_compare(User_id1, Match_id1, User_id2) ->
+    Distance_User1 = calc_totaldistance(User_id1, Match_id1),
+    Distance_User2 = calc_totaldistance(User_id2, Match_id1), 
+    matchlogic:comparedistance(Distance_User1, Distance_User2),
+    {matchlogic:comparedistance(Distance_User1, Distance_User2), Distance_User1 - Distance_User2}.
+
+
+
+
+	
+				       
