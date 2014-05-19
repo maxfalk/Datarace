@@ -1,0 +1,47 @@
+%% @doc Tests for search_serv module
+
+-module(search_serv_test).
+
+-include_lib("eunit/include/eunot.hrl").
+-include("..include/database.hrl").
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%% TEST DESCRIPTIONS
+%%%%%%%%%%%%%%%%%%%%%%%
+
+search_serv_test_()->
+    {"Test search serv functions"
+      {setup, fun setup/0, fun stop/1,
+      fun (SetupData)->
+	      
+      end}}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SETUP FUNCTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+setup()->
+    application:start(crypto),
+    application:start(emysql),
+    application:start(datarace).
+
+
+
+stop(_)->
+    application:stop(crypto),
+    application:stop(emysql),
+    application:stop(datarace).
+    
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ACTUAL TESTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% HELPER FUNCTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%
