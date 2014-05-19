@@ -9,6 +9,10 @@
 -include("../include/types.hrl").
 
 
+%%====================================================================
+%% 
+%%====================================================================
+
 %%@doc Convert a received message to an easier read format.
 -spec convert_pack(Type, Data) -> Result when
       Type :: binary(),
@@ -22,7 +26,9 @@ convert_pack(Type, Data)->
 	?LOGIN ->
 	    login_pack(List_data);
 	?REGISTER ->
-	    register_pack(List_data)
+	    register_pack(List_data);
+	?MATCH_GPS ->
+	    match_gps_pack(Data)
     end.
     
 
@@ -44,13 +50,17 @@ login_pack(List)->
       Password :: [integer()],
       Email :: [integer()].
 
-register_pack(List)->
+register_pack(List) ->
     {Username, Rest} = lists:split(50, List),
     {Password, Email} = lists:split(50, Rest),    
     {[X || X <- Username, X =/= 0], 
      [X || X <- Password, X =/= 0], 
      [X || X <- Email, X =/= 0]}.
 
+
+match_gps_pack(Data) ->
+    <<Longitude/big-float, Latitude/big-float>> = Data,
+    {Longitude, Latitude}.
 
 %%@doc Convert a set of data to a binary packet
 
@@ -64,22 +74,25 @@ pack(Type, Data) ->
     
 
 request_lookup_pack({MadeRequestTable, ReceivedRequestTable}) ->
-    {[ request_entry_pack(Entry) || Entry <- MadeRequestTable ],
-     [ request_entry_pack(Entry) || Entry <- ReceivedRequestTable ]}.
+    MadeRequestPack = [ request_entry_pack(Entry) || Entry <- MadeRequestTable ],
+    ReceivedRequestPack = [ request_entry_pack(Entry) || Entry <- ReceivedRequestTable ],
+    {binary_join(?REQUEST_LOOKUP_REPLY_MADE, MadeRequestPack), 
+     binary_join(?REQUEST_LOOKUP_REPLY_CHAL, ReceivedRequestPack)}.
+
 
 request_entry_pack({request_table, RequestId, ChallengeId, UserName,
 		    {datetime, {{Year, Month, Day}, {Hour, Minute, Second}}}, 
-		     State}) ->
+		     State, Distance}) ->
     NamePad = 8*(50-byte_size(UserName)),
-    <<?REQUEST_LOOKUP_REPLY/binary, %% 2 bytes
-      RequestId:32/little-integer, %% 4 bytes
+    <<RequestId:32/little-integer, %% 4 bytes
       ChallengeId:32/little-integer, %% 4 bytes
       UserName/binary, 0:NamePad, %% 50 bytes
       Year:32/little-integer, Month:32/little-integer, Day:32/little-integer, %% 12 bytes
       Hour:32/little-integer, Minute:32/little-integer, Second:32/little-integer, %% 12 bytes
-      State:32/little-integer %% 4 bytes
-    >>. %% 88 bytes in total
-    
+      State:32/little-integer, %% 4 bytes
+      Distance:32/little-integer %% 4 bytes
+    >>. %% 90 bytes in total
+
 
 get_home_stats_pack({user_stats_table, UserName, AverageSpeed, AverageDistance, 
 		     Wins, Matches, Requests}) ->
@@ -95,16 +108,15 @@ get_home_stats_pack({user_stats_table, UserName, AverageSpeed, AverageDistance,
 
 
 %%@doc Join a list of binaries into a single binary.
--spec binary_join([Binary]) -> Result when
+-spec binary_join(Type, [Binary]) -> Result when
+      Type :: binary(),
       Binary :: binary(),
       Result :: binary().
 
-binary_join([]) ->    
-    <<>>;
-binary_join([Part]) ->
-    Part;
-binary_join([Head|Tail]) ->
-    lists:foldr(fun (Value, Acc) ->
+binary_join(Type, []) ->    
+    Type;
+binary_join(Type, List) ->
+    lists:foldl(fun (Value, Acc) ->
 			<<Acc/binary, Value/binary>> 
 		end, 
-		Head, Tail).
+		Type, List).
