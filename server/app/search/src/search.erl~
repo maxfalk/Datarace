@@ -1,0 +1,20 @@
+%%@doc Application for search server
+%%
+%%
+%%
+
+-module(search).
+-export([start/1, stop/0]).
+
+-behaviour(application).
+
+%%
+%%
+%%
+
+start()->
+    application:start().
+
+
+stop()->
+    application:stop().

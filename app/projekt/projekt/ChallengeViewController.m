@@ -31,6 +31,12 @@ typedef struct __attribute__ ((packed)) {
     return self;
 }
 
+- (IBAction)sendChallengeRequest:(id)sender {
+    //requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
+
+    [NetworkConnectionClass makeRequest:40 distance:_distanceSlider.value];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _challenger.text = _challengerUsername;
@@ -40,17 +46,6 @@ typedef struct __attribute__ ((packed)) {
     
     _distanceSlider.maximumTrackTintColor = [UIColor colorWithRed:0.13 green:0.66 blue:0.82 alpha:1];
     _distanceSlider.thumbTintColor = [UIColor colorWithRed:0.4 green:0.6 blue:0.72 alpha:1];
-    
-    
-    // Do any additional setup after loading the view.
-
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
     
 }
 
@@ -84,15 +79,5 @@ typedef struct __attribute__ ((packed)) {
 
 
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *wheel;
 @property (strong, nonatomic) NSTimer *time;
 @property CLLocationCoordinate2D myCoordinate;
+@property (weak, nonatomic) IBOutlet UIButton *rememberButton;
 
 @end
 
@@ -28,23 +29,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
-	// Do any additional setup after loading the view, typically from a nib.
-    
-    //self.locationManager = [[CLLocationManager alloc] init];
-    //self.locationManager.delegate = self;
-   // [self.locationManager startUpdatingLocation];
-
-    
-    
-    //self.time = [NSTimer scheduledTimerWithTimeInterval:10 target: locationManager selector:@selector(startUpdatingLocation) userInfo:nil repeats:YES];
-    
-    
-    //[NetworkConnectionClass sendUpdatedCoordinates];
-    
-    //
-    
     [super viewDidLoad];
+    
+    
     
     UIColor *babyBlue = [UIColor colorWithRed:0.4 green:0.6 blue:0.72 alpha:1];
     
@@ -60,10 +47,26 @@
     _passwordField.delegate = self;
     
     _wheel.hidden=YES;
+    NSLog(@"remember = %li", (long)[[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue]);
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 1) {
+        _usernameField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"rememberUSERNAME"];
+        _passwordField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"rememberPASSWORD"];
+        [_rememberButton setBackgroundImage: [UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
+        
+        
+    }
     
     //[self updateLocation];
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    NSLog(@"remember = %li", (long)[[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue]);
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 1) {
+        _usernameField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"rememberUSERNAME"];
+        _passwordField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"rememberPASSWORD"];
+        [_rememberButton setBackgroundImage: [UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
+    }
+}
 
 
 - (void)viewWillAppear:(BOOL)animated
@@ -105,42 +108,49 @@
     [_wheel startAnimating];
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
-       [NetworkConnectionClass initNetworkCommunication];
+        [NetworkConnectionClass initNetworkCommunication];
         int result = [NetworkConnectionClass sendLoginPackage:(_usernameField.text) password:(_passwordField.text)];
         //int result = 0;
-
-
+        
+        
         dispatch_async( dispatch_get_main_queue(), ^{
-        // Add code here to update the UI/send notifications based on the
-        // results of the background processing
-        
-        if (result == 0) {
-            _usernameField.text = @"";
-            _passwordField.text = @"";
-            [self performSegueWithIdentifier:@"login" sender:self.networkConnection];
-        } else if (result == 1) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"Wrong username"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        } else if (result == 2) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"Wrong password"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        } else if (result == 3) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"Could not connect to server"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
-        
+            // Add code here to update the UI/send notifications based on the
+            // results of the background processing
+            
+            if (result == 0) {
+                _usernameField.text = @"";
+                _passwordField.text = @"";
+                [self performSegueWithIdentifier:@"login" sender:self.networkConnection];
+            } else if (result == 1) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Wrong username"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            } else if (result == 2) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Wrong password"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            } else if (result == 3) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Could not connect to server"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            } else if (result == 4) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Already signed in on another device"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            
             _wheel.hidden=YES;
             [_wheel stopAnimating];
             [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
@@ -235,22 +245,53 @@
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-   // dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if ([segue.identifier isEqualToString:@"signup"]) {
-            self.networkConnection = (NetworkConnectionClass *)sender;
-            SignupViewController *connection = (SignupViewController *) [segue destinationViewController];
-            connection.networkConnection = self.networkConnection;
-        }
-        
-      //  NSLog(@"Finished work in background");
-        //dispatch_async( dispatch_get_main_queue(), ^{
-          //  NSLog(@"Back on main thread");
-        //});
-                       
+    // dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    if ([segue.identifier isEqualToString:@"signup"]) {
+        self.networkConnection = (NetworkConnectionClass *)sender;
+        SignupViewController *connection = (SignupViewController *) [segue destinationViewController];
+        connection.networkConnection = self.networkConnection;
+    }
+    
+    //  NSLog(@"Finished work in background");
+    //dispatch_async( dispatch_get_main_queue(), ^{
+    //  NSLog(@"Back on main thread");
+    //});
+    
     //});
 }
 
+- (IBAction)rememberButtonPressed:(id)sender {
     
-        @end
-                       
-                       
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 1) {
+        [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"remember"];
+        [_rememberButton setBackgroundImage: [UIImage imageNamed:@"decline"] forState:UIControlStateNormal];
+        //_usernameField.text = @"";
+        //_passwordField.text = @"";
+        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"rememberUSERNAME"];
+        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"rememberPASSWORD"];
+        NSLog(@"remember = %li", (long)[[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue]);
+        
+    } else if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 0) {
+        
+        if (([_usernameField.text isEqualToString:@""]) && ([_passwordField.text isEqualToString:@""])) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Fill in the fields correctly"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        } else {
+        [[NSUserDefaults standardUserDefaults] setObject:_usernameField.text forKey:@"rememberUSERNAME"];
+        [[NSUserDefaults standardUserDefaults] setObject:_passwordField.text forKey:@"rememberPASSWORD"];
+        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"remember"];
+            NSLog(@"remember = %li", (long)[[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue]);
+        [_rememberButton setBackgroundImage: [UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
+        }
+    }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+@end
+
+

@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gOI-eO-MNY">
-                                <rect key="frame" x="104" y="319" width="113" height="32"/>
+                                <rect key="frame" x="104" y="353" width="113" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.90588235294117647" green="0.40000000000000002" blue="0.36078431372549019" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -68,7 +68,7 @@
                                 </state>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Jxu-4c-kQ1">
-                                <rect key="frame" x="150" y="325" width="20" height="20"/>
+                                <rect key="frame" x="150" y="359" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sxo-8g-xLv">
@@ -82,6 +82,31 @@
                                     <segue destination="U4d-3u-7x2" kind="push" identifier="signup" id="c0h-tp-X6G"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remember me" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BNI-PZ-jfk">
+                                <rect key="frame" x="85" y="305" width="100" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="16" id="3uS-aQ-hja"/>
+                                    <constraint firstAttribute="width" constant="100" id="o4P-I5-Qk2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="0.25500239158163263" green="0.25500239158163263" blue="0.25500239158163263" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xaa-gs-XhN">
+                                <rect key="frame" x="193" y="300" width="24" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="24" id="9Qf-YA-JzN"/>
+                                    <constraint firstAttribute="height" constant="24" id="E3q-eg-e9F"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="decline">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="rememberButtonPressed:" destination="V9P-fZ-dyb" eventType="touchUpInside" id="gKo-e8-GH8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.396078431372549" green="0.59607843137254901" blue="0.72156862745098038" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="1" green="0.16808280109489052" blue="0.16545962591240873" alpha="1" colorSpace="calibratedRGB"/>
@@ -91,19 +116,24 @@
                             <constraint firstAttribute="trailing" secondItem="0F6-9I-akO" secondAttribute="trailing" constant="120" id="BAs-0S-emK"/>
                             <constraint firstItem="eXL-j5-aZ3" firstAttribute="leading" secondItem="AHh-J0-wPn" secondAttribute="leading" constant="62" id="IJM-dd-uL6"/>
                             <constraint firstItem="B1I-2P-NuF" firstAttribute="top" secondItem="Sxo-8g-xLv" secondAttribute="bottom" constant="20" id="Ky9-Hs-oSr"/>
+                            <constraint firstItem="BNI-PZ-jfk" firstAttribute="top" secondItem="5KC-7i-48K" secondAttribute="bottom" constant="13" id="SOK-6a-v1p"/>
                             <constraint firstItem="gOI-eO-MNY" firstAttribute="leading" secondItem="Jxu-4c-kQ1" secondAttribute="trailing" constant="-66" id="Vcu-SG-fmf"/>
                             <constraint firstItem="gOI-eO-MNY" firstAttribute="leading" secondItem="AHh-J0-wPn" secondAttribute="leading" constant="104" id="VuT-tb-Zz8"/>
                             <constraint firstItem="Sxo-8g-xLv" firstAttribute="leading" secondItem="AHh-J0-wPn" secondAttribute="leading" constant="134" id="YeU-kV-9ZS"/>
-                            <constraint firstItem="gOI-eO-MNY" firstAttribute="top" secondItem="5KC-7i-48K" secondAttribute="bottom" constant="27" id="ZMz-I5-0m0"/>
+                            <constraint firstItem="gOI-eO-MNY" firstAttribute="top" secondItem="5KC-7i-48K" secondAttribute="bottom" constant="61" id="ZMz-I5-0m0"/>
                             <constraint firstItem="0F6-9I-akO" firstAttribute="top" secondItem="ccF-LO-y7i" secondAttribute="bottom" constant="64" id="cZO-9J-FPQ"/>
+                            <constraint firstItem="BNI-PZ-jfk" firstAttribute="leading" secondItem="AHh-J0-wPn" secondAttribute="leading" constant="85" id="goh-Gw-7Rf"/>
                             <constraint firstItem="5KC-7i-48K" firstAttribute="top" secondItem="eXL-j5-aZ3" secondAttribute="bottom" constant="16" id="iNe-PP-hql"/>
-                            <constraint firstItem="Jxu-4c-kQ1" firstAttribute="top" secondItem="5KC-7i-48K" secondAttribute="bottom" constant="33" id="s54-BQ-Aal"/>
+                            <constraint firstItem="Xaa-gs-XhN" firstAttribute="leading" secondItem="BNI-PZ-jfk" secondAttribute="trailing" constant="8" id="jRB-Gp-YDq"/>
+                            <constraint firstItem="Xaa-gs-XhN" firstAttribute="top" secondItem="5KC-7i-48K" secondAttribute="bottom" constant="8" id="low-bR-jRU"/>
+                            <constraint firstItem="Jxu-4c-kQ1" firstAttribute="top" secondItem="5KC-7i-48K" secondAttribute="bottom" constant="67" id="s54-BQ-Aal"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="gJT-Pk-WcC"/>
                     <connections>
                         <outlet property="loginButton" destination="gOI-eO-MNY" id="NU4-iC-iQl"/>
                         <outlet property="passwordField" destination="5KC-7i-48K" id="R2c-Gz-GVo"/>
+                        <outlet property="rememberButton" destination="Xaa-gs-XhN" id="THt-eC-OKv"/>
                         <outlet property="usernameField" destination="eXL-j5-aZ3" id="K9y-Pf-RU6"/>
                         <outlet property="wheel" destination="Jxu-4c-kQ1" id="DJ1-pl-rzV"/>
                         <segue destination="erF-ky-88u" kind="push" identifier="login" id="YAi-fz-3XO"/>
@@ -662,6 +692,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="sectionIndexBackgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="vuG-Cf-EJH">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
@@ -779,6 +810,7 @@
                                 </state>
                                 <connections>
                                     <action selector="loginButtonPressed:" destination="V9P-fZ-dyb" eventType="touchUpInside" id="MJo-5e-GlT"/>
+                                    <action selector="sendChallengeRequest:" destination="WB7-au-axN" eventType="touchUpInside" id="qwA-2V-kFz"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -971,6 +1003,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="decline" width="34" height="34"/>
         <image name="logo" width="80" height="80"/>
         <image name="m1" width="60" height="60"/>
         <image name="m2" width="60" height="60"/>

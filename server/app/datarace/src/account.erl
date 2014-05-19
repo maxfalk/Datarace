@@ -234,6 +234,10 @@ get_user(User_name)->
 -spec delete(Userid)-> ok when 
       Userid :: integer().
 
+
+delete(Username) when is_list(Username) ->
+    Data = get_user(Username),
+    delete(Data#register_table.id);
 delete(Userid)->    
     database:db_query(delete_user,
 		      <<"CALL delete_user(?)">>,
