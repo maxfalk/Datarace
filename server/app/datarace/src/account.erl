@@ -237,7 +237,8 @@ get_user(User_name)->
 
 delete(Username) when is_list(Username) ->
     Data = get_user(Username),
-    delete(Data#register_table.id);
+    [delete(X#register_table.id) || X<- Data],
+    ok;
 delete(Userid)->    
     database:db_query(delete_user,
 		      <<"CALL delete_user(?)">>,
