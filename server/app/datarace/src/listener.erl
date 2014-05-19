@@ -47,6 +47,7 @@ start_link(ListenSocket) ->
       ListenSocket :: socket().
 
 init(ListenSocket) ->
+    process_flag(trap_exit, true),
     gen_fsm:send_event(self(), initialized),
     {ok, connect, ListenSocket}.
 
@@ -66,8 +67,8 @@ connect(initialized, ListenSocket) ->
     case gen_tcp:accept(ListenSocket) of
 	{ok, AcceptSocket} ->
 	    {ok, {Address, Port}} = inet:peername(AcceptSocket),
-	    log_serv:log("User connected: IP: " ++ inet_parse:ntoa(Address) ++ 
-			     ", Port: " ++ integer_to_list(Port)),
+	    log_serv:log("User connected with IP " ++ inet_parse:ntoa(Address) ++ 
+			     " on port " ++ integer_to_list(Port)),
 	    listener_sup:start_listener(),
 	    {next_state, login, AcceptSocket};
 	{error, Reason} ->
@@ -93,33 +94,42 @@ login({?LOGIN, Packet}, AcceptSocket) ->
     {UserName, Password} = packconv:convert_pack(?LOGIN, Packet),
     case account:login(UserName, Password) of
 	{ok, UserId} ->
-	    log_serv:log("Logged in userid: " ++ integer_to_list(UserId)),
-	    {ok, Pid} = client_serv_sup:start_client_serv(UserId, AcceptSocket),
-	    case gen_tcp:controlling_process(AcceptSocket, Pid) of
-		ok -> 
-		    client_serv:verify_control_transfer(Pid);
-		{error, _Reason} -> 
-		    log_serv:log(
-		      "Socket control transfer failed. UID " ++ integer_to_list(UserId)),
+	    log_serv:log("Logged in UID " ++ integer_to_list(UserId)),
+	    case client_serv_sup:start_client_serv(UserId, AcceptSocket) of
+		{ok, Pid} -> 
+		    case gen_tcp:controlling_process(AcceptSocket, Pid) of
+			ok -> 
+			    client_serv:verify_control_transfer(Pid);
+			{error, _Reason} -> 
+			    log_serv:log("Socket control transfer failed for UID " ++ 
+					     integer_to_list(UserId)),
+			    account:logout(UserId)
+		    end;
+		{error, _Reason} ->
+		    log_serv:log("Could not spawn new client serv process for UID " ++ 
+				     integer_to_list(UserId)),
 		    account:logout(UserId)
 	    end;
 	{error, no_user} -> 
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_USERNAME),
-	    log_serv:log("Login in failed: Wrong username");
+	    log_serv:log("Login failed because wrong username");
 	{error, wrong_password} ->
 	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_PASSWORD),
-	    log_serv:log("Login in failed: Wrong password")
+	    log_serv:log("Login failed because wrong password");
+	{error, already_loggedin} ->
+	    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_LOGGED_IN),
+	    log_serv:log("Login failed because already logged in")
     end,
     {stop, normal, AcceptSocket};
 login({?REGISTER, Packet}, AcceptSocket) ->
     {UserName, Password, Email} = packconv:convert_pack(?REGISTER, Packet),
-    log_serv:log("Registering user: " ++ UserName),  
+    log_serv:log("Register user: " ++ UserName),  
     case account:register(UserName, Password, Email) of
 	ok ->
-	    log_serv:log("User: " ++ UserName ++ " registered"),
+	    log_serv:log("User " ++ UserName ++ " registered"),
 	    gen_tcp:send(AcceptSocket, ?REGISTER_TRUE);
 	{error, user_already_exist} ->
-	    log_serv:log("User: " ++ UserName ++ " already registered"),
+	    log_serv:log("User " ++ UserName ++ " already registered"),
 	    gen_tcp:send(AcceptSocket, ?REGISTER_FALSE)
     end,
     {stop, normal, AcceptSocket}.

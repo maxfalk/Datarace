@@ -31,7 +31,7 @@ start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 
-%% @doc Start a new Client_serv dynamically. 
+%% @doc Start a new client_serv dynamically. 
 
 -spec start_client_serv(UserId, Socket) -> Result when
       UserId :: integer(),

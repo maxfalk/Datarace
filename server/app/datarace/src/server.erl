@@ -1,3 +1,4 @@
+
 %%@doc module for starting and stopping the servers applications
 %%
 %%
@@ -21,6 +22,12 @@ start()->
 -spec stop()-> ok.
 
 stop()->
+    case whereis(master_sup) of
+	undefined -> 
+	    ok;
+	_ ->
+	    master_sup:stop_children()
+    end,
     application:stop(datarace),
     application:stop(log),
     application:stop(emysql),

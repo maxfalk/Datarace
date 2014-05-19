@@ -15,10 +15,10 @@ request_test_()->
       {setup, 
        fun start/0, 
        fun stop/1, 
-       fun (SetupData)->
-	       [start_link(SetupData),
-		login_false(SetupData),
-		login_true(SetupData)]
+       fun (SetupData) ->
+	       [listener_connect(SetupData),
+		listener_register(SetupData),
+		listener_login(SetupData)]
        end}}.
 
 
@@ -30,13 +30,17 @@ start() ->
     application:start(crypto),
     application:start(emysql),
     application:start(datarace),
-    server:start(),
     {ok, Config} = file:consult(filename:absname("../configs/config")),
     {port, Port} = lists:keyfind(port, 1, Config),
-    Port.
+    {listeners, Listeners} = lists:keyfind(listeners, 1, Config),
+    timer:sleep(100),
+    Users = gen_users(Listeners),
+    [ account:delete(Username) || {Username, _, _} <- Users ],
+    {Port, Listeners, Users}.
 
 
-stop(_SetupData) ->
+stop({_Port, _Listeners, Users}) ->
+    [ account:delete(Username) || {Username, _, _} <- Users ],
     application:stop(datarace),
     application:stop(emysql),
     application:stop(crypto).
@@ -46,44 +50,103 @@ stop(_SetupData) ->
 %% Actual tests
 %%====================================================================
 
-start_link(Port) ->
-    process_flag(trap_exit, true),
-    {SockRes, ListenSocket} = tcp:listen(Port+1),
-    {StartRes1, Pid1} = listener:start_link(ListenSocket),
-    {StartRes2, Pid2} = listener:start_link(ListenSocket),
-    tcp:close(ListenSocket),
-    exit(Pid1, shutdown),
-    exit(Pid2, shutdown),
-    [?_assertEqual(ok, SockRes),
-     ?_assertEqual(ok, StartRes1),
-     ?_assertEqual(ok, StartRes2)].
+listener_connect({Port, Listeners, _Users}) ->
+    NewListeners = 10,
+    ChildrenBefore = count_children(listener_sup),
+    SocketList = connect_n_times(Port, NewListeners),
+    timer:sleep(100),
+    ChildrenDuring = count_children(listener_sup),
+    disconnect_all(SocketList),
+    timer:sleep(100),
+    ChildrenAfter = count_children(listener_sup),
+    [?assertEqual([{specs, 1}, 
+		   {active, Listeners}, 
+		   {supervisors, 0}, 
+		   {workers, Listeners}], 
+		  ChildrenBefore),
+     ?assertEqual([{specs, 1}, 
+		   {active, Listeners + NewListeners}, 
+		   {supervisors, 0}, 
+		   {workers, Listeners + NewListeners}], 
+		  ChildrenDuring),
+     ?assertEqual([{specs, 1}, 
+		   {active, Listeners}, 
+		   {supervisors, 0}, 
+		   {workers, Listeners}], 
+		  ChildrenAfter)].
 
 
-login_false(Port) ->
-    {Connect, ConnectSocket} = tcp:connect(localhost, Port),
-    FalseLoginPacket = tcp:binary_login("sdfaef3434f", "dfsdfgsdfg3434f34f"),
-    tcp:send(ConnectSocket, FalseLoginPacket),
-    Reply = tcp:recv(ConnectSocket),
-    [?_assertEqual(ok, Connect),
-     ?_assertEqual(ok, Reply)].
+listener_register({Port, _Listeners, Users}) ->
+    RegisterTrue = register_users(Port, Users, [], ?REGISTER_TRUE),
+    RegisterFalse = register_users(Port, Users, [], ?REGISTER_FALSE),
+    [RegisterTrue, RegisterFalse].
 
 
-login_true(Port) ->
-    {Connect, ConnectSocket} = tcp:connect(localhost, Port),
-    FalseLoginPacket = tcp:binary_login("test1", "test1"),
-    tcp:send(ConnectSocket, FalseLoginPacket),
-    Reply = tcp:recv(ConnectSocket),
-    [?_assertEqual(ok, Connect),
-     ?_assertEqual({tcp, ?LOGIN_TRUE}, Reply)].
-
+listener_login({Port, _Listeners, Users}) ->
+    login_users(Port, Users, [], ?LOGIN_TRUE).
 
 
 %%====================================================================
 %% Helper functions
 %%====================================================================
 
+gen_users(N) ->
+    NamePrefix = "TestUser",
+    Users = [ NamePrefix ++ integer_to_list(Int) || Int <- lists:seq(1, N) ],
+    [ {X, X, X} || X <- Users ].
 
-%% fail_login() ->
-%%     Packet = tcp:binary_login("rubbishusername", "rubbishpassword"),
-%%     gen_tcp:send(CPacket),
-%%     tcp:recv(ConnectSocket).
+
+count_children(Supervisor) ->
+    supervisor:count_children(Supervisor).
+
+
+connect_n_times(Port, N) when N > 0 ->
+    connect_n_times(Port, N, []).
+
+connect_n_times(_Port, 0, Acc) ->
+    Acc;
+connect_n_times(Port, N, Acc) when N > 0 ->
+    {ok, Socket} = client_funs:connect(localhost, Port),
+    connect_n_times(Port, N-1, [Socket|Acc]).
+
+
+disconnect_all(SocketList) ->
+    [ client_funs:close(Socket) || Socket <- SocketList ],
+    ok.
+
+
+register_users(_Port, [], Acc, _ExpectedResult) ->
+    Acc;
+register_users(Port, [User|Users], Acc, ExpectedResult) ->
+    {Username, Password, Email} = User,
+    {ok, Socket} = client_funs:connect(localhost, Port),
+    client_funs:register(Socket, Username, Password, Email),
+    receive 
+	{tcp, _, Packet} -> 
+	    NewAcc = [?assertEqual(ExpectedResult, Packet) | Acc]; 
+	Packet -> 
+	    NewAcc = [?assertEqual(ExpectedResult, Packet) | Acc]	
+    end,
+    receive
+	_ -> ok
+    end,
+    register_users(Port, Users, NewAcc).
+
+
+login_users(_Port, [], Acc, _ExpectedResult) ->
+    Acc;
+login_users(Port, [User|Users], Acc, ExpectedResult) ->
+    {Username, Password, _} = User,
+    {ok, Socket} = client_funs:connect(localhost, Port),
+    client_funs:login(Socket, Username, Password),
+    receive 
+	{tcp, _, Packet} -> 
+	    NewAcc = [?assertEqual(ExpectedResult, Packet) | Acc]; 
+	Packet -> 
+	    NewAcc = [?assertEqual(ExpectedResult, Packet) | Acc]	
+    end,
+    receive
+	_ -> ok
+    end,
+    register_users(Port, Users, NewAcc).
+
