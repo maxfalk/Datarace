@@ -1,5 +1,6 @@
 -module(gps).
 -export([distance/4, speed/2, averagespeed/2, averagedistance/2, statistics_compare/3]).
+-export([calc_pointdistance/3]).
 -include_lib("../include/database.hrl").
 
 %%@doc===============================================%
@@ -67,7 +68,7 @@ calc_totaldistance(User_id1, Match_id) ->
     
 calc_totaldistancehelp([], Distance) ->
     Distance;
-calc_totaldistancehelp([Last], Distance) ->
+calc_totaldistancehelp([_Last], Distance) ->
     Distance;
 calc_totaldistancehelp([First,Sec | Tl], Distance) ->
     Sum_distance = distance(First#gps_table.longitude, First#gps_table.latitude, 
@@ -76,6 +77,52 @@ calc_totaldistancehelp([First,Sec | Tl], Distance) ->
 
 
 
+
+%%@doc calculate the difference in time of two date times.
+-spec calc_timediff(T1,T2) -> integer() when
+      T1 :: any(),
+      T2 :: any().
+
+calc_timediff(T1,T2) when T1 > T2 ->
+    calendar:datetime_to_gregorian_seconds(T1) -
+	calendar:datetime_to_gregorian_seconds(T2);
+calc_timediff(T1,T2) when T1 < T2 ->
+    calendar:datetime_to_gregorian_seconds(T1) -
+	calendar:datetime_to_gregorian_seconds(T2);
+calc_timediff(_T1,_T2) ->
+    0.
+
+%%@doc Calculates the distance at a given time point
+-spec calc_pointdistance(UserId, MatchId, StartTime)-> float() when
+      UserId :: integer(),
+      MatchId :: integer(),
+      StartTime :: any().
+
+calc_pointdistance(UserId, MatchId, StartTime)->
+    Gps = usercom:gps_get(UserId, MatchId),
+    Time = calc_timediff(calendar:local_time(), StartTime),
+    calc_pointdistancehelp(Gps, Time, 0, 0).
+
+
+calc_pointdistancehelp([], _, Distance, _) ->
+    Distance;
+calc_pointdistancehelp([_Last], _, Distance, _) ->
+    Distance;
+calc_pointdistancehelp([First,Sec | Tl], Maxtime, Distance, Time) ->
+    NewTime = Time + calc_timediff(First#gps_table.time, Sec#gps_table.time),
+    if
+	NewTime =< Maxtime ->
+	    Sum_distance = distance(First#gps_table.longitude, First#gps_table.latitude, 
+				    Sec#gps_table.longitude, Sec#gps_table.latitude),
+	    calc_pointdistancehelp([Sec|Tl], Maxtime, Sum_distance + Distance, NewTime);
+	 NewTime > Maxtime ->
+	    Distance
+    end.
+
+
+
+
+    
 
 %%@doc==============================================%
 %% get the gps coordinates and speed from the other %
