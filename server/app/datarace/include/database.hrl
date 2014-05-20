@@ -11,9 +11,11 @@
 -record(request_info_table, {userId, challenged_userId}).
 -record(match_table,{id, main_userId, sec_userId, winner, requestId}).
 -record(user_stats_table,{userName, averageSpeed, averageDistance, wins, matches, requests}).
--record(gps_table,{longitude, latitude}).
+-record(gps_table,{longitude, latitude, time}).
+-record(user_search_table,{id, user_name}).
 
 
+-type user_search_table() :: {integer(), string()}.
 -type login_table() :: {integer(), string(), string()}.
 -type loginlog_table() :: {integer()}.
 -type register_table() :: {integer()}.
@@ -22,3 +24,4 @@
 -type match_table() :: {integer(), integer(), integer(), integer(), integer()}.
 -type user_stats_table() :: {string(), float(), float(), integer(), integer(), integer()}.
 -type gps_table() :: {float(), float()}.
+
