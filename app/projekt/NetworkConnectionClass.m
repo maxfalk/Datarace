@@ -57,6 +57,23 @@ typedef struct __attribute__ ((packed)) {
     uint32_t distance;
 } requestMake;
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    uint32_t msg;
+} match;
+
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+} quitMatch;
+
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    double longitude;
+    double latitude;
+} GPSCoord;
 
 @implementation NetworkConnectionClass
 //@synthesize inputStream, outputStream;
@@ -193,13 +210,11 @@ static NSOutputStream *outputStream;
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(loginOutput)];
 }
 
-+(void)sendUpdatedCoordinates {
-    NSLog(@"UPDATE!");
-}
+
 
 +(void *)getHomeStats {
     
-    	uint32_t myInt32Value = 2;
+    uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
     requestStats packet;
@@ -215,8 +230,7 @@ static NSOutputStream *outputStream;
     return result;
 }
 
-+(void *)getRequests:(int)type1 type2:(int)type2 {
-    
++(void)sendRequest {
     uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
@@ -228,6 +242,12 @@ static NSOutputStream *outputStream;
     memset(result, 0, sizeof(requestLookUpResult));
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
+}
+
++(void *)getRequests:(int)type1 type2:(int)type2 {
+
+    requestLookUpResult *result = malloc(sizeof(requestLookUpResult));
+    memset(result, 0, sizeof(requestLookUpResult));
     
     
     [self readStream:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
@@ -253,8 +273,7 @@ static NSOutputStream *outputStream;
         
     }
     
-    return result;
-    
+    return result;    
 }
 +(int)acceptRequest:(uint32_t) requestId {
     
@@ -293,8 +312,82 @@ static NSOutputStream *outputStream;
     
     return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestMake)];
 
-    
+}
 
++(void *)searchForUsers {
+    
+    NSMutableArray *usersData = [[NSMutableArray alloc] init];
+    
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    requestStats packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 5;
+    packet.type[1] = 0;
+    
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
+    
+    users *result = malloc(sizeof(users));
+    
+    [self readStream:(uint8_t *)&result maxLength:sizeof(result)];
+    
+    return result;
+}
+
++(int)startRace:(int)reqID {
+    
+    uint32_t myInt32Value = 6;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+
+    match packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 4;
+    packet.type[1] = 0;
+    packet.msg = reqID;
+    
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
+    
+    match *result = malloc(sizeof(match));
+    [inputStream read:(uint8_t *)result maxLength:sizeof(*result)];
+
+    if ((result->type[0] == 4) && (result->type[1] == 1)) {
+        NSLog(@"success");
+        return 1;
+    } else {
+        NSLog (@"not succesful");
+        return 0;
+    }
+}
+
++(void)sendUpdatedCoordinates:(double)latitude longitude:(double)longitude {
+    
+    uint32_t myInt32Value = 18;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    GPSCoord packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 4;
+    packet.type[1] = 2;
+    packet.latitude = latitude;
+    packet.longitude = longitude;
+    
+    if ((latitude != 0) && (longitude != 0)) {
+    [outputStream write:(uint8_t *)&packet maxLength:sizeof(GPSCoord)];
+    }
+}
+
++(void)quitRace {
+    
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    quitMatch packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 4;
+    packet.type[1] = 3;
+    
+    [outputStream write:(uint8_t *)&packet maxLength:sizeof(quitMatch)];
 }
 
 @end

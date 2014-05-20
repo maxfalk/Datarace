@@ -182,8 +182,20 @@
     UIGraphicsEndImageContext();
     
     }
+    
+    /*CALayer *layer = [self.drawpad.layer sublayers][0];
+	layer.transform = CATransform3DMakeRotation(10, 0, 1, 0);
+     */
 }
 
+- (void)spinIt {
+	/*CALayer *layer = [self.view.layer sublayers][0];
+	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.x"];
+	animation.duration = 1.25f;
+	animation.toValue = @(DEGREES_TO_RADIANS(360));
+	[layer addAnimation:animation forKey:@"spinAnimation"];
+     */
+}
 
 
 @end

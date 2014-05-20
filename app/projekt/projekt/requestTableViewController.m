@@ -115,9 +115,8 @@
     
 }
 
--(void)viewDidDisappear:(BOOL)animated {
-    NSLog(@"wooohooo");
-}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

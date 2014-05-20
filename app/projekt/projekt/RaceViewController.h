@@ -12,5 +12,6 @@
 #import "NetworkConnectionClass.h"
 
 @interface RaceViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate>
+@property int reqID;
 
 @end

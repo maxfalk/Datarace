@@ -131,6 +131,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="gJT-Pk-WcC"/>
                     <connections>
+                        <outlet property="image" destination="0F6-9I-akO" id="LaS-7N-frh"/>
                         <outlet property="loginButton" destination="gOI-eO-MNY" id="NU4-iC-iQl"/>
                         <outlet property="passwordField" destination="5KC-7i-48K" id="R2c-Gz-GVo"/>
                         <outlet property="rememberButton" destination="Xaa-gs-XhN" id="THt-eC-OKv"/>
@@ -684,6 +685,65 @@
             </objects>
             <point key="canvasLocation" x="2548" y="318"/>
         </scene>
+        <!--User Search Table View Controller-->
+        <scene sceneID="UEl-TN-Sj7">
+            <objects>
+                <tableViewController id="Tab-aH-A6u" customClass="UserSearchTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="zbk-b0-aLq">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="HAC-uo-efj">
+                            <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="nSC-98-Bx1" id="AUh-iD-BuO"/>
+                            </connections>
+                        </searchBar>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="SBT-J7-VYH">
+                                <rect key="frame" x="0.0" y="130" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SBT-J7-VYH" id="AZG-R0-BoB">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Tab-aH-A6u" id="KAh-f0-eaf"/>
+                            <outlet property="delegate" destination="Tab-aH-A6u" id="wDE-SP-pFf"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="3Cc-V7-3Mh">
+                        <nil key="title"/>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Xvr-uf-inf">
+                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <state key="normal" title="User Search">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="nSC-98-Bx1" id="PzN-Nu-j3l"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wua-RO-6Je" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="nSC-98-Bx1">
+                    <connections>
+                        <outlet property="delegate" destination="Tab-aH-A6u" id="tO2-YN-lly"/>
+                        <outlet property="searchBar" destination="HAC-uo-efj" id="WNS-NV-Fg6"/>
+                        <outlet property="searchContentsController" destination="Tab-aH-A6u" id="Tm4-HE-o4h"/>
+                        <outlet property="searchResultsDataSource" destination="Tab-aH-A6u" id="67w-wg-Qqf"/>
+                        <outlet property="searchResultsDelegate" destination="Tab-aH-A6u" id="Rbs-dz-DWg"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="1597" y="-1895"/>
+        </scene>
         <!--Competitor Table View Controller-->
         <scene sceneID="hd7-jq-ypZ">
             <objects>
@@ -718,6 +778,11 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="search" id="8mN-nk-1ay">
+                            <connections>
+                                <segue destination="Tab-aH-A6u" kind="push" id="dRb-fH-fQA"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="WB7-au-axN" kind="push" identifier="challengeSettings" id="7qm-KA-zx8"/>
@@ -921,25 +986,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="To goal" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="26c-W3-Oj5">
-                                <rect key="frame" x="40" y="364" width="60" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Between players" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KlS-P8-ear">
-                                <rect key="frame" x="161" y="364" width="120" height="21"/>
+                                <rect key="frame" x="130" y="323" width="60" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="3 km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BRx-lS-uMx">
-                                <rect key="frame" x="40" y="387" width="60" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="2.5 km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KMS-5G-fTc">
-                                <rect key="frame" x="185" y="387" width="72" height="21"/>
+                                <rect key="frame" x="130" y="346" width="60" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
@@ -962,6 +1015,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="Emz-Hr-Xy0">
                         <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="fk7-iC-Agb">
+                            <button key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TPk-eh-ydk">
+                                <rect key="frame" x="16" y="11" width="22" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </button>
+                        </barButtonItem>
                         <button key="titleView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Hru-zS-1zx">
                             <rect key="frame" x="96" y="5" width="128" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -970,13 +1029,18 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="stop" id="5R0-HB-SGY">
+                            <connections>
+                                <action selector="quitButtonPressed:" destination="g6R-qd-8MV" id="7UZ-Uf-zon"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="betweenPlayersLabel" destination="KMS-5G-fTc" id="bal-Fl-amH"/>
                         <outlet property="competitorName" destination="qgI-kK-2XE" id="NLj-1H-3Dt"/>
                         <outlet property="competitorSlider" destination="8Gr-DU-C0l" id="Q4M-nt-KP1"/>
                         <outlet property="differenceLabel" destination="tlK-4h-Jjg" id="cLv-wd-ckP"/>
                         <outlet property="mapView" destination="wF4-CY-hkM" id="bGp-oj-quX"/>
+                        <outlet property="quitButton" destination="5R0-HB-SGY" id="Y4r-AY-Kpe"/>
                         <outlet property="toGoalLabel" destination="BRx-lS-uMx" id="KnG-xN-Bpb"/>
                         <outlet property="yourSlider" destination="gjY-td-PNy" id="TzA-bx-vWb"/>
                         <segue destination="xt4-j6-T09" kind="modal" identifier="startCountdown" modalTransitionStyle="flipHorizontal" id="jdx-qu-TA8"/>
