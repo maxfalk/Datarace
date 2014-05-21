@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D9F6B601917ABA300937D62 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */; };
+		C7908A02192B3D8B00E7053F /* UserSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7908A01192B3D8B00E7053F /* UserSearchTableViewController.m */; };
 		C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */; };
 		C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */; };
 		C7B7C7DD18FD17EC0096DB88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B7C7DC18FD17EC0096DB88 /* Foundation.framework */; };
@@ -32,7 +33,6 @@
 		C7EB1192190E77C600861F26 /* RegisteredViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7EB1191190E77C600861F26 /* RegisteredViewController.m */; };
 		C7EB1195190E9D3600861F26 /* CompetitorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7EB1194190E9D3600861F26 /* CompetitorTableViewController.m */; };
 		C7ECED5318FD4A0000C3EE81 /* menuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7ECED5218FD4A0000C3EE81 /* menuViewController.m */; };
-		C7F584B41906A47D0040254A /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F584B31906A47D0040254A /* GCDAsyncUdpSocket.m */; };
 		C7F584B71906A7F90040254A /* ChallengeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7F584B61906A7F90040254A /* ChallengeViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +48,8 @@
 
 /* Begin PBXFileReference section */
 		5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C7908A00192B3D8B00E7053F /* UserSearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSearchTableViewController.h; sourceTree = "<group>"; };
+		C7908A01192B3D8B00E7053F /* UserSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSearchTableViewController.m; sourceTree = "<group>"; };
 		C7A7ED3618FFD5BA00DE0740 /* requestTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = requestTableViewController.h; sourceTree = "<group>"; };
 		C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = requestTableViewController.m; sourceTree = "<group>"; };
 		C7A7ED3918FFD89E00DE0740 /* CustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCell.h; sourceTree = "<group>"; };
@@ -86,8 +88,6 @@
 		C7EB1194190E9D3600861F26 /* CompetitorTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompetitorTableViewController.m; sourceTree = "<group>"; };
 		C7ECED5118FD4A0000C3EE81 /* menuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = menuViewController.h; sourceTree = "<group>"; };
 		C7ECED5218FD4A0000C3EE81 /* menuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = menuViewController.m; sourceTree = "<group>"; };
-		C7F584B21906A47D0040254A /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
-		C7F584B31906A47D0040254A /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		C7F584B51906A7F90040254A /* ChallengeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChallengeViewController.h; sourceTree = "<group>"; };
 		C7F584B61906A7F90040254A /* ChallengeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChallengeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,6 +118,65 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C79089FB192B3CC500E7053F /* Challenge */ = {
+			isa = PBXGroup;
+			children = (
+				C7908A00192B3D8B00E7053F /* UserSearchTableViewController.h */,
+				C7908A01192B3D8B00E7053F /* UserSearchTableViewController.m */,
+				C7D0C2E4191B82B200284B33 /* RaceViewController.h */,
+				C7D0C2E5191B82B200284B33 /* RaceViewController.m */,
+				C7EB1193190E9D3600861F26 /* CompetitorTableViewController.h */,
+				C7EB1194190E9D3600861F26 /* CompetitorTableViewController.m */,
+				C7D0C2E7191B84AB00284B33 /* CountdownViewController.h */,
+				C7D0C2E8191B84AB00284B33 /* CountdownViewController.m */,
+				C7F584B51906A7F90040254A /* ChallengeViewController.h */,
+				C7F584B61906A7F90040254A /* ChallengeViewController.m */,
+			);
+			name = Challenge;
+			sourceTree = "<group>";
+		};
+		C79089FC192B3CCE00E7053F /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				C7A7ED3618FFD5BA00DE0740 /* requestTableViewController.h */,
+				C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */,
+			);
+			name = Request;
+			sourceTree = "<group>";
+		};
+		C79089FD192B3CD400E7053F /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				C7CC2390190A5A9A0040E8C1 /* NetworkConnectionClass.h */,
+				C7CC2391190A5A9A0040E8C1 /* NetworkConnectionClass.m */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		C79089FE192B3D1000E7053F /* Custom objects */ = {
+			isa = PBXGroup;
+			children = (
+				C7A7ED3918FFD89E00DE0740 /* CustomCell.h */,
+				C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */,
+			);
+			name = "Custom objects";
+			sourceTree = "<group>";
+		};
+		C79089FF192B3D2B00E7053F /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				C7ECED5118FD4A0000C3EE81 /* menuViewController.h */,
+				C7ECED5218FD4A0000C3EE81 /* menuViewController.m */,
+				C7B7C7F118FD17EC0096DB88 /* projektViewController.h */,
+				C7B7C7F218FD17EC0096DB88 /* projektViewController.m */,
+				C7CC2394190A81D40040E8C1 /* SignupViewController.h */,
+				C7CC2395190A81D40040E8C1 /* SignupViewController.m */,
+				C7EB1190190E77C600861F26 /* RegisteredViewController.h */,
+				C7EB1191190E77C600861F26 /* RegisteredViewController.m */,
+			);
+			name = Menu;
+			sourceTree = "<group>";
+		};
 		C7B7C7D018FD17EC0096DB88 = {
 			isa = PBXGroup;
 			children = (
@@ -154,35 +213,16 @@
 		C7B7C7E218FD17EC0096DB88 /* projekt */ = {
 			isa = PBXGroup;
 			children = (
-				C7D0C2E4191B82B200284B33 /* RaceViewController.h */,
-				C7D0C2E5191B82B200284B33 /* RaceViewController.m */,
-				C7EB1193190E9D3600861F26 /* CompetitorTableViewController.h */,
-				C7EB1194190E9D3600861F26 /* CompetitorTableViewController.m */,
-				C7D0C2E7191B84AB00284B33 /* CountdownViewController.h */,
-				C7D0C2E8191B84AB00284B33 /* CountdownViewController.m */,
-				C7CC2390190A5A9A0040E8C1 /* NetworkConnectionClass.h */,
-				C7CC2391190A5A9A0040E8C1 /* NetworkConnectionClass.m */,
-				C7F584B21906A47D0040254A /* GCDAsyncUdpSocket.h */,
-				C7F584B31906A47D0040254A /* GCDAsyncUdpSocket.m */,
-				C7F584B51906A7F90040254A /* ChallengeViewController.h */,
-				C7F584B61906A7F90040254A /* ChallengeViewController.m */,
+				C79089FE192B3D1000E7053F /* Custom objects */,
+				C79089FD192B3CD400E7053F /* Network */,
+				C79089FF192B3D2B00E7053F /* Menu */,
+				C79089FB192B3CC500E7053F /* Challenge */,
+				C79089FC192B3CCE00E7053F /* Request */,
 				C7B7C7EE18FD17EC0096DB88 /* Main.storyboard */,
-				C7A7ED3918FFD89E00DE0740 /* CustomCell.h */,
-				C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */,
-				C7ECED5118FD4A0000C3EE81 /* menuViewController.h */,
-				C7ECED5218FD4A0000C3EE81 /* menuViewController.m */,
-				C7B7C7F118FD17EC0096DB88 /* projektViewController.h */,
-				C7B7C7F218FD17EC0096DB88 /* projektViewController.m */,
-				C7A7ED3618FFD5BA00DE0740 /* requestTableViewController.h */,
-				C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */,
 				C7B7C7EB18FD17EC0096DB88 /* projektAppDelegate.h */,
 				C7B7C7EC18FD17EC0096DB88 /* projektAppDelegate.m */,
-				C7CC2394190A81D40040E8C1 /* SignupViewController.h */,
-				C7CC2395190A81D40040E8C1 /* SignupViewController.m */,
-				C7EB1190190E77C600861F26 /* RegisteredViewController.h */,
-				C7EB1191190E77C600861F26 /* RegisteredViewController.m */,
-				C7B7C7E318FD17EC0096DB88 /* Supporting Files */,
 				C7B7C7F418FD17EC0096DB88 /* Images.xcassets */,
+				C7B7C7E318FD17EC0096DB88 /* Supporting Files */,
 			);
 			path = projekt;
 			sourceTree = "<group>";
@@ -331,10 +371,10 @@
 				C7B7C7F318FD17EC0096DB88 /* projektViewController.m in Sources */,
 				C7D0C2E9191B84AB00284B33 /* CountdownViewController.m in Sources */,
 				C7D0C2E6191B82B200284B33 /* RaceViewController.m in Sources */,
-				C7F584B41906A47D0040254A /* GCDAsyncUdpSocket.m in Sources */,
 				C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */,
 				C7F584B71906A7F90040254A /* ChallengeViewController.m in Sources */,
 				C7CC2396190A81D40040E8C1 /* SignupViewController.m in Sources */,
+				C7908A02192B3D8B00E7053F /* UserSearchTableViewController.m in Sources */,
 				C7ECED5318FD4A0000C3EE81 /* menuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

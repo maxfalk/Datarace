@@ -50,9 +50,13 @@
     _green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
     _red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
     
+}
+
+-(void)viewDidAppear:(BOOL)animated {
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
         
+        [NetworkConnectionClass sendRequest];
         requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
         requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
         int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
@@ -101,6 +105,7 @@
         });
     });
     
+
 }
 - (void)didReceiveMemoryWarning
 {
@@ -190,12 +195,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     CustomCell *cell = (CustomCell *)[tableView cellForRowAtIndexPath:indexPath];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    //[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
         if ([cell.statusLabel.text isEqualToString:@"READY"]) {
             NSLog(@"Pressed on a READY cell");
-            [self performSegueWithIdentifier:@"startChallenge" sender:nil];
+            [self performSegueWithIdentifier:@"startChallenge" sender:indexPath];
             
             
         } else if ([cell.statusLabel.text isEqualToString:@"Pending"]) {
@@ -211,15 +216,19 @@
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSIndexPath *indexPath = sender;
+     CustomCell *cell = (CustomCell *)[self.tableView cellForRowAtIndexPath:sender];
     if ([segue.identifier isEqualToString:@"challengeSettings"]) {
-        CustomCell *cell = (CustomCell *)[self.tableView cellForRowAtIndexPath:sender];
         NSString *string = cell.competitorLabel.text;
         ChallengeViewController *class = (ChallengeViewController *) [segue destinationViewController];
         class.challengerUsername = string;
     } else if ([segue.identifier isEqualToString:@"startChallenge"]) {
-        
+        RaceViewController *class = (RaceViewController *) [segue destinationViewController];
+        class.reqID = [[_requestIDs objectAtIndex:indexPath.row] integerValue];
     }
 }
+
+
 
 - (void)addFooter {
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];

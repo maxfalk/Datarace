@@ -44,6 +44,13 @@ typedef struct __attribute__ ((packed)) {
     requestLookUp *requestLookUp;
 } requestLookUpResult;
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    uint32_t userId;
+    char username[50];
+} users;
+
 @interface NetworkConnectionClass : NSObject <NSStreamDelegate>
 
 @property (nonatomic) homeStats result;
@@ -88,15 +95,22 @@ typedef struct __attribute__ ((packed)) {
  */
 +(void)signOut;
 
-+(void)sendUpdatedCoordinates;
-
 +(void *)getHomeStats;
 
++(void)sendRequest;
 +(void *)getRequests:(int)type1 type2:(int)type2;
 
 +(int) acceptRequest:(uint32_t) requestId;
 +(int) cancelRequest:(uint32_t) requestId;
 
 +(int)makeRequest:(uint32_t) userId distance:(uint32_t)distance;
+
++(void *)searchForUsers;
+
++(int)startRace:(int)reqID;
+
++(void)sendUpdatedCoordinates:(double)latitude longitude:(double)longitude;
+
++(void)quitRace;
 
 @end

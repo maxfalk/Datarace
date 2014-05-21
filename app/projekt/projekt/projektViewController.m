@@ -19,6 +19,8 @@
 @property (strong, nonatomic) NSTimer *time;
 @property CLLocationCoordinate2D myCoordinate;
 @property (weak, nonatomic) IBOutlet UIButton *rememberButton;
+@property (weak, nonatomic) IBOutlet UIImageView *image;
+
 
 @end
 
@@ -47,7 +49,6 @@
     _passwordField.delegate = self;
     
     _wheel.hidden=YES;
-    NSLog(@"remember = %li", (long)[[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue]);
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 1) {
         _usernameField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"rememberUSERNAME"];
         _passwordField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"rememberPASSWORD"];
@@ -56,12 +57,12 @@
         
     }
     
+
     //[self updateLocation];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    NSLog(@"remember = %li", (long)[[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue]);
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 1) {
+       if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 1) {
         _usernameField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"rememberUSERNAME"];
         _passwordField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"rememberPASSWORD"];
         [_rememberButton setBackgroundImage: [UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
@@ -269,7 +270,6 @@
         //_passwordField.text = @"";
         [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"rememberUSERNAME"];
         [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"rememberPASSWORD"];
-        NSLog(@"remember = %li", (long)[[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue]);
         
     } else if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 0) {
         
@@ -284,7 +284,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:_usernameField.text forKey:@"rememberUSERNAME"];
         [[NSUserDefaults standardUserDefaults] setObject:_passwordField.text forKey:@"rememberPASSWORD"];
         [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"remember"];
-            NSLog(@"remember = %li", (long)[[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue]);
+            
         [_rememberButton setBackgroundImage: [UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
         }
     }

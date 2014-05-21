@@ -27,6 +27,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *betweenPlayersLabel;
 @property (nonatomic) NSInteger distance;
 @property (weak, nonatomic) IBOutlet UILabel *differenceLabel;
+@property int check;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *quitButton;
+
+
 
 @end
 
@@ -42,11 +46,19 @@
 }
 
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
+    
     
     [self performSegueWithIdentifier:@"startCountdown" sender:self];
     [super viewDidLoad];
+    
+    _check = 0;
+    int result = [NetworkConnectionClass startRace:_reqID];
+    if (result == 1) {
+        NSLog(@"success");
+    } else {
+        NSLog (@"not succesful");
+    }
     
     NSOperationQueue *myQueue = [[NSOperationQueue alloc] init];
     [myQueue addOperationWithBlock:^{
@@ -70,13 +82,11 @@
                 }
                 else
                 {
-                    NSLog(@"all ok");
                     self.locationManager = [[CLLocationManager alloc] init];
                     self.locationManager.delegate = self;
                     [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
                     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
                     [self.locationManager startUpdatingLocation];
-                    NSLog(@"latitude= %f longitude = %f",self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.latitude);
                 }
             }
             
@@ -85,44 +95,9 @@
             self.routeLineView = [[MKPolylineView alloc] init];
             self.routeLine = [[MKPolyline alloc] init];
             [self.mapView addOverlay:self.routeLine];
-           
             
             
-            // Do any additional setup after loading the view.
-            /*
-             UIBezierPath *path1 = [UIBezierPath bezierPath];
-             [path1 moveToPoint:CGPointMake(10,10)];
-             [path1 addLineToPoint:CGPointMake(70,10)];
-             [path1 stroke];
-             
-             
-             
-             
-             UIBezierPath *path2 = [UIBezierPath bezierPath];
-             [path2 moveToPoint:CGPointMake(70,10)];
-             [path2 addLineToPoint:CGPointMake(140,10)];
-             [path2 stroke];
-             
-             
-             UIColor *green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
-             UIGraphicsBeginImageContext(CGSizeMake(120, 120));
-             [[UIColor blackColor] setStroke];
-             path1.lineCapStyle = kCGLineCapRound;
-             path1.lineWidth = 15.0f;
-             [green setStroke];
-             [path1 stroke];
-             
-             UIColor *red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
-             path2.lineWidth = 15.0f;
-             path2.lineCapStyle = kCGLineCapRound;
-             [red setStroke];
-             [path2 stroke];
-             self.drawpad.image = UIGraphicsGetImageFromCurrentImageContext();
-             
-             //[self drawRect:CGRectMake(0, 0, 100, 100)];
-             
-             UIGraphicsEndImageContext();
-             */
+            
         }];
     }];
     
@@ -133,16 +108,18 @@
     _competitorSlider.minimumValue = 0;
     _competitorSlider.maximumValue = _distance;
     
-    [_yourSlider setThumbImage:[UIImage imageNamed:@"slider"]
-                                forState:UIControlStateNormal];
-    [_competitorSlider setThumbImage:[UIImage imageNamed:@"slider"]
+    UIImage *image = [UIImage imageNamed:@"slider"];
+    [_yourSlider setThumbImage:image
                       forState:UIControlStateNormal];
+    [_competitorSlider setThumbImage:image
+                            forState:UIControlStateNormal];
     _totalCompetitorDistance = 2500;
     _competitorSlider.value = _totalCompetitorDistance;
+    
 }
 
-- (void)didReceiveMemoryWarning
-{
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -174,7 +151,6 @@
     [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
     [self.points addObject:self.mapView.userLocation];
     
-    //NSLog(@"acc: %f", self.mapView.userLocation.location.horizontalAccuracy);
     if (_firstPosition != nil) {
         [self drawRoute:@[self.mapView.userLocation, prev]];
     }
@@ -189,28 +165,26 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    // if ((_firstPosition.coordinate.latitude == 0) && (_firstPosition.coordinate.longitude == 0))  {
-    
-    
-    if (_firstPosition == nil) {
-        NSLog(@"%f", self.mapView.userLocation.location.horizontalAccuracy);
-        if (self.mapView.userLocation.location.horizontalAccuracy < 0)
-        {
-            // No Signal
-        } else if (self.mapView.userLocation.location.horizontalAccuracy > 163) {
-            // Poor Signal
-        } else if (self.mapView.userLocation.location.horizontalAccuracy > 48) {
-            // Average Signal
-            _firstPosition = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:self.locationManager.location.coordinate.longitude];
-        } else {
-            _firstPosition = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:self.locationManager.location.coordinate.longitude];
-            
+    if (_check == 0) {
+        
+        if (_firstPosition == nil) {
+            if (self.mapView.userLocation.location.horizontalAccuracy < 0)
+            {
+                // No Signal
+            } else if (self.mapView.userLocation.location.horizontalAccuracy > 163) {
+                // Poor Signal
+            } else if (self.mapView.userLocation.location.horizontalAccuracy > 48) {
+                // Average Signal
+                _firstPosition = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:self.locationManager.location.coordinate.longitude];
+            } else {
+                _firstPosition = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:self.locationManager.location.coordinate.longitude];
+                
+            }
         }
+        
+        [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
+        [NetworkConnectionClass sendUpdatedCoordinates:_previousPosition.latitude longitude:_previousPosition.longitude];
     }
-    
-    [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
-    [NetworkConnectionClass sendUpdatedCoordinates];
-    
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {
@@ -258,7 +232,7 @@
         double R = 6372.8;
         
         double prevTotalDistance = _totalDistance;
-
+        
         _totalDistance = (R * c * 1000) + prevTotalDistance;
         _yourSlider.value = _totalDistance;
         _toGoalLabel.text = [NSString stringWithFormat:@"%0.1f", (_distance - _totalDistance)/1000];
@@ -269,11 +243,16 @@
         } else if ((_totalDistance - _totalCompetitorDistance) > 0) {
             _differenceLabel.textColor = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
         }
-        
-
     }
 }
 
+- (IBAction)quitButtonPressed:(id)sender {
+    _check = 1;
+    self.mapView.showsUserLocation = NO;
+    [self.locationManager stopUpdatingLocation];
+    [self.navigationController popViewControllerAnimated:YES];
+    [NetworkConnectionClass quitRace];
+}
 
 
 @end
