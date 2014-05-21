@@ -5,23 +5,29 @@
 
 -module(server).
 
--export([start/0, stop/0]).
+-export([start/1, stop/0]).
 
 %%@doc start the server
 %%
--spec start()-> ok.
+-spec start(Log) -> ok when
+      Log :: true | false.
 
-start()->
+start(Log) ->
     application:start(crypto),
     application:start(emysql),
-    application:start(log),
+    case Log of 
+	true ->
+	    application:start(log);
+	false ->
+	    ok
+    end,
     application:start(datarace).
 
 
 %%@doc Stop the server
 -spec stop()-> ok.
 
-stop()->
+stop() ->
     case whereis(master_sup) of
 	undefined -> 
 	    ok;
@@ -29,7 +35,12 @@ stop()->
 	    master_sup:stop_children()
     end,
     application:stop(datarace),
-    application:stop(log),
+    case whereis(log_sup) of
+	undefined -> 
+	    ok;
+	_ ->
+	    application:stop(log)
+    end,
     application:stop(emysql),
     application:stop(crypto).
 

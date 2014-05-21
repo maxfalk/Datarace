@@ -31,19 +31,13 @@ database_test_()->
 
 
 start()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     account:register("AutoTesting", "sdfgaudya8s72","Testing@mail.com"),
     {ok, Id} = account:login("AutoTesting", "sdfgaudya8s72"),
     account:logout(Id),
     Id.
 
 stop(Id)->
-    account:delete(Id),
-    database:stop(),  
-    application:stop(emysql),
-    application:stop(crypto).
+    account:delete(Id).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%

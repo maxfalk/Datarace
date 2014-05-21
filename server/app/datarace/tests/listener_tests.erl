@@ -27,23 +27,16 @@ listener_test_()->
 %%====================================================================
 
 start() ->
-    application:start(crypto),
-    application:start(emysql),
-    application:start(datarace),
     {ok, Config} = file:consult(filename:absname("../configs/config")),
     {port, Port} = lists:keyfind(port, 1, Config),
     {listeners, Listeners} = lists:keyfind(listeners, 1, Config),
-    timer:sleep(100),
     Users = gen_users(Listeners),
     [ account:delete(Username) || {Username, _, _} <- Users ],
     {Port, Listeners, Users}.
 
 
 stop({_Port, _Listeners, Users}) ->
-    [ account:delete(Username) || {Username, _, _} <- Users ],
-    application:stop(datarace),
-    application:stop(emysql),
-    application:stop(crypto).
+    [ account:delete(Username) || {Username, _, _} <- Users ].
 
 
 %%====================================================================
@@ -54,7 +47,6 @@ listener_connect({Port, Listeners, _Users}) ->
     NewListeners = 10,
     ChildrenBefore = count_children(listener_sup),
     SocketList = connect_n_times(Port, NewListeners),
-    timer:sleep(100),
     ChildrenDuring = count_children(listener_sup),
     disconnect_all(SocketList),
     timer:sleep(100),
@@ -108,7 +100,7 @@ listener_login({Port, Listeners, Users}) ->
 %%====================================================================
 
 gen_users(N) ->
-    NamePrefix = "TestUser",
+    NamePrefix = "ListenerUser",
     Users = [ NamePrefix ++ integer_to_list(Int) || Int <- lists:seq(1, N) ],
     [ {X, X, X} || X <- Users ].
 

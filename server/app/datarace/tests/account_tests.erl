@@ -25,20 +25,12 @@ account_test_()->
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 start()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     account:register("Autotest","Autotest","AT@mail.com").
 
 stop(_)->
     {ok, Id} = account:login("Autotest","Autotest"),
     account:logout(Id),
-    account:delete(Id),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
-
-    
+    account:delete(Id).    
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%

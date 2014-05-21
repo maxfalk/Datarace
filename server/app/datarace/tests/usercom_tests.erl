@@ -60,37 +60,24 @@ stats_test_()->
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Request setup cleanup
 start_request()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     create_users().
 
 stop_request({U1, U2})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
+    delete_users({U1, U2}).
+
 
 %% Request util setup cleanup
 start_request_util()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
     {U1, U2}.
 
 stop_request_util({U1, U2})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
+    delete_users({U1, U2}).
+
 
 %% Match setup cleanup
 start_match()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
     {R, _R1} = usercom:request_lookup(U1),
@@ -99,16 +86,11 @@ start_match()->
     {Result#request_table.id, U1, U2}.
 
 stop_match({_ , U1, U2})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
+    delete_users({U1, U2}).
+
 
 %% Gps setup cleanup
 start_gps()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
     {R, _R1} = usercom:request_lookup(U1),
@@ -120,18 +102,12 @@ start_gps()->
 
 
 stop_gps({_, U1, U2})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
+    delete_users({U1, U2}).
     
 
 %%Stats setup, cleanup
 
 start_stats()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
     {R, R1} = usercom:request_lookup(U1),
@@ -146,11 +122,7 @@ start_stats()->
 
 
 stop_stats({U1, U2, _Username})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
-    
+    delete_users({U1, U2}).    
 
 
 
@@ -247,6 +219,8 @@ create_user(Username, Password)->
     U1.
 
 create_users()->
+    account:delete("test_usercom1"),
+    account:delete("test_usercom2"),    
     U1 = create_user("test_usercom1","oaisdnni123asd"),
     U2 = create_user("test_usercom2", "os09mlsni123asd"),
     {U1, U2}.
