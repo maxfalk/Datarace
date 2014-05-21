@@ -57,7 +57,8 @@
 -define(MATCH_CONFIRM, <<4,1>>).
 -define(MATCH_GPS, <<4,2>>). %% Contains two floats: longitude, latitude 
 -define(MATCH_STOP, <<4,3>>).
-
+-define(MATCH_COMP_POS, <<4,4>>).
+-define(MATCH_COMP_REPLY, <<4,5>>). %% Contains one float: distance
 
 %%====================================================================
 %% Search
@@ -65,3 +66,4 @@
 
 -define(SEARCH_STRING, <<5,0>>).
 -define(SEARCH_RESULTS, <<5,1>>).
+-define(SEARCH_SERVER_DOWN, <<5,2>>).

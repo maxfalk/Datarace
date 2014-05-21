@@ -10,8 +10,8 @@
 %% Test description
 %%====================================================================
 
-request_test_()->
-    {"Test listener functionality",
+listener_test_()->
+    {"Test listener functionality: login, register",
       {setup, 
        fun start/0, 
        fun stop/1, 
@@ -59,17 +59,17 @@ listener_connect({Port, Listeners, _Users}) ->
     disconnect_all(SocketList),
     timer:sleep(100),
     ChildrenAfter = count_children(listener_sup),
-    [?assertEqual([{specs, 1}, 
+    [?_assertEqual([{specs, 1}, 
 		   {active, Listeners}, 
 		   {supervisors, 0}, 
 		   {workers, Listeners}], 
 		  ChildrenBefore),
-     ?assertEqual([{specs, 1}, 
+     ?_assertEqual([{specs, 1}, 
 		   {active, Listeners + NewListeners}, 
 		   {supervisors, 0}, 
 		   {workers, Listeners + NewListeners}], 
 		  ChildrenDuring),
-     ?assertEqual([{specs, 1}, 
+     ?_assertEqual([{specs, 1}, 
 		   {active, Listeners}, 
 		   {supervisors, 0}, 
 		   {workers, Listeners}], 
@@ -82,8 +82,25 @@ listener_register({Port, _Listeners, Users}) ->
     [RegisterTrue, RegisterFalse].
 
 
-listener_login({Port, _Listeners, Users}) ->
-    login_users(Port, Users, [], ?LOGIN_TRUE).
+listener_login({Port, Listeners, Users}) ->
+    LoginTrue = login_users(Port, Users, [], ?LOGIN_TRUE),
+    LoginFalse = login_users(Port, Users, [], ?LOGIN_FALSE_LOGGED_IN),
+    ListenerChildCount = count_children(listener_sup),
+    ClientServChildCount = count_children(client_serv_sup),
+    UserCount = length(Users),
+    [LoginTrue,
+     LoginFalse,
+     ?_assertEqual([{specs, 1}, 
+		    {active, Listeners}, 
+		    {supervisors, 0}, 
+		    {workers, Listeners}], 
+		   ListenerChildCount),
+     ?_assertEqual([{specs, 10
+}, 
+		    {active, UserCount}, 
+		    {supervisors, 0}, 
+		    {workers, UserCount}], 
+		   ClientServChildCount)].
 
 
 %%====================================================================
@@ -123,14 +140,14 @@ register_users(Port, [User|Users], Acc, ExpectedResult) ->
     client_funs:register(Socket, Username, Password, Email),
     receive 
 	{tcp, _, Packet} -> 
-	    NewAcc = [?assertEqual(ExpectedResult, Packet) | Acc]; 
+	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]; 
 	Packet -> 
-	    NewAcc = [?assertEqual(ExpectedResult, Packet) | Acc]	
+	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]	
     end,
     receive
 	_ -> ok
     end,
-    register_users(Port, Users, NewAcc).
+    register_users(Port, Users, NewAcc, ExpectedResult).
 
 
 login_users(_Port, [], Acc, _ExpectedResult) ->
@@ -141,12 +158,14 @@ login_users(Port, [User|Users], Acc, ExpectedResult) ->
     client_funs:login(Socket, Username, Password),
     receive 
 	{tcp, _, Packet} -> 
-	    NewAcc = [?assertEqual(ExpectedResult, Packet) | Acc]; 
+	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc];
+	{tcp_closed, _Msg} ->
+	    receive 
+		{tcp, _, Packet} -> 
+		    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]
+	    end;
 	Packet -> 
-	    NewAcc = [?assertEqual(ExpectedResult, Packet) | Acc]	
+	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]	
     end,
-    receive
-	_ -> ok
-    end,
-    register_users(Port, Users, NewAcc).
+    login_users(Port, Users, NewAcc, ExpectedResult).
 

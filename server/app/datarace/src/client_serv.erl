@@ -88,7 +88,8 @@ verify(control_transferred, {UserId, Socket}) ->
 
 main(?LOGIN_LOGOUT, LoopData) ->
     {stop, normal, LoopData};
-main({?REQUEST, <<ChallengeId:32/little-integer, Distance:32/little-integer>>}, {UserId, Socket}) ->
+main({?REQUEST, <<ChallengeId:32/little-integer, Distance:32/little-integer>>}, 
+     {UserId, Socket}) ->
     log_serv:log("Match request made by UID " ++ 
 		     integer_to_list(UserId) ++ " for " ++
 		     integer_to_list(ChallengeId) ++ " distance " ++
@@ -100,12 +101,6 @@ main(?REQUEST_LOOKUP, {UserId, Socket}) ->
 		     integer_to_list(UserId)),
     RequestTableTuple = usercom:request_lookup(UserId),
     {MadePack, ChalPack} = packconv:pack(?REQUEST_LOOKUP, RequestTableTuple),
-    log_serv:log("Number of made requests is " ++ 
-		     integer_to_list((byte_size(MadePack)-2) div 90) ++
-		     " number of received requests is " ++ 
-		     integer_to_list((byte_size(ChalPack)-2) div 90) ++
-		     " packet size " ++ integer_to_list(byte_size(MadePack)) ++ 
-		     "/" ++ integer_to_list(byte_size(ChalPack))),
     ok = gen_tcp:send(Socket, MadePack),
     ok = gen_tcp:send(Socket, ChalPack),
     {next_state, main, {UserId, Socket}};
@@ -125,23 +120,45 @@ main(?GET_HOME_STATS, {UserId, Socket}) ->
     UserStatsTablePack = packconv:pack(?GET_HOME_STATS, UserStatsTableTuple),
     ok = gen_tcp:send(Socket, UserStatsTablePack),
     {next_state, main, {UserId, Socket}};
-main({?MATCH_START, <<RequestId:32/integer>>}, {UserId, Socket}) ->
-    {match_table, MatchTable} = usercom:match(RequestId),
+main({?MATCH_START, <<RequestId:32/little-integer>>}, {UserId, Socket}) ->
+    log_serv:log("Match started with RID " ++ integer_to_list(RequestId)),
+    MatchTable = usercom:match(RequestId),
     ok = gen_tcp:send(Socket, ?MATCH_CONFIRM),
-    {next_state, match, {UserId, Socket, MatchTable}}.
+    {next_state, match, {UserId, Socket, calendar:local_time(), MatchTable}};
+main({?SEARCH_STRING, Packet}, {UserId, Socket}) ->
+    case search_sup:start_search_serv() of
+	{ok, Pid} ->
+	    SearchString = packconv:convert_pack(?SEARCH_STRING, Packet),
+	    SearchResult = search_serv:search(Pid, SearchString),
+	    ResultPacket = packconv:pack(?SEARCH_RESULTS, SearchResult),
+	    ok = gen_tcp:send(Socket, ResultPacket),
+	    search_serv:stop(Pid);
+	_Error ->
+	    ok = gen_tcp:send(Socket, ?SEARCH_SERVER_DOWN)
+    end,
+    {next_state, main, {UserId, Socket}}.
 
 
-match({?MATCH_GPS, Packet}, {UserId, Socket, {MatchId, _,_,_,_} = MatchTable}) ->
+match({?MATCH_GPS, Packet}, {UserId, Socket, StartTime, {_, MatchId, _,_,_,_} = MatchTable}) ->
     {Longitude, Latitude} = packconv:convert_pack(?MATCH_GPS, Packet),
     log_serv:log("Received GPS data from UID " ++ 
 		     integer_to_list(UserId) ++ ": Long " ++ 
-		     integer_to_list(Longitude) ++ " Lat " ++
-		     integer_to_list(Latitude)),
-    %usercom:gps_save(UserId, MatchId, Longitude, Latitude),
-    {next_state, match, {UserId, Socket, MatchTable}};
-match(?MATCH_STOP, {UserId, Socket, {MatchId, _,_,_,_}}) ->
-    log_serv:log("Match stopped for MID " ++ MatchId),
+		     float_to_list(Longitude) ++ ", Lat " ++
+		     float_to_list(Latitude)),
+    usercom:gps_save(UserId, MatchId, Longitude, Latitude),
+    {next_state, match, {UserId, Socket, StartTime, MatchTable}};
+match(?MATCH_COMP_POS, {UserId, Socket, StartTime, {_, MID, FID, SID, _,_} = MatchTable}) ->
+    ChallengerId = case UserId of FID -> SID; SID -> FID end,
+    Distance = gps:calc_pointdistance(UserId, MID, StartTime),
+    %%return result
+    {next_state, match, {UserId, Socket, StartTime, MatchTable}};
+match(?MATCH_STOP, {UserId, Socket, StartTime, {_, MatchId, _,_,_,_}}) ->
+    log_serv:log("Match stopped for MID " ++ integer_to_list(MatchId)),
     {next_state, main, {UserId, Socket}}.
+
+
+
+
 
 
 %% @doc Receives TCP packets and forwards them to the function 
@@ -169,11 +186,27 @@ handle_info({tcp_closed, _}, _State, {UserId, Socket}) ->
     log_serv:log("UID " ++ integer_to_list(UserId) ++ 
 		     " disconnected unexpectedly"),    
     {stop, normal, {UserId, Socket}};
-handle_info({tcp_error, _, _Reason}, _State, Socket) ->
+handle_info({tcp_error, _, _Reason}, _State, {UserId, Socket}) ->
+    {ok, {Address, Port}} = inet:peername(Socket),
+    log_serv:log("Tcp error for IP " ++ inet_parse:ntoa(Address) ++ 
+		     " and Port " ++ integer_to_list(Port)),  
+    {stop, normal, Socket};
+handle_info({tcp, _, <<Type:2/binary>>}, State, {UserId, Socket, StartTime, MatchTable}) ->
+    inet:setopts(Socket, [{active, once}]),
+    ?MODULE:State(Type, {UserId, Socket, StartTime, MatchTable});
+handle_info({tcp, _, <<Type:2/binary, Packet/binary>>}, State, {UserId, Socket, StartTime, MatchTable}) ->
+    inet:setopts(Socket, [{active, once}]),
+    ?MODULE:State({Type, Packet}, {UserId, Socket, StartTime, MatchTable});
+handle_info({tcp_closed, _}, _State, {UserId, Socket, StartTime, MatchTable}) ->
+    log_serv:log("UID " ++ integer_to_list(UserId) ++ 
+		     " disconnected unexpectedly"),    
+    {stop, normal, {UserId, Socket, StartTime, MatchTable}};
+handle_info({tcp_error, _, _Reason}, _State, {UserId, Socket, StartTime, MatchTable}) ->
     {ok, {Address, Port}} = inet:peername(Socket),
     log_serv:log("Tcp error for IP " ++ inet_parse:ntoa(Address) ++ 
 		     " and Port " ++ integer_to_list(Port)),  
     {stop, normal, Socket}.
+
 
 
 %% @doc The function is called upon termination and makes sure that
