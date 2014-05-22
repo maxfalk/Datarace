@@ -88,7 +88,7 @@ listener_login({Port, Listeners, Users}) ->
 		    {workers, Listeners}], 
 		   ListenerChildCount),
      ?_assertEqual([{specs, 10
-}, 
+		    }, 
 		    {active, UserCount}, 
 		    {supervisors, 0}, 
 		    {workers, UserCount}], 
