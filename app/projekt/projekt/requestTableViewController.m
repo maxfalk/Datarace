@@ -52,15 +52,15 @@
         
         requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
         requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
-
+        
         _requests = [[NSMutableArray alloc] init];
         _distances  = [[NSMutableArray alloc] init];
         _requestIDs = [[NSMutableArray alloc] init];
         
-
         
-        int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
-        int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
+        
+        //int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
+        //int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
         
         if (lookUpResultMade != nil) {
             int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
@@ -91,7 +91,7 @@
                     [_distances addObject:[NSNumber numberWithInt:distance]];
                     [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
                     
-                }                  
+                }
             }
         }
         
@@ -102,6 +102,11 @@
         free(lookUpResultMade->requestLookUp);
         free(lookUpResultGot);
         free(lookUpResultMade);
+        
+        lookUpResultGot->requestLookUp = nil;
+        lookUpResultMade->requestLookUp = nil;
+        lookUpResultGot = nil;
+        lookUpResultMade = nil;
         
         dispatch_async( dispatch_get_main_queue(), ^{
             // Add code here to update the UI/send notifications based on the
@@ -116,7 +121,6 @@
 }
 
 
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -125,7 +129,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-    return 100;
+        return 100;
     } else
         return 44;
 }
@@ -213,18 +217,18 @@
         [cell addSubview:drawpad];
         
         if (indexPath.section == 0) {
-        UIButton *declineButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 35, 34, 34)];
-        //[closeBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
-        [declineButton addTarget:self action:@selector(declineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [declineButton setImage:[UIImage imageNamed:@"decline"] forState:UIControlStateNormal];
-        [declineButton setTag:indexPath.row];
-        
-        UIButton *acceptButton = [[UIButton alloc] initWithFrame:CGRectMake(210, 35, 34, 34)];
-        [acceptButton addTarget:self action:@selector(acceptButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [acceptButton setImage:[UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
-        
-        [cell addSubview:declineButton];
-        [cell addSubview:acceptButton];
+            UIButton *declineButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 35, 34, 34)];
+            //[closeBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+            [declineButton addTarget:self action:@selector(declineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [declineButton setImage:[UIImage imageNamed:@"decline"] forState:UIControlStateNormal];
+            [declineButton setTag:indexPath.row];
+            
+            UIButton *acceptButton = [[UIButton alloc] initWithFrame:CGRectMake(210, 35, 34, 34)];
+            [acceptButton addTarget:self action:@selector(acceptButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [acceptButton setImage:[UIImage imageNamed:@"accept"] forState:UIControlStateNormal];
+            
+            [cell addSubview:declineButton];
+            [cell addSubview:acceptButton];
             
         }
         
@@ -234,12 +238,12 @@
         if (_myRequests != nil) {
             cell.primaryLabel.text = [NSString stringWithFormat:@"%li", (long)indexPath.row+1];
             //[_myRequests objectAtIndex:indexPath.row];
-        
-        
-        //cell.primaryLabelTwo.text = @"Distance";
-       // cell.distanceLabel.text = [NSString stringWithFormat:@"%@", [_myRequestsDistances objectAtIndex:indexPath.row]];
-        cell.distanceLabel.textAlignment = NSTextAlignmentCenter;
-        } 
+            
+            
+            //cell.primaryLabelTwo.text = @"Distance";
+            // cell.distanceLabel.text = [NSString stringWithFormat:@"%@", [_myRequestsDistances objectAtIndex:indexPath.row]];
+            cell.distanceLabel.textAlignment = NSTextAlignmentCenter;
+        }
     }
     
     return cell;
@@ -249,7 +253,7 @@
     NSLog(@"declined!");
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
     int reqID = [[_requestIDs objectAtIndex:indexPath.row] integerValue];
-
+    
     [NetworkConnectionClass cancelRequest:reqID];
     
     [_requests removeObjectAtIndex:indexPath.row];

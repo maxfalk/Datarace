@@ -56,6 +56,8 @@
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
         
+        
+        
         [NetworkConnectionClass sendRequest];
         requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
         requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
@@ -89,22 +91,23 @@
             }
         }
         
-        [self.tableView reloadData];
         
         free(lookUpResultGot->requestLookUp);
         free(lookUpResultMade->requestLookUp);
         free(lookUpResultGot);
         free(lookUpResultMade);
         
+        
         dispatch_async( dispatch_get_main_queue(), ^{
             // Add code here to update the UI/send notifications based on the
             // results of the background processing
             [self addFooter];
-            
+             [self.tableView reloadData];
             
         });
     });
     
+  
 
 }
 - (void)didReceiveMemoryWarning
@@ -216,15 +219,20 @@
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSIndexPath *indexPath = sender;
-     CustomCell *cell = (CustomCell *)[self.tableView cellForRowAtIndexPath:sender];
+
     if ([segue.identifier isEqualToString:@"challengeSettings"]) {
+        NSIndexPath *indexPath = sender;
+        CustomCell *cell = (CustomCell *)[self.tableView cellForRowAtIndexPath:sender];
         NSString *string = cell.competitorLabel.text;
         ChallengeViewController *class = (ChallengeViewController *) [segue destinationViewController];
         class.challengerUsername = string;
     } else if ([segue.identifier isEqualToString:@"startChallenge"]) {
+        NSIndexPath *indexPath = sender;
+        CustomCell *cell = (CustomCell *)[self.tableView cellForRowAtIndexPath:sender];
         RaceViewController *class = (RaceViewController *) [segue destinationViewController];
         class.reqID = [[_requestIDs objectAtIndex:indexPath.row] integerValue];
+    } else if ([segue.identifier isEqualToString:@"search"]) {
+        NSLog(@"Search ready to segue");
     }
 }
 
@@ -236,5 +244,9 @@
     [self.tableView setTableFooterView:v];
 }
 
+- (IBAction)searchButtonPressed:(id)sender {
+    [self performSegueWithIdentifier:@"search" sender:self];
+    NSLog(@"Searchbutton pressed");
+}
 
 @end

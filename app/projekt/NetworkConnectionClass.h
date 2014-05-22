@@ -47,9 +47,14 @@ typedef struct __attribute__ ((packed)) {
 typedef struct __attribute__ ((packed)) {
     uint32_t length;
     char type[2];
-    uint32_t userId;
+    struct user *userArray;
+} userArray;
+
+typedef struct __attribute__ ((packed)) {
+    int userID;
     char username[50];
-} users;
+} user;
+
 
 @interface NetworkConnectionClass : NSObject <NSStreamDelegate>
 
@@ -105,7 +110,7 @@ typedef struct __attribute__ ((packed)) {
 
 +(int)makeRequest:(uint32_t) userId distance:(uint32_t)distance;
 
-+(void *)searchForUsers;
++(void *)searchForUsers:(NSString *)username;
 
 +(int)startRace:(int)reqID;
 

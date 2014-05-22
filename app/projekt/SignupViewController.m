@@ -169,31 +169,34 @@
 
 - (IBAction)signupButtonPressed:(id)sender {
     [NetworkConnectionClass initNetworkCommunication];
+    int result = [NetworkConnectionClass signupUser:_usernameField.text password:_passwordField.text email:_emailField.text];
+    
+    if (result == 0) {
+        [self performSegueWithIdentifier:@"signupSuccess" sender:self];
+    } else if (result == 1) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Signup unsuccessful"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    } else if (result == 2) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Wrong password"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        
+    }
     
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        int result = [NetworkConnectionClass signupUser:_usernameField.text password:_passwordField.text email:_emailField.text];
+        
         
         
         dispatch_async( dispatch_get_main_queue(), ^{
-            if (result == 0) {
-                [self performSegueWithIdentifier:@"signupSuccess" sender:self];
-            } else if (result == 1) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Signup unsuccessful"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            } else if (result == 2) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Wrong password"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-                
-            }
+           
         });
         
     });

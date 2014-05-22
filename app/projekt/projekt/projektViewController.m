@@ -163,68 +163,25 @@
     [_loginButton setTitle:@"" forState:UIControlStateNormal];
     [_passwordField resignFirstResponder];
     
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"remember"] integerValue] == 1) {
+    
+    [[NSUserDefaults standardUserDefaults] setObject:_usernameField.text forKey:@"rememberUSERNAME"];
+    [[NSUserDefaults standardUserDefaults] setObject:_passwordField.text forKey:@"rememberPASSWORD"];
+[[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
     double delayInSeconds = 0.3;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
     });
-    
 }
 
 
-/*
- 
- - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode {
- NSLog(@"got an event");
- switch (eventCode) {
- case NSStreamEventHasSpaceAvailable:
- NSLog(@"None!");
- break;
- case NSStreamEventOpenCompleted:
- NSLog(@"Stream opened");
- break;
- case NSStreamEventHasBytesAvailable:
- NSLog(@"NSStreamEventHasBytesAvail");
- 
- 
- [inputStream close];
- [inputStream removeFromRunLoop:[NSRunLoop currentRunLoop]forMode:NSDefaultRunLoopMode];
- break;
- case NSStreamEventErrorOccurred:
- NSLog(@"CONNECTION ERROR: Connection to the host  failed!");
- break;
- case NSStreamEventEndEncountered:
- NSLog(@"Stream Closed");
- break;
- default:
- break;
- }
- }
- */
-
-/*
- -(void)initNetworkCommunication {
- CFReadStreamRef readStream;
- CFWriteStreamRef writeStream;
- CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"83.253.5.227", 8888, &readStream, &writeStream);
- inputStream = (__bridge NSInputStream *)readStream;
- outputStream = (__bridge NSOutputStream *)writeStream;
- [inputStream setDelegate:self];
- [outputStream setDelegate:self];
- [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
- [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
- 
- [inputStream open];
- [outputStream open];
- 
- }
- */
 
 - (void)addBounceAnimationToView:(UIView *)view {
     CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-    
     bounceAnimation.values = @[@(1), @(0.9), @(1.1), @(1)];
-    
     bounceAnimation.duration = 0.6;
     NSMutableArray *timingFunctions = [[NSMutableArray alloc] initWithCapacity:bounceAnimation.values.count];
     
@@ -234,7 +191,6 @@
     
     [bounceAnimation setTimingFunctions:timingFunctions.copy];
     bounceAnimation.removedOnCompletion = NO;
-    
     [view.layer addAnimation:bounceAnimation forKey:@"bounce"];
 }
 
@@ -252,13 +208,7 @@
         SignupViewController *connection = (SignupViewController *) [segue destinationViewController];
         connection.networkConnection = self.networkConnection;
     }
-    
-    //  NSLog(@"Finished work in background");
-    //dispatch_async( dispatch_get_main_queue(), ^{
-    //  NSLog(@"Back on main thread");
-    //});
-    
-    //});
+
 }
 
 - (IBAction)rememberButtonPressed:(id)sender {
@@ -280,6 +230,7 @@
                                                   cancelButtonTitle:@"OK"
                                                   otherButtonTitles:nil];
             [alert show];
+            
         } else {
         [[NSUserDefaults standardUserDefaults] setObject:_usernameField.text forKey:@"rememberUSERNAME"];
         [[NSUserDefaults standardUserDefaults] setObject:_passwordField.text forKey:@"rememberPASSWORD"];
