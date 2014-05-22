@@ -15,7 +15,6 @@
 start(Log) ->
     application:start(crypto),
     application:start(emysql),
-<<<<<<< Updated upstream
     case Log of 
 	true ->
 	    application:start(log);
@@ -23,12 +22,6 @@ start(Log) ->
 	    ok
     end,
     application:start(datarace).
-=======
-    application:start(log),
-    application:start(datarace),
-    application:start(search).
->>>>>>> Stashed changes
-
 
 %%@doc Stop the server
 -spec stop()-> ok.
@@ -48,8 +41,7 @@ stop() ->
 	    application:stop(log)
     end,
     application:stop(emysql),
-    application:stop(crypto),
-    application:stop(search).
+    application:stop(crypto).
 
 
     

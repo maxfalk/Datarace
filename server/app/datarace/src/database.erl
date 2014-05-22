@@ -95,7 +95,8 @@ db_query(Name, Binary_string, Args)->
 async_db_query(Binary_string)->
     spawn_link(fun()->
 		       db_query_error_handler(emysql:execute(database_pool, Binary_string))
-	       end).
+	       end),
+    ok.
 
 %%@doc Query the database with a string, were "?" will be replaced
 %% with the arguments in the list args in the same order as they are
@@ -112,7 +113,8 @@ async_db_query(Name, Binary_string, Args)->
     spawn_link(fun()->
 		       emysql:prepare(Name, Binary_string),
 		       db_query_error_handler(emysql:execute(database_pool, Name, Args))
-	       end).
+	       end),
+    ok.
 
 
 

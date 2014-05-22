@@ -55,19 +55,19 @@ search(Pid, Username)->
 
 %%@doc Search the database for the 5 best matches to the given 
 %%username. 
--spec database_lookup(Pid, UserName) -> [user_search_table(), ...] when
+-spec database_lookup(UserName) -> [user_search_table(), ...] when
       UserName :: string().
 
-database_lookup(Pid, UserName)->
+database_lookup(UserName)->
     Sql_result = database:db_query(username_search,
-				   <<"SELECT t1.id, t1.user_name
+				   <<"SELECT t1.id, t1.userName
                                       FROM
                                        tUsers t1
                                       WHERE
-                                       t1.user_name like ?
+                                       t1.userName like ?
                                       LIMIT 5;">>,
 				   [UserName ++ "%"]),
-    database:result_to_record(Sql_result, user_search_table)
+    database:result_to_record(Sql_result, user_search_table).
 
    
 
@@ -78,13 +78,13 @@ database_lookup(Pid, UserName)->
       State :: [user_search_table(), ...],
       UserName :: string().
 
-search_internal_state(Pid, State, UserName)->
+search_internal_state(State, UserName)->
     lists:reverse( 
       [Match || Match <- State, 
 		string:equal(
 		  string:left(
 		    binary_to_list(
-		      Match#user_search_table.user_name), 
+		      Match#user_search_table.userName), 
 		    length(UserName)), 
 		  UserName)]).
 

@@ -28,15 +28,14 @@ login(UserName, Password)->
 
 %%@doc Looks at the users data from the database and matches it with the
 %%input data to se if it is vaild.
--spec login_helper(Password, UserData) ->  {ok, integer()} | {error, no_user} | {error, wrong_password} when
+-spec login_helper(Password, Login_rec) ->  {ok, integer()} | {error, no_user} | {error, wrong_password} when
       Password :: string(),
-      UserData :: [login_table(), ...]. 
+      Login_rec :: login_table(). 
 
-login_helper(_Password, [])->
+login_helper(_Password, {error,no_item})->
     %%logg attempeted loggin?
     {error, no_user};
-login_helper(Password, UserData)->
-    Login_rec = database:get_row(UserData,1),
+login_helper(Password, Login_rec)->
     PasswordSalt = Password ++ binary_to_list(Login_rec#login_table.salt),
     case check_password(PasswordSalt, Login_rec#login_table.password) of
 	ok ->
@@ -59,9 +58,9 @@ login_helper(Password, UserData)->
 
 get_user_data(UserName)->
     Sql_result = database:db_query(login_user_info, 
-				   <<"SELECT id, salt, password from tUsers WHERE userName = ?">>,
+			     <<"SELECT id, salt, password from tUsers WHERE userName = ?">>,
 				   [UserName]),
-    database:result_to_record(Sql_result, login_table).
+    database:get_row(database:result_to_record(Sql_result, login_table), 1).
 
     
 
@@ -84,7 +83,7 @@ check_password(PasswordInput,PasswordStored) ->
       UserId :: integer().
 
 set_loggedin(UserId)->
-    database:async_db_query(login_log_login,
+    database:db_query(login_log_login,
 		   <<"INSERT INTO tLoginLog (userId,login) VALUES(?, now())">>,
 		   [UserId]),
     ok.
@@ -132,8 +131,13 @@ logout(UserId) when is_integer(UserId) ->
     ok;
 logout(UserName) when is_list(UserName) ->
     UserData = database:get_row(get_user_data(UserName),1),
-    set_loggedout(UserData#login_table.id),
-    ok.
+    case UserData of
+	{error, no_item}->
+	    ok;
+	_ ->
+	    set_loggedout(UserData#login_table.id),
+	    ok
+    end.
 
 %@doc Mark user as logged out in the database.
 -spec set_loggedout(UserId) -> ok when

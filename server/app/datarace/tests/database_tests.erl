@@ -31,13 +31,14 @@ database_test_()->
 
 
 start()->
+    account:delete("AutoTesting"),
     account:register("AutoTesting", "sdfgaudya8s72","Testing@mail.com"),
-    {ok, Id} = account:login("AutoTesting", "sdfgaudya8s72"),
-    account:logout(Id),
+    timer:sleep(100),
+    {ok, Id} = account:login("AutoTesting","sdfgaudya8s72"),
     Id.
 
 stop(Id)->
-    account:delete(Id).
+    account:delete("AutoTesting").
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,7 +50,7 @@ stop(Id)->
 db_query(_)->
     {R, _, _, _, _} = database:db_query("SELECT * FROM tUsers"),
     {R1, _, _, _, _} = database:db_query(test_sel,
-			 "SELECT * FROM tUsers WHERE user_name = ?",["AutoTesting"]),
+			 "SELECT * FROM tUsers WHERE userName = ?",["AutoTesting"]),
     [?_assertEqual(result_packet, R),
     ?_assertEqual(result_packet, R1)].
 
@@ -58,27 +59,30 @@ get_row(_)->
     [?_assertEqual(database:get_row([1,2,3],1),1),
     ?_assertEqual(database:get_row([],1),{error, no_item})].
     
-result_to_record_login(Userid)->
+result_to_record_login(Id)->
     Sql_result = database:db_query(login_user_info, 
-			    <<"SELECT id, salt, password from tUsers WHERE user_name = ?">>,
+			    <<"SELECT id, salt, password from tUsers WHERE userName = ?">>,
 				   ["AutoTesting"]),
     Record = hd(database:result_to_record(Sql_result, login_table)),
-    [?_assertEqual(Record#login_table.id, Userid)].
+    [?_assertEqual(Record#login_table.id, Id)].
 
 
-result_to_record_logout(Userid)->
+result_to_record_logout(Id)->
     Sql_result = database:db_query(loginlog_logout_select,
-				<<"SELECT userId as id FROM tLoginLog WHERE userId = ?">>,
-				   [Userid]),
+				<<"SELECT t2.id as id 
+                                   FROM tLoginLog t1 inner join 
+                                        tUsers t2 on t1.userId = t2.id  
+                                   WHERE t2.userName = ?">>,
+				   ["AutoTesting"]),
     Record = database:get_row(database:result_to_record(Sql_result, loginlog_table),1),
-    [?_assertEqual(Record#loginlog_table.id, Userid)].
+    [?_assertEqual(Record#loginlog_table.id, Id)].
 
-result_to_record_register(Userid)->
+result_to_record_register(Id)->
     Sql_result = database:db_query(register_select,
-				   <<"SELECT id FROM tUsers WHERE user_name = ?">>,
+				   <<"SELECT id FROM tUsers WHERE userName = ?">>,
 				   ["AutoTesting"]),
     Record = hd(database:result_to_record(Sql_result, register_table)),
-    [?_assertEqual(Record#register_table.id, Userid)].
+    [?_assertEqual(Record#register_table.id, Id)].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -14,7 +14,7 @@
 -record(match_table,{id,userId, winner, requestId}).
 -record(user_stats_table,{userName, averageSpeed, averageDistance, wins, matches, requests}).
 -record(gps_table,{longitude, latitude, time}).
--record(user_search_table,{id, user_name}).
+-record(user_search_table,{id, userName}).
 
 
 

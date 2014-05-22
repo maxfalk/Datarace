@@ -95,14 +95,16 @@ request_lookup(UserId)->
 
 request_lookup_made(UserId) ->
     Sql_result = database:db_query(request_select_made, 
-				   <<"SELECT t1.id, t2.id as challenged_userId, 
-                                             t3.userName as user_name, 
-                                             t2.time, t1.state, t2.distance
-                                      FROM
+				   <<"SELECT t3.id, t4.id as challenged_userId, 
+                                             t4.userName as user_name, 
+                                             t2.time, t3.state, t2.distance
+                                       FROM                               
                                        tRequestedUsers t1 inner join
                                        tRequest t2 on t1.requestId = t2.id and 
                                                 t2.userId = t1.userId inner join
-                                       tUsers t3 on t2.userId != t3.id
+                                       tRequestedUsers t3 on t2.id = t3.requestId and 
+                                                t2.userId != t3.userId inner join
+                                       tUsers t4 on t3.userId = t4.id
                                       WHERE
                                        t1.userId = ?">>,
 				   [UserId]),
@@ -115,7 +117,7 @@ request_lookup_made(UserId) ->
 
 request_lookup_challenged(UserId)->
     Sql_result = database:db_query(request_select_challanged, 
-				   <<"SELECT t1.id, t2.id as challenged_userId, 
+				   <<"SELECT t1.id, t3.id as challenged_userId, 
                                              t3.userName as user_name, 
                                              t2.time, t1.state, t2.distance
                                      FROM
@@ -183,7 +185,8 @@ match(UserRequestId)->
 	{error, no_item} ->
 	    create_match(Data#request_info_table.requestId),
 	    NewMatch = get_match(Data#request_info_table.requestId, UserRequestId),
-	    add_user_to_match(UserRequestId, NewMatch#match_table.id);
+	    add_user_to_match(UserRequestId, NewMatch#match_table.id),
+	    get_match(Data#request_info_table.requestId, UserRequestId);
 
 	_ ->
 	    add_user_to_match(UserRequestId, Matchdata#match_table.id),
@@ -208,13 +211,12 @@ create_match(RequestId)->
 
 get_match(RequestId, UserRequestId)->
     Sql_result = database:db_query(match_select,
-		   <<"select t1.id, t3.userId, t1.winnerUserId as winner, t1.requestId
+		   <<"select t1.id, t3.userId, t1.winnerUserId as winner, t3.id as requestId
                       from
                        tMatch t1 inner join
-                       tRequestedUsers t3 on t1.requestId = t3.requestId
-                      where
+                       tRequestedUsers t3 on t1.requestId = t3.requestId                                           where
                        t1.requestId = ? and
-                       t3.id != ?">>,
+                       t3.id = ?">>,
 		     [RequestId, UserRequestId]),
     database:get_row(database:result_to_record(Sql_result, match_table),1).
    
@@ -225,7 +227,7 @@ get_match(RequestId, UserRequestId)->
 add_user_to_match(UserRequestId, MatchId)->
     database:db_query(insert_match_part,
 		      "INSERT INTO tMatchParticipant(requestedUserId, time, matchId, state)
-                       VALUES(?, now(), ?, 0)",
+                       VALUES( ?, now(), ?, 0)",
 		     [UserRequestId, MatchId]).
     
 
@@ -236,7 +238,7 @@ add_user_to_match(UserRequestId, MatchId)->
 
 set_winner(MatchId, WinnerId)->
     database:async_db_query(match_select,
-		      <<"UPDATE tMatch SET winner = ? WHERE id = ?">>,
+		      <<"UPDATE tMatch SET winnerUserId = ? WHERE id = ?">>,
 		      [WinnerId, MatchId]),
     ok.
     
@@ -258,10 +260,16 @@ set_winner(MatchId, WinnerId)->
 
 gps_save(User_id, Match_id, Longidtude, Latitude)->
     database:async_db_query(gps_insert,
-		   <<"INSERT INTO tGps (userId, matchId, longitude, latitude, time)
-                   VALUES(?, ?, ?, ?, now())">>,
-		   [User_id, Match_id, Longidtude, Latitude]),
-    ok.
+		   <<"INSERT INTO tGps (matchParticipant, longitude, latitude, time)
+                      SELECT t2.id, ?, ?, now()
+                      FROM
+                        tMatch t1 inner join
+                        tMatchParticipant t2 on t1.id = t2.matchId inner join
+                        tRequestedUsers t3 on t2.requestedUserId = t3.id
+                      WHERE
+                        t3.userId = ? and
+                        t1.id = ?">>,
+		   [Longidtude, Latitude, User_id, Match_id]).
     
 %%@doc Get gps coordinates for a user in a specific match.
 -spec gps_get(User_id, Match_id) -> [gps_table(), ...] when
@@ -270,12 +278,15 @@ gps_save(User_id, Match_id, Longidtude, Latitude)->
 
 gps_get(User_id,Match_id)->
     Sql_result = database:db_query(gps_get,
-				   <<"SELECT longitude, latitude, time
+				   <<"SELECT t1.longitude, t1.latitude, t1.time
                                       FROM
-                                        tGps
+                                        tGps t1 inner join
+                                        tMatchParticipant t2 on t1.matchParticipant = t2.id
+                                        inner join
+                                        tRequestedUsers t3 on t2.requestedUserId = t3.id
                                       WHERE
-                                        userId = ? and
-                                        matchId = ?">>,
+                                       t3.userId = ? and
+                                       t2.matchId = ?">>,
 				   [User_id, Match_id]),
     database:result_to_record(Sql_result, gps_table).
     

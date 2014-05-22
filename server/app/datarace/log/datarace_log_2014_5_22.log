@@ -1,0 +1,111 @@
+[2014-5-22 11:24:28] User connected with IP 130.238.251.4 on port 49636
+[2014-5-22 11:24:29] Login failed because wrong username
+[2014-5-22 11:24:29] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:24:38] User connected with IP 130.238.251.4 on port 49637
+[2014-5-22 11:24:39] Login failed because wrong password
+[2014-5-22 11:24:39] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:24:42] User connected with IP 130.238.251.4 on port 49638
+[2014-5-22 11:24:45] Logged in UID 44
+[2014-5-22 11:24:45] Spawned new client_serv for UID 44
+[2014-5-22 11:24:45] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:24:45] Socket transfer for UID 44
+[2014-5-22 11:24:46] Get home stats for UID 44
+[2014-5-22 11:24:49] Match request lookup made by UID 44
+[2014-5-22 11:25:7] UID 44 disconnected unexpectedly
+[2014-5-22 11:25:7] Logged out UID 44
+[2014-5-22 11:25:8] Terminating client server with reason normal in state main
+[2014-5-22 11:25:10] User connected with IP 130.238.251.4 on port 49645
+[2014-5-22 11:25:11] Logged in UID 44
+[2014-5-22 11:25:11] Spawned new client_serv for UID 44
+[2014-5-22 11:25:11] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:25:11] Socket transfer for UID 44
+[2014-5-22 11:25:11] Get home stats for UID 44
+[2014-5-22 11:25:12] Match request lookup made by UID 44
+[2014-5-22 11:25:44] UID 44 disconnected unexpectedly
+[2014-5-22 11:25:44] Logged out UID 44
+[2014-5-22 11:25:45] Terminating client server with reason normal in state main
+[2014-5-22 11:25:47] User connected with IP 130.238.251.4 on port 49650
+[2014-5-22 11:25:48] Logged in UID 44
+[2014-5-22 11:25:48] Spawned new client_serv for UID 44
+[2014-5-22 11:25:48] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:25:48] Socket transfer for UID 44
+[2014-5-22 11:25:48] Get home stats for UID 44
+[2014-5-22 11:25:51] Match request lookup made by UID 44
+[2014-5-22 11:27:2] UID 44 disconnected unexpectedly
+[2014-5-22 11:27:2] Logged out UID 44
+[2014-5-22 11:27:2] Terminating client server with reason normal in state main
+[2014-5-22 11:27:26] User connected with IP 130.238.251.4 on port 49668
+[2014-5-22 11:27:28] Logged in UID 44
+[2014-5-22 11:27:28] Spawned new client_serv for UID 44
+[2014-5-22 11:27:28] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:27:28] Socket transfer for UID 44
+[2014-5-22 11:27:28] Get home stats for UID 44
+[2014-5-22 11:27:33] Match request lookup made by UID 44
+[2014-5-22 11:28:12] UID 44 disconnected unexpectedly
+[2014-5-22 11:28:12] Logged out UID 44
+[2014-5-22 11:28:12] Terminating client server with reason normal in state main
+[2014-5-22 11:28:16] User connected with IP 130.238.251.4 on port 49674
+[2014-5-22 11:28:16] Logged in UID 44
+[2014-5-22 11:28:16] Spawned new client_serv for UID 44
+[2014-5-22 11:28:17] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:28:17] Socket transfer for UID 44
+[2014-5-22 11:28:17] Get home stats for UID 44
+[2014-5-22 11:28:18] Match request lookup made by UID 44
+[2014-5-22 11:28:56] UID 44 disconnected unexpectedly
+[2014-5-22 11:28:56] Logged out UID 44
+[2014-5-22 11:28:56] Terminating client server with reason normal in state main
+[2014-5-22 11:28:59] User connected with IP 130.238.251.4 on port 49679
+[2014-5-22 11:28:59] Logged in UID 44
+[2014-5-22 11:28:59] Spawned new client_serv for UID 44
+[2014-5-22 11:28:59] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:29:0] Socket transfer for UID 44
+[2014-5-22 11:29:0] Get home stats for UID 44
+[2014-5-22 11:29:2] Match request lookup made by UID 44
+[2014-5-22 11:30:33] UID 44 disconnected unexpectedly
+[2014-5-22 11:30:33] Logged out UID 44
+[2014-5-22 11:30:33] Terminating client server with reason normal in state main
+[2014-5-22 11:30:38] User connected with IP 130.238.251.4 on port 49696
+[2014-5-22 11:30:39] Logged in UID 44
+[2014-5-22 11:30:39] Spawned new client_serv for UID 44
+[2014-5-22 11:30:39] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:30:39] Socket transfer for UID 44
+[2014-5-22 11:30:39] Get home stats for UID 44
+[2014-5-22 11:30:40] Match request lookup made by UID 44
+[2014-5-22 11:30:50] UID 44 disconnected unexpectedly
+[2014-5-22 11:30:50] Logged out UID 44
+[2014-5-22 11:30:51] Terminating client server with reason normal in state main
+[2014-5-22 11:31:30] User connected with IP 130.238.251.4 on port 49702
+[2014-5-22 11:31:31] Logged in UID 44
+[2014-5-22 11:31:31] Spawned new client_serv for UID 44
+[2014-5-22 11:31:31] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:31:31] Socket transfer for UID 44
+[2014-5-22 11:31:31] Get home stats for UID 44
+[2014-5-22 11:31:33] Match request lookup made by UID 44
+[2014-5-22 11:33:15] UID 44 disconnected unexpectedly
+[2014-5-22 11:33:15] Logged out UID 44
+[2014-5-22 11:33:15] Terminating client server with reason normal in state main
+[2014-5-22 11:33:19] User connected with IP 130.238.251.4 on port 49707
+[2014-5-22 11:33:20] Logged in UID 44
+[2014-5-22 11:33:20] Spawned new client_serv for UID 44
+[2014-5-22 11:33:20] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:33:20] Socket transfer for UID 44
+[2014-5-22 11:33:20] Get home stats for UID 44
+[2014-5-22 11:33:22] Match request lookup made by UID 44
+[2014-5-22 11:34:44] UID 44 disconnected unexpectedly
+[2014-5-22 11:34:44] Logged out UID 44
+[2014-5-22 11:34:44] Terminating client server with reason normal in state main
+[2014-5-22 11:34:48] User connected with IP 130.238.251.4 on port 49711
+[2014-5-22 11:34:49] Logged in UID 44
+[2014-5-22 11:34:49] Spawned new client_serv for UID 44
+[2014-5-22 11:34:49] Terminating listener: Reason: normal, State: login
+[2014-5-22 11:34:49] Socket transfer for UID 44
+[2014-5-22 11:34:49] Get home stats for UID 44
+[2014-5-22 11:34:50] Match request lookup made by UID 44
+[2014-5-22 11:35:38] Logged out UID 44
+[2014-5-22 11:35:38] Terminating client server with reason shutdown in state main
+[2014-5-22 12:8:27] Database error while executing a query: Incorrect arguments to EXECUTE
+[2014-5-22 12:8:28] Database error while executing a query: Incorrect arguments to EXECUTE
+[2014-5-22 12:8:28] Database error while executing a query: Incorrect arguments to EXECUTE
+[2014-5-22 12:8:29] Database error while executing a query: Incorrect arguments to EXECUTE
+[2014-5-22 12:8:35] Database error while executing a query: Incorrect arguments to EXECUTE
+[2014-5-22 12:14:33] Database error while executing a query: Incorrect arguments to EXECUTE
