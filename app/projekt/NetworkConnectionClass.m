@@ -75,6 +75,12 @@ typedef struct __attribute__ ((packed)) {
     double latitude;
 } GPSCoord;
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    char username[50];
+} userSearch;
+
 @implementation NetworkConnectionClass
 //@synthesize inputStream, outputStream;
 
@@ -257,7 +263,6 @@ static NSOutputStream *outputStream;
         
         result->requestLookUpMeta.length = ntohl(result->requestLookUpMeta.length)-2;
         double numberOfPackages = (double)(result->requestLookUpMeta.length)/(double)(sizeof(requestLookUp));
-         NSLog(@"numberOfPackages: %f", numberOfPackages);
         requestLookUp *reqLookUp = malloc(numberOfPackages*sizeof(requestLookUp));
         if(reqLookUp == nil){
             NSLog(@"Out of space");
@@ -314,23 +319,39 @@ static NSOutputStream *outputStream;
 
 }
 
-+(void *)searchForUsers {
++(void *)searchForUsers:(NSString *)username {
     
-    NSMutableArray *usersData = [[NSMutableArray alloc] init];
+    //NSMutableArray *usersData = [[NSMutableArray alloc] init];
     
-    uint32_t myInt32Value = 2;
+    uint32_t myInt32Value = 52;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
-    requestStats packet;
+    userSearch packet;
+    
+    const char *user = [username UTF8String];
+    memset(packet.username, 0, 50);
+    strcpy(packet.username, user);
+    
     packet.length = myInt32AsABigEndianNumber;
     packet.type[0] = 5;
     packet.type[1] = 0;
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
-    users *result = malloc(sizeof(users));
+    userArray *result = malloc(sizeof(userArray));
     
-    [self readStream:(uint8_t *)&result maxLength:sizeof(result)];
+    [self readStream:(uint8_t *)&result maxLength:6];
+    
+     if ((result->type[0] == 5) && (result->type[1] == 1)) {
+    
+     int numberOfPackages = ((result->length-6)/sizeof(user));
+    
+       for(int i = 0; i < numberOfPackages; i++) {
+        //user *userInfo = malloc(numberOfPackages*sizeof(user));
+       // [self readStream:(uint8_t *)(userInfo+i) maxLength:sizeof(userArray)];
+           
+       }
+     }
     
     return result;
 }

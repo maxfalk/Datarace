@@ -19,13 +19,4 @@
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (strong) NetworkConnectionClass *networkConnection;
 
-//-(void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation;
-
-//-(void)signupUser:(NSString *)username password:(NSString *)password email:(NSString *)email;
-
-
-//@property (nonatomic) NetworkConnectionClass *networkConnection;
-//+(NetworkConnectionClass *)networkConnection;
-//-(void)initNetworkCommunication;
-
 @end

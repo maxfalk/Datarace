@@ -34,7 +34,7 @@ typedef struct __attribute__ ((packed)) {
 - (IBAction)sendChallengeRequest:(id)sender {
     //requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
 
-    [NetworkConnectionClass makeRequest:40 distance:_distanceSlider.value];
+    [NetworkConnectionClass makeRequest:1 distance:_distanceSlider.value];
 }
 
 - (void)viewDidLoad {
