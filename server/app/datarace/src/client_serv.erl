@@ -159,12 +159,7 @@ match({?MATCH_GPS, Packet}, LoopData) ->
 		     Longitude, Latitude),
     {next_state, match, LoopData};
 match(?MATCH_COMP_POS, LoopData) ->
-    MUID = (LoopData#loop_data.match_table)#match_table.main_userId,
-    SUID = (LoopData#loop_data.match_table)#match_table.sec_userId,
-    ChallengerId = case LoopData#loop_data.user_id of 
-		       MUID -> SUID;
-		       SUID -> MUID
-		   end,
+    ChallengerId = (LoopData#loop_data.match_table)#match_table.userId, 
     Distance = gps:calc_pointdistance(ChallengerId, 
 				      (LoopData#loop_data.match_table)#match_table.id, 
 				      LoopData#loop_data.start_time),

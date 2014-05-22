@@ -95,7 +95,7 @@ request_lookup(UserId)->
 
 request_lookup_made(UserId) ->
     Sql_result = database:db_query(request_select_made, 
-				   <<"SELECT t3.id, t4.id as challenged_userId, 
+				   <<"SELECT t1.id, t4.id as challenged_userId, 
                                              t4.userName as user_name, 
                                              t2.time, t3.state, t2.distance
                                        FROM                               

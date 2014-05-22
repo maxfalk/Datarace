@@ -1,2 +1,2 @@
-{port, 9988}.
+{port, 8888}.
 {listeners, 10}.

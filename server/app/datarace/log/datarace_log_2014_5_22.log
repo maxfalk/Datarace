@@ -109,3 +109,287 @@
 [2014-5-22 12:8:29] Database error while executing a query: Incorrect arguments to EXECUTE
 [2014-5-22 12:8:35] Database error while executing a query: Incorrect arguments to EXECUTE
 [2014-5-22 12:14:33] Database error while executing a query: Incorrect arguments to EXECUTE
+[2014-5-22 14:5:9] User connected with IP 130.243.181.169 on port 54861
+[2014-5-22 14:5:9] Login failed because wrong username
+[2014-5-22 14:5:10] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:5:21] User connected with IP 130.243.181.169 on port 54862
+[2014-5-22 14:5:22] Logged in UID 1
+[2014-5-22 14:5:22] Spawned new client_serv for UID 1
+[2014-5-22 14:5:22] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:5:22] Socket transfer for UID 1
+[2014-5-22 14:5:22] Get home stats for UID 1
+[2014-5-22 14:5:26] Match request lookup made by UID 1
+[2014-5-22 14:5:30] Match request made by UID 1 for 40 distance 5
+[2014-5-22 14:5:30] Database error while executing a query: Cannot add or update a child row: a foreign key constraint fails (`databasev2`.`tRequestedUsers`, CONSTRAINT `tRequestedUsersUserIdForeignKey` FOREIGN KEY (`userId`) REFERENCES `tUsers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+[2014-5-22 14:5:30] Logged out UID 1
+[2014-5-22 14:5:30] Terminating client server in state main
+[2014-5-22 14:7:3] User connected with IP 130.243.181.169 on port 54870
+[2014-5-22 14:7:4] Logged in UID 1
+[2014-5-22 14:7:4] Spawned new client_serv for UID 1
+[2014-5-22 14:7:4] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:7:4] Socket transfer for UID 1
+[2014-5-22 14:7:5] Get home stats for UID 1
+[2014-5-22 14:8:55] UID 1 disconnected unexpectedly
+[2014-5-22 14:8:55] Logged out UID 1
+[2014-5-22 14:8:56] Terminating client server in state main
+[2014-5-22 14:10:35] User connected with IP 130.238.251.4 on port 51387
+[2014-5-22 14:10:35] Login failed because wrong password
+[2014-5-22 14:10:35] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:10:41] User connected with IP 130.238.251.4 on port 51388
+[2014-5-22 14:10:42] Logged in UID 44
+[2014-5-22 14:10:42] Spawned new client_serv for UID 44
+[2014-5-22 14:10:43] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:10:43] Socket transfer for UID 44
+[2014-5-22 14:10:43] Get home stats for UID 44
+[2014-5-22 14:10:46] Match request lookup made by UID 44
+[2014-5-22 14:11:4] Logged out UID 44
+[2014-5-22 14:11:4] Terminating client server in state main
+[2014-5-22 14:11:6] User connected with IP 130.238.251.4 on port 51392
+[2014-5-22 14:11:7] Logged in UID 44
+[2014-5-22 14:11:7] Spawned new client_serv for UID 44
+[2014-5-22 14:11:7] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:11:7] Socket transfer for UID 44
+[2014-5-22 14:11:7] Get home stats for UID 44
+[2014-5-22 14:11:11] Match request lookup made by UID 44
+[2014-5-22 14:11:17] UID 44 disconnected unexpectedly
+[2014-5-22 14:11:17] Logged out UID 44
+[2014-5-22 14:11:17] Terminating client server in state main
+[2014-5-22 14:11:21] User connected with IP 130.238.251.4 on port 51395
+[2014-5-22 14:11:22] Logged in UID 44
+[2014-5-22 14:11:22] Spawned new client_serv for UID 44
+[2014-5-22 14:11:22] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:11:22] Socket transfer for UID 44
+[2014-5-22 14:11:22] Get home stats for UID 44
+[2014-5-22 14:11:23] Match request lookup made by UID 44
+[2014-5-22 14:11:27] Match request made by UID 44 for 40 distance 7
+[2014-5-22 14:11:27] Database error while executing a query: Cannot add or update a child row: a foreign key constraint fails (`databasev2`.`tRequestedUsers`, CONSTRAINT `tRequestedUsersUserIdForeignKey` FOREIGN KEY (`userId`) REFERENCES `tUsers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+[2014-5-22 14:11:27] Logged out UID 44
+[2014-5-22 14:11:27] Terminating client server in state main
+[2014-5-22 14:12:3] User connected with IP 130.238.251.4 on port 51398
+[2014-5-22 14:12:4] Logged in UID 44
+[2014-5-22 14:12:4] Spawned new client_serv for UID 44
+[2014-5-22 14:12:4] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:12:4] Socket transfer for UID 44
+[2014-5-22 14:12:5] Get home stats for UID 44
+[2014-5-22 14:12:6] Match request lookup made by UID 44
+[2014-5-22 14:12:8] Match request made by UID 44 for 1 distance 5
+[2014-5-22 14:12:8] Logged out UID 44
+[2014-5-22 14:12:8] Terminating client server in state main
+[2014-5-22 14:33:3] User connected with IP 127.0.0.1 on port 59363
+[2014-5-22 14:33:35] Logged in UID 1
+[2014-5-22 14:33:35] Spawned new client_serv for UID 1
+[2014-5-22 14:33:36] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:33:36] Socket transfer for UID 1
+[2014-5-22 14:34:15] UID 1 disconnected unexpectedly
+[2014-5-22 14:34:16] Logged out UID 1
+[2014-5-22 14:34:16] Terminating client server in state main
+[2014-5-22 14:37:17] User connected with IP 130.238.251.4 on port 52003
+[2014-5-22 14:37:18] Logged in UID 44
+[2014-5-22 14:37:18] Spawned new client_serv for UID 44
+[2014-5-22 14:37:18] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:37:18] Socket transfer for UID 44
+[2014-5-22 14:37:18] Get home stats for UID 44
+[2014-5-22 14:37:20] Match request lookup made by UID 44
+[2014-5-22 14:37:22] Match request made by UID 44 for 1 distance 5
+[2014-5-22 14:37:22] Logged out UID 44
+[2014-5-22 14:37:22] Terminating client server in state main
+[2014-5-22 14:41:52] User connected with IP 130.238.251.4 on port 52053
+[2014-5-22 14:41:54] Logged in UID 44
+[2014-5-22 14:41:54] Spawned new client_serv for UID 44
+[2014-5-22 14:41:54] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:41:55] Socket transfer for UID 44
+[2014-5-22 14:41:55] Get home stats for UID 44
+[2014-5-22 14:41:56] Match request lookup made by UID 44
+[2014-5-22 14:41:58] Match request made by UID 44 for 1 distance 5
+[2014-5-22 14:42:1] Match request lookup made by UID 44
+[2014-5-22 14:42:3] Match request lookup made by UID 44
+[2014-5-22 14:42:10] Match request lookup made by UID 44
+[2014-5-22 14:42:12] UID 44 disconnected unexpectedly
+[2014-5-22 14:42:12] Logged out UID 44
+[2014-5-22 14:42:12] Terminating client server in state main
+[2014-5-22 14:42:15] User connected with IP 130.238.251.4 on port 52056
+[2014-5-22 14:42:15] Logged in UID 44
+[2014-5-22 14:42:15] Spawned new client_serv for UID 44
+[2014-5-22 14:42:15] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:42:15] Socket transfer for UID 44
+[2014-5-22 14:42:15] Get home stats for UID 44
+[2014-5-22 14:42:17] Match request lookup made by UID 44
+[2014-5-22 14:42:55] Match request lookup made by UID 44
+[2014-5-22 14:43:37] UID 44 disconnected unexpectedly
+[2014-5-22 14:43:37] Logged out UID 44
+[2014-5-22 14:43:37] Terminating client server in state main
+[2014-5-22 14:43:40] User connected with IP 130.238.251.4 on port 52060
+[2014-5-22 14:43:41] Logged in UID 44
+[2014-5-22 14:43:41] Spawned new client_serv for UID 44
+[2014-5-22 14:43:41] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:43:41] Socket transfer for UID 44
+[2014-5-22 14:43:41] Get home stats for UID 44
+[2014-5-22 14:43:46] Match request lookup made by UID 44
+[2014-5-22 14:43:54] Match started with RID 217
+[2014-5-22 14:44:10] Received GPS data from UID 44: Long -1.22030433320000000208e+02, Lat 3.73318196499999999105e+01
+[2014-5-22 14:44:11] Received GPS data from UID 44: Long -1.22030433320000000208e+02, Lat 3.73318196499999999105e+01
+[2014-5-22 14:44:12] Received GPS data from UID 44: Long -1.22030529363683726274e+02, Lat 3.73318108702258015796e+01
+[2014-5-22 14:44:13] Received GPS data from UID 44: Long -1.22030586762100128340e+02, Lat 3.73318043132487673574e+01
+[2014-5-22 14:44:14] Received GPS data from UID 44: Long -1.22030627801089892159e+02, Lat 3.73317924991481433494e+01
+[2014-5-22 14:44:15] Received GPS data from UID 44: Long -1.22030669301745803068e+02, Lat 3.73317741184887239569e+01
+[2014-5-22 14:44:16] Received GPS data from UID 44: Long -1.22030698226884084079e+02, Lat 3.73317371218465794414e+01
+[2014-5-22 14:44:17] Received GPS data from UID 44: Long -1.22030698826449778949e+02, Lat 3.73316957593273031080e+01
+[2014-5-22 14:44:18] Received GPS data from UID 44: Long -1.22030693369796338743e+02, Lat 3.73316586562996874932e+01
+[2014-5-22 14:44:19] Received GPS data from UID 44: Long -1.22030705039069786721e+02, Lat 3.73315837235598309007e+01
+[2014-5-22 14:44:20] Received GPS data from UID 44: Long -1.22030699435931310859e+02, Lat 3.73315464244971337848e+01
+[2014-5-22 14:44:21] Received GPS data from UID 44: Long -1.22030699435931310859e+02, Lat 3.73315464244971337848e+01
+[2014-5-22 14:44:22] Received GPS data from UID 44: Long -1.22030718697254712879e+02, Lat 3.73315035592887198845e+01
+[2014-5-22 14:44:23] Received GPS data from UID 44: Long -1.22030711317175274644e+02, Lat 3.73314664320098827943e+01
+[2014-5-22 14:44:24] Received GPS data from UID 44: Long -1.22030721336386804410e+02, Lat 3.73314268674864422337e+01
+[2014-5-22 14:44:25] Received GPS data from UID 44: Long -1.22030724241987186929e+02, Lat 3.73313521314310818866e+01
+[2014-5-22 14:44:26] Received GPS data from UID 44: Long -1.22030724241987186929e+02, Lat 3.73313521314310818866e+01
+[2014-5-22 14:44:27] Received GPS data from UID 44: Long -1.22030739204165925571e+02, Lat 3.73313145486775539439e+01
+[2014-5-22 14:44:28] Received GPS data from UID 44: Long -1.22030738881880395752e+02, Lat 3.73312804057553080384e+01
+[2014-5-22 14:44:29] Received GPS data from UID 44: Long -1.22030734895619616509e+02, Lat 3.73312112760593279859e+01
+[2014-5-22 14:44:30] Received GPS data from UID 44: Long -1.22030734895619616509e+02, Lat 3.73312112760593279859e+01
+[2014-5-22 14:44:31] Received GPS data from UID 44: Long -1.22030725271305769297e+02, Lat 3.73311773005641924783e+01
+[2014-5-22 14:44:32] Received GPS data from UID 44: Long -1.22030714901397757899e+02, Lat 3.73311439597825582837e+01
+[2014-5-22 14:44:33] Received GPS data from UID 44: Long -1.22030697774385473053e+02, Lat 3.73311142736620595883e+01
+[2014-5-22 14:44:34] Received GPS data from UID 44: Long -1.22030686536179032942e+02, Lat 3.73310795549149574413e+01
+[2014-5-22 14:44:35] Received GPS data from UID 44: Long -1.22030666239222270519e+02, Lat 3.73310467973810276021e+01
+[2014-5-22 14:44:36] Received GPS data from UID 44: Long -1.22030659725853880104e+02, Lat 3.73310105884062934933e+01
+[2014-5-22 14:44:37] Received GPS data from UID 44: Long -1.22030625256601751971e+02, Lat 3.73309445791429865835e+01
+[2014-5-22 14:44:38] Received GPS data from UID 44: Long -1.22030625256601751971e+02, Lat 3.73309445791429865835e+01
+[2014-5-22 14:44:39] Received GPS data from UID 44: Long -1.22030625396757301360e+02, Lat 3.73309104363302353136e+01
+[2014-5-22 14:44:40] Received GPS data from UID 44: Long -1.22030597688144922586e+02, Lat 3.73308788093383085993e+01
+[2014-5-22 14:44:41] Received GPS data from UID 44: Long -1.22030589523609194202e+02, Lat 3.73308391484604555899e+01
+[2014-5-22 14:44:42] Received GPS data from UID 44: Long -1.22030570874798698355e+02, Lat 3.73308054301939549191e+01
+[2014-5-22 14:44:43] Received GPS data from UID 44: Long -1.22030560276909483264e+02, Lat 3.73307737026337704833e+01
+[2014-5-22 14:44:44] Received GPS data from UID 44: Long -1.22030552416136401916e+02, Lat 3.73307408903572337522e+01
+[2014-5-22 14:44:45] Received GPS data from UID 44: Long -1.22030525803871924495e+02, Lat 3.73307198832713353909e+01
+[2014-5-22 14:44:45] Match stopped for MID 30
+[2014-5-22 14:44:46] Match request lookup made by UID 44
+[2014-5-22 14:44:52] Match request lookup made by UID 44
+[2014-5-22 14:45:36] UID 44 disconnected unexpectedly
+[2014-5-22 14:45:36] Logged out UID 44
+[2014-5-22 14:45:36] Terminating client server in state main
+[2014-5-22 14:45:39] User connected with IP 130.238.251.4 on port 52065
+[2014-5-22 14:45:39] Logged in UID 44
+[2014-5-22 14:45:39] Spawned new client_serv for UID 44
+[2014-5-22 14:45:39] Terminating listener: Reason: normal, State: login
+[2014-5-22 14:45:39] Socket transfer for UID 44
+[2014-5-22 14:45:40] Get home stats for UID 44
+[2014-5-22 14:54:48] UID 44 disconnected unexpectedly
+[2014-5-22 14:54:48] Logged out UID 44
+[2014-5-22 14:54:48] Terminating client server in state main
+[2014-5-22 15:6:8] User connected with IP 130.243.181.169 on port 55257
+[2014-5-22 15:6:8] Logged in UID 2
+[2014-5-22 15:6:8] Spawned new client_serv for UID 2
+[2014-5-22 15:6:8] Terminating listener: Reason: normal, State: login
+[2014-5-22 15:6:8] Socket transfer for UID 2
+[2014-5-22 15:6:8] Get home stats for UID 2
+[2014-5-22 15:6:14] Match request lookup made by UID 2
+[2014-5-22 15:6:22] Match request made by UID 2 for 1 distance 5
+[2014-5-22 15:6:51] Match request lookup made by UID 2
+[2014-5-22 15:6:55] Match request lookup made by UID 2
+[2014-5-22 15:6:58] Match started with RID 225
+[2014-5-22 15:7:15] Received GPS data from UID 2: Long -1.22030386419999999248e+02, Lat 3.73318208100000035188e+01
+[2014-5-22 15:7:16] Received GPS data from UID 2: Long -1.22030543807090509745e+02, Lat 3.73318095867358579198e+01
+[2014-5-22 15:7:17] Received GPS data from UID 2: Long -1.22030543807090509745e+02, Lat 3.73318095867358579198e+01
+[2014-5-22 15:7:18] Received GPS data from UID 2: Long -1.22030629899434487129e+02, Lat 3.73317921487959267779e+01
+[2014-5-22 15:7:18] Received GPS data from UID 2: Long -1.22030669231571238242e+02, Lat 3.73317741383541701339e+01
+[2014-5-22 15:7:19] Received GPS data from UID 2: Long -1.22030669231571238242e+02, Lat 3.73317741383541701339e+01
+[2014-5-22 15:7:21] Received GPS data from UID 2: Long -1.22030698232410642845e+02, Lat 3.73317371179284549498e+01
+[2014-5-22 15:7:22] Received GPS data from UID 2: Long -1.22030693370411967180e+02, Lat 3.73316586332165982753e+01
+[2014-5-22 15:7:22] Received GPS data from UID 2: Long -1.22030693370411967180e+02, Lat 3.73316586332165982753e+01
+[2014-5-22 15:7:23] Received GPS data from UID 2: Long -1.22030705039612158203e+02, Lat 3.73315837505306618027e+01
+[2014-5-22 15:7:25] Received GPS data from UID 2: Long -1.22030699435584025991e+02, Lat 3.73315464226100672818e+01
+[2014-5-22 15:7:26] Received GPS data from UID 2: Long -1.22030699435584025991e+02, Lat 3.73315464226100672818e+01
+[2014-5-22 15:7:27] Received GPS data from UID 2: Long -1.22030711316686975465e+02, Lat 3.73314664281101542542e+01
+[2014-5-22 15:7:28] Received GPS data from UID 2: Long -1.22030721336928749565e+02, Lat 3.73314268361024659271e+01
+[2014-5-22 15:7:29] Received GPS data from UID 2: Long -1.22030731773985294808e+02, Lat 3.73313887326491098406e+01
+[2014-5-22 15:7:30] Received GPS data from UID 2: Long -1.22030724237975590540e+02, Lat 3.73313520925510005100e+01
+[2014-5-22 15:7:31] Received GPS data from UID 2: Long -1.22030739199158020369e+02, Lat 3.73313145885305246452e+01
+[2014-5-22 15:7:31] Received GPS data from UID 2: Long -1.22030738882184223826e+02, Lat 3.73312803961036934197e+01
+[2014-5-22 15:7:33] Received GPS data from UID 2: Long -1.22030738882184223826e+02, Lat 3.73312803961036934197e+01
+[2014-5-22 15:7:33] Received GPS data from UID 2: Long -1.22030736561310163779e+02, Lat 3.73312460072938492317e+01
+[2014-5-22 15:7:34] Received GPS data from UID 2: Long -1.22030725283647399237e+02, Lat 3.73311773743264652126e+01
+[2014-5-22 15:7:35] Received GPS data from UID 2: Long -1.22030714906769262029e+02, Lat 3.73311439824179132074e+01
+[2014-5-22 15:7:37] Received GPS data from UID 2: Long -1.22030697789874295722e+02, Lat 3.73311143118181476552e+01
+[2014-5-22 15:7:37] Received GPS data from UID 2: Long -1.22030686524259209591e+02, Lat 3.73310795215449786610e+01
+[2014-5-22 15:7:39] Received GPS data from UID 2: Long -1.22030666247633291732e+02, Lat 3.73310468149144298877e+01
+[2014-5-22 15:7:39] Received GPS data from UID 2: Long -1.22030666247633291732e+02, Lat 3.73310468149144298877e+01
+[2014-5-22 15:7:41] Received GPS data from UID 2: Long -1.22030659695567265999e+02, Lat 3.73310104858583500231e+01
+[2014-5-22 15:7:41] Received GPS data from UID 2: Long -1.22030640920196503885e+02, Lat 3.73309777292492697143e+01
+[2014-5-22 15:7:43] Received GPS data from UID 2: Long -1.22030625398877020871e+02, Lat 3.73309104512559173372e+01
+[2014-5-22 15:7:43] Received GPS data from UID 2: Long -1.22030625398877020871e+02, Lat 3.73309104512559173372e+01
+[2014-5-22 15:7:45] Received GPS data from UID 2: Long -1.22030589531398049985e+02, Lat 3.73308391776461405698e+01
+[2014-5-22 15:7:45] Received GPS data from UID 2: Long -1.22030589531398049985e+02, Lat 3.73308391776461405698e+01
+[2014-5-22 15:7:47] Received GPS data from UID 2: Long -1.22030570888814665409e+02, Lat 3.73308054696408575523e+01
+[2014-5-22 15:9:24] UID 2 disconnected unexpectedly
+[2014-5-22 15:9:24] Logged out UID 2
+[2014-5-22 15:9:25] Terminating client server in state match
+[2014-5-22 15:17:54] User connected with IP 130.243.181.169 on port 55303
+[2014-5-22 15:17:56] Logged in UID 2
+[2014-5-22 15:17:56] Spawned new client_serv for UID 2
+[2014-5-22 15:17:56] Terminating listener: Reason: normal, State: login
+[2014-5-22 15:17:56] Socket transfer for UID 2
+[2014-5-22 15:17:56] Get home stats for UID 2
+[2014-5-22 15:18:0] Match request lookup made by UID 2
+[2014-5-22 15:18:6] Match request made by UID 2 for 1 distance 5
+[2014-5-22 15:18:11] Match request lookup made by UID 2
+[2014-5-22 15:18:17] Match request lookup made by UID 2
+[2014-5-22 15:18:29] Match request lookup made by UID 2
+[2014-5-22 15:18:31] Match started with RID 226
+[2014-5-22 15:18:34] Received GPS data from UID 2: Long -1.22022070009999993090e+02, Lat 3.73247579399999978023e+01
+[2014-5-22 15:18:34] Received GPS data from UID 2: Long -1.22022196275179993563e+02, Lat 3.73247581064268061368e+01
+[2014-5-22 15:18:35] Received GPS data from UID 2: Long -1.22022196275179993563e+02, Lat 3.73247581064268061368e+01
+[2014-5-22 15:18:36] Received GPS data from UID 2: Long -1.22022270826413176792e+02, Lat 3.73247570144843692219e+01
+[2014-5-22 15:18:37] Received GPS data from UID 2: Long -1.22022307149526938019e+02, Lat 3.73247556777663618277e+01
+[2014-5-22 15:18:38] Received GPS data from UID 2: Long -1.22022347990499341108e+02, Lat 3.73247550811989583508e+01
+[2014-5-22 15:18:40] Received GPS data from UID 2: Long -1.22022401953729030311e+02, Lat 3.73247600847112224187e+01
+[2014-5-22 15:18:40] Received GPS data from UID 2: Long -1.22022401953729030311e+02, Lat 3.73247600847112224187e+01
+[2014-5-22 15:18:41] Received GPS data from UID 2: Long -1.22022420660807455306e+02, Lat 3.73247540267010720072e+01
+[2014-5-22 15:18:43] Received GPS data from UID 2: Long -1.22022459670562952283e+02, Lat 3.73247563583066792603e+01
+[2014-5-22 15:18:43] Received GPS data from UID 2: Long -1.22022506266819945608e+02, Lat 3.73247594155428075169e+01
+[2014-5-22 15:18:44] Received GPS data from UID 2: Long -1.22022585286651874981e+02, Lat 3.73247577934404333178e+01
+[2014-5-22 15:18:45] Received GPS data from UID 2: Long -1.22022585286651874981e+02, Lat 3.73247577934404333178e+01
+[2014-5-22 15:18:46] Received GPS data from UID 2: Long -1.22022623823060186510e+02, Lat 3.73247524329303246304e+01
+[2014-5-22 15:18:47] Received GPS data from UID 2: Long -1.22022664574117769121e+02, Lat 3.73247512926826914281e+01
+[2014-5-22 15:18:48] Received GPS data from UID 2: Long -1.22022928139823051197e+02, Lat 3.73246402650380773025e+01
+[2014-5-22 15:18:49] Received GPS data from UID 2: Long -1.22022928139823051197e+02, Lat 3.73246402650380773025e+01
+[2014-5-22 15:18:50] Received GPS data from UID 2: Long -1.22023020074566574067e+02, Lat 3.73246577410112294615e+01
+[2014-5-22 15:18:51] Received GPS data from UID 2: Long -1.22023020074566574067e+02, Lat 3.73246577410112294615e+01
+[2014-5-22 15:18:52] Received GPS data from UID 2: Long -1.22023061402524220398e+02, Lat 3.73246587863348437963e+01
+[2014-5-22 15:18:53] Received GPS data from UID 2: Long -1.22023125255131148492e+02, Lat 3.73246579006870220496e+01
+[2014-5-22 15:18:54] Received GPS data from UID 2: Long -1.22023125255131148492e+02, Lat 3.73246579006870220496e+01
+[2014-5-22 15:18:55] Received GPS data from UID 2: Long -1.22023147101790570446e+02, Lat 3.73246576196411581350e+01
+[2014-5-22 15:18:56] Received GPS data from UID 2: Long -1.22023145937909106351e+02, Lat 3.73246458145232438142e+01
+[2014-5-22 15:18:57] Received GPS data from UID 2: Long -1.22023140170000004900e+02, Lat 3.73246466399999974328e+01
+[2014-5-22 15:18:58] Received GPS data from UID 2: Long -1.22023140170000004900e+02, Lat 3.73246466399999974328e+01
+[2014-5-22 15:18:59] Received GPS data from UID 2: Long -1.22023146680149423560e+02, Lat 3.73246335421428199197e+01
+[2014-5-22 15:19:0] Received GPS data from UID 2: Long -1.22023155345043804232e+02, Lat 3.73246260105716700650e+01
+[2014-5-22 15:19:1] Received GPS data from UID 2: Long -1.22023187769301827643e+02, Lat 3.73246206166074969701e+01
+[2014-5-22 15:19:2] Received GPS data from UID 2: Long -1.22023239660031791232e+02, Lat 3.73246151050795518245e+01
+[2014-5-22 15:19:3] Received GPS data from UID 2: Long -1.22023274157944598528e+02, Lat 3.73246288209869732100e+01
+[2014-5-22 15:19:4] Received GPS data from UID 2: Long -1.22023318705653039729e+02, Lat 3.73246301839212648588e+01
+[2014-5-22 15:19:5] Received GPS data from UID 2: Long -1.22023406726255942090e+02, Lat 3.73246432934859626585e+01
+[2014-5-22 15:19:9] Received GPS data from UID 2: Long -1.22023406726255942090e+02, Lat 3.73246432934859626585e+01
+[2014-5-22 15:19:9] Received GPS data from UID 2: Long -1.22023437402904392002e+02, Lat 3.73246303992878836198e+01
+[2014-5-22 15:19:9] Received GPS data from UID 2: Long -1.22023522780166530310e+02, Lat 3.73246274494341889749e+01
+[2014-5-22 15:19:9] Received GPS data from UID 2: Long -1.22023522780166530310e+02, Lat 3.73246274494341889749e+01
+[2014-5-22 15:19:10] Received GPS data from UID 2: Long -1.22023606440025034203e+02, Lat 3.73246293934104187429e+01
+[2014-5-22 15:19:11] Received GPS data from UID 2: Long -1.22023606440025034203e+02, Lat 3.73246293934104187429e+01
+[2014-5-22 15:19:12] Received GPS data from UID 2: Long -1.22023650043823693068e+02, Lat 3.73246316013050147831e+01
+[2014-5-22 15:19:13] Received GPS data from UID 2: Long -1.22023693846778044758e+02, Lat 3.73246391962946688636e+01
+[2014-5-22 15:19:14] Received GPS data from UID 2: Long -1.22023736332194872034e+02, Lat 3.73246312438627612096e+01
+[2014-5-22 15:19:15] Received GPS data from UID 2: Long -1.22023776502673854338e+02, Lat 3.73246343256339798700e+01
+[2014-5-22 15:19:16] Received GPS data from UID 2: Long -1.22023860241380532443e+02, Lat 3.73246245825863312007e+01
+[2014-5-22 15:19:17] Received GPS data from UID 2: Long -1.22023860241380532443e+02, Lat 3.73246245825863312007e+01
+[2014-5-22 15:19:18] Received GPS data from UID 2: Long -1.22023896354644350026e+02, Lat 3.73246259858667670528e+01
+[2014-5-22 15:19:19] Received GPS data from UID 2: Long -1.22023962398473557300e+02, Lat 3.73246291983771882883e+01
+[2014-5-22 15:19:20] Received GPS data from UID 2: Long -1.22023994889015682475e+02, Lat 3.73246291953094839755e+01
+[2014-5-22 15:19:21] Received GPS data from UID 2: Long -1.22024031784040019488e+02, Lat 3.73246333490693871227e+01
+[2014-5-22 15:19:22] Received GPS data from UID 2: Long -1.22024077328612875704e+02, Lat 3.73246389302661469856e+01
+[2014-5-22 15:19:23] Received GPS data from UID 2: Long -1.22024113101044818563e+02, Lat 3.73246254673690884829e+01
+[2014-5-22 15:19:24] Received GPS data from UID 2: Long -1.22024157381325622396e+02, Lat 3.73246318205255604994e+01
+[2014-5-22 15:19:25] Received GPS data from UID 2: Long -1.22024204195773421588e+02, Lat 3.73246282720631370466e+01
+[2014-5-22 15:19:26] Received GPS data from UID 2: Long -1.22024250255106167629e+02, Lat 3.73246322218260431214e+01
+[2014-5-22 15:19:27] Received GPS data from UID 2: Long -1.22024301176609455410e+02, Lat 3.73246111033301133375e+01
+[2014-5-22 15:19:59] Logged out UID 2
+[2014-5-22 15:19:59] Terminating client server in state match
