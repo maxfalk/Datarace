@@ -16,7 +16,8 @@ client_serv_test_()->
        fun start/0, 
        fun stop/1, 
        fun (SetupData) ->
-	       [client_serv_init(SetupData)]
+	       [client_serv_init(SetupData),
+		client_serv_request(SetupData)]
        end}}.
 
 
@@ -32,22 +33,24 @@ start() ->
     [ account:delete(Username) || {Username, _, _} <- Users ],
     [ account:register(Username, Password, Email) || {Username, Password, Email} <- Users ],
     LoggedInUsers = [ login_user(Port, User) || User <- Users ],
-    {Port, Listeners, LoggedInUsers}.
+    timer:sleep(100),
+    LoggedInUsersWithIds = append_user_ids(LoggedInUsers),
+    {Listeners, LoggedInUsersWithIds}.
 
 
-stop({_Port, _Listeners, LoggedInUsers}) ->
-    [ account:delete(Username) || {_, Username, _, _} <- LoggedInUsers ].
+stop({_Listeners, LoggedInUsers}) ->
+    [ account:delete(Username) || {_,Username,_,_,_} <- LoggedInUsers ].
 
 
 %%====================================================================
 %% Actual tests
 %%====================================================================
 
-client_serv_init({_Port, _Listeners, LoggedInUsers}) ->
-    [ ?_assert(not is_atom(Socket)) || {Socket,_,_,_} <- LoggedInUsers ].
+client_serv_init({_Listeners, LoggedInUsers}) ->
+    [ ?_assert(not is_atom(Socket)) || {Socket,_,_,_,_} <- LoggedInUsers ].
 
 
-client_serv_({_Port, _Listeners, LoggedInUsers}) ->
+client_serv_request({_Listeners, LoggedInUsers}) ->
     [].
 
 
@@ -73,9 +76,19 @@ login_user(Port, {Username, Password, Email}) ->
 	    {Socket, Username, Password, Email};
 	{tcp_closed, _Msg} ->
 	    receive 
-		{tcp, _, Packet} -> 
+		{tcp, _, _} -> 
 		    {tcp_closed, Username, Password, Email}
 	    end;
-	Result -> 
+	_ -> 
 	    {tcp_error, Username, Password, Email}
     end.
+
+
+append_user_ids(Users) ->
+    Children = supervisor:which_children(client_serv_sup),
+    Ids = lists:sort([ UID || {UID,_,_,_} <- Children ]),
+    append_user_ids(Users, Ids, []).
+
+append_user_ids([], [], Acc) -> Acc;
+append_user_ids([User|Users], [Id|Ids], Acc) ->
+    append_user_ids(Users, Ids, [erlang:append_element(User, Id) | Acc]).

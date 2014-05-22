@@ -1,0 +1,55 @@
+[2014-5-21 13:16:21] User connected with IP 127.0.0.1 on port 38877
+[2014-5-21 13:16:21] Login failed because wrong username
+[2014-5-21 13:16:22] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:22] User connected with IP 127.0.0.1 on port 52355
+[2014-5-21 13:16:22] Login failed because wrong username
+[2014-5-21 13:16:22] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:22] User connected with IP 127.0.0.1 on port 34380
+[2014-5-21 13:16:22] Login failed because wrong username
+[2014-5-21 13:16:22] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:22] User connected with IP 127.0.0.1 on port 60674
+[2014-5-21 13:16:22] Login failed because wrong username
+[2014-5-21 13:16:22] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:22] User connected with IP 127.0.0.1 on port 52758
+[2014-5-21 13:16:23] Login failed because wrong username
+[2014-5-21 13:16:23] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:23] User connected with IP 127.0.0.1 on port 49566
+[2014-5-21 13:16:23] Login failed because wrong username
+[2014-5-21 13:16:23] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:23] User connected with IP 127.0.0.1 on port 32861
+[2014-5-21 13:16:23] Login failed because wrong username
+[2014-5-21 13:16:23] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:24] User connected with IP 127.0.0.1 on port 55069
+[2014-5-21 13:16:24] Login failed because wrong username
+[2014-5-21 13:16:24] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:24] User connected with IP 127.0.0.1 on port 52560
+[2014-5-21 13:16:24] Login failed because wrong username
+[2014-5-21 13:16:24] Terminating listener: Reason: normal, State: login
+[2014-5-21 13:16:25] User connected with IP 127.0.0.1 on port 50024
+[2014-5-21 13:16:25] Login failed because wrong username
+[2014-5-21 13:16:25] Terminating listener: Reason: normal, State: login
+[2014-5-21 16:20:16] User connected with IP 130.238.251.4 on port 62501
+[2014-5-21 16:20:16] Login failed because wrong username
+[2014-5-21 16:20:16] Terminating listener: Reason: normal, State: login
+[2014-5-21 16:20:41] User connected with IP 130.238.251.4 on port 62503
+[2014-5-21 16:20:42] Register user: MaxFalk
+[2014-5-21 16:20:42] User MaxFalk registered
+[2014-5-21 16:20:42] Terminating listener: Reason: normal, State: login
+[2014-5-21 16:20:48] User connected with IP 130.238.251.4 on port 62505
+[2014-5-21 16:20:48] Register user: MaxFalk
+[2014-5-21 16:20:48] User MaxFalk already registered
+[2014-5-21 16:20:48] Terminating listener: Reason: normal, State: login
+[2014-5-21 16:21:30] User connected with IP 130.238.251.4 on port 62508
+[2014-5-21 16:21:30] Register user: Mackelito
+[2014-5-21 16:21:30] User Mackelito registered
+[2014-5-21 16:21:30] Terminating listener: Reason: normal, State: login
+[2014-5-21 16:21:41] User connected with IP 130.238.251.4 on port 62509
+[2014-5-21 16:21:41] Login failed because wrong password
+[2014-5-21 16:21:41] Terminating listener: Reason: normal, State: login
+[2014-5-21 16:21:47] User connected with IP 130.238.251.4 on port 62510
+[2014-5-21 16:21:47] Logged in UID 44
+[2014-5-21 16:21:47] Spawned new client_serv for UID 44
+[2014-5-21 16:21:47] Terminating listener: Reason: normal, State: login
+[2014-5-21 16:21:48] Socket transfer for UID 44
+[2014-5-21 16:21:48] Get home stats for UID 44
+[2014-5-21 16:21:48] Logged out UID 44

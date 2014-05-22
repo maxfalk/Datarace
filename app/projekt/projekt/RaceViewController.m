@@ -29,7 +29,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *differenceLabel;
 @property int check;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *quitButton;
-
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (nonatomic) NSDate *now;
+@property (weak, nonatomic) NSTimer *stopWatch;
+@property int currentTimeInSeconds;
+@property (weak, nonatomic) IBOutlet UILabel *averageSpeedLabel;
 
 
 @end
@@ -115,14 +119,56 @@
                             forState:UIControlStateNormal];
     _totalCompetitorDistance = 2500;
     _competitorSlider.value = _totalCompetitorDistance;
+
+    _averageSpeedLabel.text = @"Calculating...";
+    
+    
+    
+    //[self updateStopWatch];
     
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    _stopWatch = [NSTimer scheduledTimerWithTimeInterval:(0.01) target:self selector:@selector(timerTicked:) userInfo:nil repeats:YES];
+
+}
+
+- (NSTimer *)createTimer {
+    return [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerTicked:) userInfo:nil repeats:YES];
+}
+
+
+
+- (void)timerTicked:(NSTimer *)timer {
+    
+    _currentTimeInSeconds++;
+    _timeLabel.text = [self formattedTime:_currentTimeInSeconds];
+    
+    if ((_currentTimeInSeconds % 500) == 0) {
+        float avrg = ((_totalDistance*1000)/(_currentTimeInSeconds*3.6));
+    _averageSpeedLabel.text = [NSString stringWithFormat: @"%.0f km/h",avrg];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (NSString *)formattedTime:(int)totalMilliSeconds {
+    
+    int milliSeconds = (totalMilliSeconds % 100);
+    int seconds = (totalMilliSeconds / 100) % 60;
+    int minutes = (totalMilliSeconds / 6000) % 60;
+    int hours = (totalMilliSeconds / 720000) % 60;
+    
+    if (hours == 0) {
+        return [NSString stringWithFormat:@"%02d:%02d:%02d", minutes, seconds, milliSeconds];
+    } else {
+        return [NSString stringWithFormat:@"%02d:%02d:%02d:%02d",hours, minutes, seconds, milliSeconds];
+    }
+}
+
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
     
@@ -251,7 +297,13 @@
     self.mapView.showsUserLocation = NO;
     [self.locationManager stopUpdatingLocation];
     [self.navigationController popViewControllerAnimated:YES];
+    [_stopWatch invalidate];
     [NetworkConnectionClass quitRace];
+}
+
+-(void)updateStopWatch {
+    
+    _timeLabel.text = [NSString stringWithFormat:@"%@", _stopWatch];
 }
 
 

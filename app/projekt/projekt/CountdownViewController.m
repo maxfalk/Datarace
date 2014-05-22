@@ -37,7 +37,9 @@
 }
 
 -(void)countDown:(NSTimer *)timer {
+   
     if (_time == 1) {
+        _countdownLabel.font = [UIFont boldSystemFontOfSize:91];
         _countdownLabel.text = @"GO!";
         _time--;
         
@@ -48,7 +50,12 @@
         
     } else {
         _countdownLabel.text = [NSString stringWithFormat:@"%li", (long)_time-1];
-        --_time;
+        _countdownLabel.font = [UIFont boldSystemFontOfSize:96]; // set font size which you want instead of 35
+        _countdownLabel.transform = CGAffineTransformScale(_countdownLabel.transform, 0.1, 0.1);
+        [UIView animateWithDuration:1.0 animations:^{
+            _countdownLabel.transform = CGAffineTransformScale(_countdownLabel.transform, 10, 10);
+        }];
+                --_time;
     }
 }
 

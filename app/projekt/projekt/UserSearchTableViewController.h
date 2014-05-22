@@ -11,6 +11,6 @@
 #import "NetworkConnectionClass.h"
 
 
-@interface UserSearchTableViewController : UITableViewController
+@interface UserSearchTableViewController : UITableViewController <UITextFieldDelegate>
 
 @end

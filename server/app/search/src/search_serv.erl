@@ -19,12 +19,29 @@
 %% SERVER API
 %%%%%%%%%%%%%%%%%%%%
 
+%%@doc Start a new process for the search_serv gen_server.
+%%
+-spec start_link()-> Result when
+      Result :: {ok,Pid} | ignore | {error,Error},
+      Pid :: pid(),
+      Error :: {already_started,Pid} | term().
+
 start_link()->
     gen_server:start_link(?MODULE, [], []).
     
+%%@doc Stop the gen_server.
+%%
+-spec stop(Pid) -> ok when
+      Pid :: pid().
+
 stop(Pid)->
     gen_server:cast(Pid, stop).
 
+%%@doc Search for a user like the one with the sent username
+%% ordering by the best match first.
+-spec search(Pid, Username)-> [user_search_table(), ...] when
+      Pid :: pid(),
+      Username :: string().
 
 search(Pid, Username)->
     gen_server:call(Pid, Username).
@@ -34,33 +51,44 @@ search(Pid, Username)->
 %%% SERVER PRIVATE FUNCTIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%@doc Search the database for the 10 best matches to the given 
+
+
+%%@doc Search the database for the 5 best matches to the given 
 %%username. 
 -spec database_lookup(UserName) -> [user_search_table(), ...] when
       UserName :: string().
 
 database_lookup(UserName)->
     Sql_result = database:db_query(username_search,
-				   <<"SELECT t1.id, t1.user_name
-                                     FROM
-                                      tUsers t1
-                                     WHERE
-                                      t1.user_name like ?
-                                     LIMIT 10;">>,
+				   <<"SELECT t1.id, t1.userName
+                                      FROM
+                                       tUsers t1
+                                      WHERE
+                                       t1.userName like ?
+                                      LIMIT 5;">>,
 				   [UserName ++ "%"]),
     database:result_to_record(Sql_result, user_search_table).
 
-%%@doc Searches the internally stored users for a match to the username given.
--spec search_internal_state(State, UserName)-> [user_search_table(), ...] when
+   
+
+%%@doc Searches the internally stored users for a match to the username given,
+%% spawns a new preccess to do the search sends back a tuple,
+%% {internal, lists of records}.
+-spec search_internal_state(State, UserName)-> pid() when
       State :: [user_search_table(), ...],
       UserName :: string().
 
 search_internal_state(State, UserName)->
-    [Match || Match <- State, 
-	      string:equal(
-		string:left(
-		  binary_to_list(Match#user_search_table.user_name), length(UserName)), 
-		UserName)].
+    lists:reverse( 
+      [Match || Match <- State, 
+		string:equal(
+		  string:left(
+		    binary_to_list(
+		      Match#user_search_table.userName), 
+		    length(UserName)), 
+		  UserName)]).
+
+   
 
 %%@doc Remove all elements in List1 which is not also members of List2.
 -spec remove_duplicates(List1, List2)-> list() when
@@ -78,7 +106,7 @@ remove_duplicates(List1, List2)->
       Packet :: any(),
       Pid :: pid().
 
-send(From, Packet) when length(Packet) > 0->
+send(From, Packet) when length(Packet) > 0 ->
     gen_server:reply(From, Packet);
 send(_From, Packet) ->
     Packet.
@@ -108,8 +136,10 @@ terminate(_Reason, _State)->
 
 
 
-%%@doc Handle search calls
-%%
+%%@doc Handle search calls, search first the internal state for matches to the saerch then 
+%% search the database for more matches. Remove duplicates and send them inte to stages.
+%% Sends first the internal matches if there is any, then send 
+%% the ones found in the database.
 -spec handle_call(UserName, From, State)-> {noreply, NewState} when
       UserName :: string(),
       From :: {pid(), term()},

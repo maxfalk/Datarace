@@ -8,12 +8,13 @@
 
 -include("../include/database.hrl").
 
-%%@doc result of a database query.
+%%result of a database query.
 -type db_result() :: any().
 -type db_start() :: any().
 
 -export([init/0,stop/0, remote_connect/0]).
--export([db_query/3,db_query/1,get_row/2,result_to_record/2]).
+-export([db_query/3,db_query/1,get_row/2,result_to_record/2, as_list/1]).
+-export([async_db_query/3, async_db_query/1]).
 
 %%@doc Load a config file and return it as a list of values and key tuples.
 -spec load_config(File, Keys)-> list() when
@@ -84,6 +85,41 @@ db_query(Name, Binary_string, Args)->
 	db_query_error_handler(emysql:execute(database_pool, Name, Args)).
 
 
+%%@doc query the database, with a simple string.
+%%Spawns a new process to make the db query. Should be used when you are not
+%%intrested in the result. Errors will be logged and reported BUT WILL NOT
+%%HAVE ANY EFFECT ON THE EXECUTION.
+-spec async_db_query(Binary_string)-> pid() when
+      Binary_string :: string().
+
+async_db_query(Binary_string)->
+    spawn_link(fun()->
+		       db_query_error_handler(emysql:execute(database_pool, Binary_string))
+	       end),
+    ok.
+
+%%@doc Query the database with a string, were "?" will be replaced
+%% with the arguments in the list args in the same order as they are
+%% placed in the string. Spawns a new process to make the db query.
+%% Should be used when you are not interested in the result. 
+%% Errors will be logged and reported BUT WILL NOT
+%% HAVE ANY EFFECT ON THE EXECUTION.
+-spec async_db_query(Name, Binary_string, Args)-> pid() when
+      Name :: atom(),
+      Binary_string :: string(),
+      Args :: list().
+
+async_db_query(Name, Binary_string, Args)->
+    spawn_link(fun()->
+		       emysql:prepare(Name, Binary_string),
+		       db_query_error_handler(emysql:execute(database_pool, Name, Args))
+	       end),
+    ok.
+
+
+
+
+
 %%@doc Gets the nth row of data from a list.
 -spec get_row(List, Num) -> any() | {error,no_item} when
       List :: list(),
@@ -114,11 +150,13 @@ result_to_record(Sql_result, Record)->
 	match_table ->
 	    emysql:as_record(Sql_result, match_table, record_info(fields, match_table));
 	user_stats_table ->
-     emysql:as_record(Sql_result, user_stats_table, record_info(fields, user_stats_table));
+	    emysql:as_record(Sql_result, user_stats_table, record_info(fields, user_stats_table));
 	gps_table ->
 	    emysql:as_record(Sql_result, gps_table, record_info(fields, gps_table));
 	request_info_table ->
-    emysql:as_record(Sql_result, request_info_table, record_info(fields, request_info_table))
+	    emysql:as_record(Sql_result, request_info_table, record_info(fields, request_info_table));
+	user_search_table ->
+	    emysql:as_record(Sql_result, user_search_table, record_info(fields, user_search_table))
     end.
 
 
@@ -136,4 +174,11 @@ db_query_error_handler({error_packet, _Id, _Num, _Binary, Reason} = Error_packet
 db_query_error_handler(Result) ->
     Result.
 
+%%@doc convert a Sql result to a list with lists of each row, and every item are a
+%% tuple of column name and value.
+-spec as_list(SqlResult)-> [[{atom(), any()}, ...], ...] when
+      SqlResult :: any().
+
+as_list(SqlResult)->
+    emysql:as_proplist(SqlResult).
     
