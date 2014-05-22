@@ -25,20 +25,12 @@ account_test_()->
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 start()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
-    account:register("Autotest","Autotest","AT@mail.com").
+    account:delete("Autotest"),
+    account:register("Autotest","Autotest","AT@mail.com"),
+    timer:sleep(10).
 
 stop(_)->
-    {ok, Id} = account:login("Autotest","Autotest"),
-    account:logout(Id),
-    account:delete(Id),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
-
-    
+    account:delete("Autotest").    
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -56,11 +48,9 @@ login(_)->
      ?_assertEqual(account:login("Autotest","ost"), {error,wrong_password})].
 
 logout(_)->
-    ok = account:logout("Autotest"),
-    {ok, Id} = account:login("Autotest","Autotest"),
-    [?_assertEqual(account:logout(Id), ok),
-    ?_assertEqual(account:logout(77), ok)].
-
+    [?_assertEqual(account:logout("Autotest"), ok),
+    ?_assertEqual(account:logout("dfgahiodas"), ok),
+    ?_assertEqual(account:logout(-1), ok)].
 
     
 

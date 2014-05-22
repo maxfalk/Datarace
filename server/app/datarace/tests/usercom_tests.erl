@@ -45,13 +45,13 @@ gps_test_()->
       end}}.
 
 
-stats_test_()->
-    {"Test stats functions",
-     {setup, fun start_stats/0, fun stop_stats/1, 
-      fun (SetupData)->
-	      [stats_home(SetupData),
-	       get_num_pending_requests(SetupData)]
-      end}}.
+%stats_test_()->
+%    {"Test stats functions",
+%     {setup, fun start_stats/0, fun stop_stats/1, 
+%      fun (SetupData)->
+%	      [stats_home(SetupData),
+%	       get_num_pending_requests(SetupData)]
+%      end}}.
     
 
 
@@ -60,57 +60,44 @@ stats_test_()->
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Request setup cleanup
 start_request()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     create_users().
 
 stop_request({U1, U2})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
+    delete_users({U1, U2}).
+
 
 %% Request util setup cleanup
 start_request_util()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     {U1, U2} = create_users(),
+    timer:sleep(100),
     usercom:request(U1, U2, 23),
+    timer:sleep(100),
     {U1, U2}.
 
 stop_request_util({U1, U2})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
+    delete_users({U1, U2}).
+
 
 %% Match setup cleanup
 start_match()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     {U1, U2} = create_users(),
+    timer:sleep(100),
     usercom:request(U1, U2, 23),
+    timer:sleep(100),
     {R, _R1} = usercom:request_lookup(U1),
     Result = hd(R), 
     usercom:match(Result#request_table.id),
     {Result#request_table.id, U1, U2}.
 
 stop_match({_ , U1, U2})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
+    delete_users({U1, U2}).
+
 
 %% Gps setup cleanup
 start_gps()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
+    timer:sleep(100),
     {R, _R1} = usercom:request_lookup(U1),
     Result = hd(R),
     Result2 = usercom:match(Result#request_table.id),
@@ -120,37 +107,29 @@ start_gps()->
 
 
 stop_gps({_, U1, U2})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
+    delete_users({U1, U2}).
     
 
 %%Stats setup, cleanup
 
 start_stats()->
-    application:start(crypto),
-    application:start(emysql),
-    database:init(),
     {U1, U2} = create_users(),
     usercom:request(U1, U2, 23),
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),
     Result2 = usercom:match(Result#request_table.id),
+    timer:sleep(100),
     usercom:set_winner(Result2#match_table.id, U1),
+    timer:sleep(100),
     usercom:gps_save(U1, Result2#match_table.id, 2345678.4567890, 5678.5678),
-    timer:sleep(1000),
+    timer:sleep(100),
     usercom:gps_save(U1, Result2#match_table.id, 2345678.4567890, 5678.5678),
     {U1, U2, <<"test_usercom1">>}.
 
 
 
 stop_stats({U1, U2, _Username})->
-    delete_users({U1, U2}),
-    database:stop(),
-    application:stop(emysql),
-    application:stop(crypto).
-    
+    delete_users({U1, U2}).    
 
 
 
@@ -163,7 +142,7 @@ stop_stats({U1, U2, _Username})->
 request({U1, U2})->
     ?_assertEqual(ok, usercom:request(U1, U2, 23)).
 
-request_lookup({U1, U2})->
+request_lookup({U1, U2}) ->
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),
     [?_assertEqual(Result#request_table.challenged_userId, U2),
@@ -174,40 +153,41 @@ request_accept({U1, _U2})->
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),   
     usercom:request_accept(Result#request_table.id),
+    timer:sleep(100),
     {R2, R3} = usercom:request_lookup(U1),
     Result_after = hd(R2),
-    ?_assertEqual(Result_after#request_table.state, 1).
+    [?_assertEqual(Result_after#request_table.state, 1)].
 
 request_cancel({U1, _U2})->
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),  
     usercom:request_cancel(Result#request_table.id),
+    timer:sleep(100),
     {R2, R3} = usercom:request_lookup(U1),
     Result_after = hd(R2),  
-    ?_assertEqual(Result_after#request_table.state, 2).
+    [?_assertEqual(Result_after#request_table.state, 2)].
     
 %%Test match    
 
-match({RequestId, U1, U2})->
-    Result = usercom:match(RequestId),
-    [?_assertEqual(Result#match_table.main_userId, U1),
-    ?_assertEqual(Result#match_table.sec_userId, U2),
-    ?_assertEqual(Result#match_table.requestId, RequestId)].
+match({UserRequestId, U1, U2})->
+    Result = usercom:match(UserRequestId),
+    [?_assertEqual(Result#match_table.userId, U2),
+    ?_assertEqual(Result#match_table.requestId, UserRequestId)].
 
     
 set_winner({RequestId, U1, U2})->
     Result = usercom:match(RequestId),
     usercom:set_winner(Result#match_table.id, U1),
+    timer:sleep(100),
     Result1 = usercom:match(RequestId),
     ?_assertEqual(Result1#match_table.winner, U1).
     
 %%Test gps
 gps_save({MatchId, U1, _U2})->
     usercom:gps_save(U1, MatchId, 2345678.4567890, 5678.5678),
-   {_, _, _, Result, _} = database:db_query(gps_table_lookup,
-		      "SELECT id FROM tGps WHERE matchId = ?",
-		      [MatchId]),
-    [?_assertEqual(length(hd(Result)), 1)].
+    timer:sleep(100),
+    Result = usercom:gps_get(U1, MatchId),
+    [?_assertEqual(length(Result), 1)].
    
 
 
@@ -242,11 +222,16 @@ get_num_pending_requests({UserId, _U2, UserName})->
 
 create_user(Username, Password)->
     ok = account:register(Username,Password, Username ++ "@mail.com"),
+    timer:sleep(100),
     {ok, U1} = account:login(Username, Password),
+    timer:sleep(100),
     account:logout(U1),
+    timer:sleep(100),
     U1.
 
 create_users()->
+    account:delete("test_usercom1"),
+    account:delete("test_usercom2"),    
     U1 = create_user("test_usercom1","oaisdnni123asd"),
     U2 = create_user("test_usercom2", "os09mlsni123asd"),
     {U1, U2}.

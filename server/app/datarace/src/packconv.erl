@@ -21,16 +21,18 @@
 		{[integer()], [integer()], [integer()]}.
 
 convert_pack(Type, Data)->
-    List_data = binary_to_list(Data),
+    ListData = binary_to_list(Data),
     case Type of
 	?LOGIN ->
-	    login_pack(List_data);
+	    login_pack(ListData);
 	?REGISTER ->
-	    register_pack(List_data);
+	    register_pack(ListData);
 	?MATCH_GPS ->
-	    match_gps_pack(Data)
+	    match_gps_pack(Data);
+	?SEARCH_STRING ->
+	    search_pack(ListData)
     end.
-    
+
 
 %%@doc Convert a login packet.
 -spec login_pack(Packet) -> {Username, Password} when
@@ -59,8 +61,13 @@ register_pack(List) ->
 
 
 match_gps_pack(Data) ->
-    <<Longitude/big-float, Latitude/big-float>> = Data,
+    <<Longitude/little-float, Latitude/little-float>> = Data,
     {Longitude, Latitude}.
+
+
+search_pack(SearchString) ->
+    [X || X <- SearchString, X =/= 0].
+
 
 %%@doc Convert a set of data to a binary packet
 
@@ -69,7 +76,9 @@ pack(Type, Data) ->
 	?REQUEST_LOOKUP ->
 	    request_lookup_pack(Data);
 	?GET_HOME_STATS ->
-	    get_home_stats_pack(Data)
+	    get_home_stats_pack(Data);
+	?SEARCH_RESULTS ->
+	    search_results_pack(Data)
     end.
     
 
@@ -105,6 +114,12 @@ get_home_stats_pack({user_stats_table, UserName, AverageSpeed, AverageDistance,
       Matches:32/little-integer, %% 4 bytes
       Requests:32/little-integer %% 4 bytes
     >>. %% 80 bytes in total
+
+
+search_results_pack(Data) ->
+    Packets = [ <<UserId:32/little-integer, Username/binary, 0:(8*(50-byte_size(Username)))>> 
+		    || {user_search_table, UserId, Username} <- Data ],
+    binary_join(?SEARCH_RESULTS, Packets).
 
 
 %%@doc Join a list of binaries into a single binary.

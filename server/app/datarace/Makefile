@@ -2,7 +2,7 @@
 GROUP_NUMBER := 17
 ####################
 
-
+NODE_NAME := datarace
 PROP_ERL := erl -env ERL_LIBS ../../
 ERLC := erlc
 ERLC_FLAGS := -W -I include
@@ -43,10 +43,10 @@ ebin/%.beam: tests/%.erl
 
 
 start: all
-	(cd ebin && $(PROP_ERL) -eval 'server:start()')
+	(cd ebin && $(PROP_ERL) -eval 'server:start(true)')
 
 test: all
-	(cd ebin && $(PROP_ERL) -noinput -eval 'eunit:test({dir, "."}, [verbose]), init:stop()')
+	(cd ebin && $(PROP_ERL) -noinput -eval 'server:start(false), eunit:test({dir, "."}, [verbose]), init:stop(), server:stop()')
 
 doc: $(BEAM_FILES)
 	erl -noshell -eval "edoc:files($(EDOC_SRC_LIST), [{dir, 'doc/html'}])" -s init stop
