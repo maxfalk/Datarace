@@ -21,7 +21,8 @@ start(Log) ->
 	false ->
 	    ok
     end,
-    application:start(datarace).
+    application:start(datarace),
+    application:start(search).
 
 %%@doc Stop the server
 -spec stop()-> ok.
@@ -33,6 +34,7 @@ stop() ->
 	_ ->
 	    master_sup:stop_children()
     end,
+    application:start(search),
     application:stop(datarace),
     case whereis(log_sup) of
 	undefined -> 

@@ -31,6 +31,11 @@ register(Socket, Username, Password, Email) ->
     gen_tcp:send(Socket, RegisterPacket).
 
 
+request(Socket, ChallengeId, Distance) ->
+    RequestPacket = request_pack(ChallengeId, Distance),
+    gen_tcp:send(Socket, RequestPacket).
+
+
 close(Socket) ->
     gen_tcp:close(Socket).
 
@@ -51,6 +56,9 @@ register_pack(Username, Password, Email) ->
     Em = Email ++ [0 || _ <- lists:seq(1, 50 - length(Email))],
     list_to_binary([1] ++ Un ++ Pw ++ Em).
 
+
+request_pack(ChallengeId, Distance) ->
+   <<?REQUEST/binary, ChallengeId:32/little-integer, Distance:32/little-integer>>.
 
 %%====================================================================
 %% Functions for unpacking

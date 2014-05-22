@@ -88,7 +88,7 @@ listener_login({Port, Listeners, Users}) ->
 		    {workers, Listeners}], 
 		   ListenerChildCount),
      ?_assertEqual([{specs, 10
-}, 
+		    }, 
 		    {active, UserCount}, 
 		    {supervisors, 0}, 
 		    {workers, UserCount}], 
@@ -135,9 +135,14 @@ register_users(Port, [User|Users], Acc, ExpectedResult) ->
 	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]; 
 	Packet -> 
 	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]	
+    after
+	1000 ->
+	    NewAcc = [?_assertEqual(ExpectedResult, timeout) | Acc]
     end,
     receive
 	_ -> ok
+    after
+	1000 -> ok
     end,
     register_users(Port, Users, NewAcc, ExpectedResult).
 
@@ -158,6 +163,9 @@ login_users(Port, [User|Users], Acc, ExpectedResult) ->
 	    end;
 	Packet -> 
 	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]	
+    after
+	1000 ->
+	    NewAcc = [?_assertEqual(ExpectedResult, timeout) | Acc]
     end,
     login_users(Port, Users, NewAcc, ExpectedResult).
 
