@@ -1,6 +1,7 @@
 -module(gps).
 -export([distance/4, speed/2, averagespeed/2, averagedistance/2, statistics_compare/3]).
 -export([calc_pointdistance/3]).
+
 -include_lib("../include/database.hrl").
 
 %%@doc===============================================%
@@ -83,15 +84,20 @@ calc_totaldistancehelp([First,Sec | Tl], Distance) ->
       T1 :: any(),
       T2 :: any().
 
-calc_timediff(T1,T2) when T1 > T2 ->
-    calendar:datetime_to_gregorian_seconds(T1) -
-	calendar:datetime_to_gregorian_seconds(T2);
-calc_timediff(T1,T2) when T1 < T2 ->
-    calendar:datetime_to_gregorian_seconds(T1) -
-	calendar:datetime_to_gregorian_seconds(T2);
-calc_timediff(_T1,_T2) ->
-    0.
-
+calc_timediff({datetime, T1},{datetime, T2}) ->
+    calc_timediff(T1,T2);
+calc_timediff(T1,T2) ->
+    Sec_time1= calendar:datetime_to_gregorian_seconds(T1),
+    Sec_time2 = calendar:datetime_to_gregorian_seconds(T2),
+    if
+	Sec_time1 < Sec_time2 ->
+	    Sec_time2 - Sec_time1;
+	Sec_time1 > Sec_time2 ->
+	    Sec_time1 - Sec_time2;
+	Sec_time1 == Sec_time2 ->
+	    0
+    end.
+    
 %%@doc Calculates the distance at a given time point
 -spec calc_pointdistance(UserId, MatchId, StartTime)-> float() when
       UserId :: integer(),

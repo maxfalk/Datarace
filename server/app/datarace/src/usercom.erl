@@ -17,17 +17,64 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%@doc Make a new request to a user
--spec request(UserId, Ch_userId, Distance) -> ok when
+-spec request(UserId, ChUserId, Distance) -> ok when
       UserId :: integer(),
-      Ch_userId :: integer(),
+      ChUserId :: integer(),
       Distance :: integer().
 
-request(UserId, Ch_userId, Distance)->
+request(UserId, ChUserList, Distance) when is_list(ChUserList) ->
+    make_request(UserId, Distance),
+    {ok, RequestId} = get_user_last_request(UserId),
+    add_user_to_request(UserId,RequestId, 1),
+    [add_user_to_request(UsrId, RequestId, 0) || UsrId <- ChUserList],
+    ok;
+request(UserId, ChUserId, Distance)->
+    request(UserId,[ChUserId], Distance).
+
+
+%%@doc make main reuqest.
+-spec make_request(UserId, Distance)-> ok when
+      UserId :: integer(),
+      Distance :: integer().
+
+make_request(UserId, Distance)->
     database:db_query(request_insert, 
-		   <<"INSERT INTO tRequest (userId, challenged_userId, distance, state, time)
-                   VALUES(?, ?, ?, 0, now())">>,
-		  [UserId, Ch_userId, Distance]),
-    ok.
+		   <<"INSERT INTO tRequest (userId, distance, state, time)
+                   VALUES(?, ?, 0, now())">>,
+		  [UserId, Distance]).
+    
+
+%%@doc get last request made by the user
+-spec get_user_last_request(UserId)-> {ok, integer()} | {error, undef} when
+      UserId :: integer().
+
+get_user_last_request(UserId)->
+     Result = database:db_query(request_user_last, 
+					  <<"SELECT max(t1.id) as id 
+                                             FROM tRequest t1 WHERE t1.userId = ?">>,
+					  [UserId]),
+    case database:get_row(database:as_list(Result),1) of
+	[{<<"id">>, undefined}] ->
+	    {error, undef};
+	[{<<"id">>, Value}] ->
+	   {ok, Value}
+    end.
+
+    
+    
+
+%%@doc add users to requests
+-spec add_user_to_request(UserId, RequestId, State)-> ok when
+      UserId :: integer(),
+      RequestId :: integer(),
+      State :: integer().
+
+add_user_to_request(UserId, RequestId, State)->
+    database:async_db_query(request_part_insert, 
+		      <<"INSERT INTO tRequestedUsers (userId, requestId, state)
+                         VALUES(?, ?, ?)">>,
+		      [UserId, RequestId, State]).
+      
 
 
 
@@ -48,13 +95,16 @@ request_lookup(UserId)->
 
 request_lookup_made(UserId) ->
     Sql_result = database:db_query(request_select_made, 
-				   <<"SELECT t1.id, t1.challenged_userId, t2.user_name, 
-                                       t1.time, t1.state, t1.distance 
-                                      FROM 
-                                       tRequest t1 inner join 
-                                       tUsers t2 on t1.challenged_userId = t2.id 
-                                      WHERE 
-                                       t1.userId = ?;">>,
+				   <<"SELECT t1.id, t2.id as challenged_userId, 
+                                             t3.userName as user_name, 
+                                             t2.time, t1.state, t2.distance
+                                      FROM
+                                       tRequestedUsers t1 inner join
+                                       tRequest t2 on t1.requestId = t2.id and 
+                                                t2.userId = t1.userId inner join
+                                       tUsers t3 on t2.userId != t3.id
+                                      WHERE
+                                       t1.userId = ?">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
 
@@ -66,53 +116,54 @@ request_lookup_made(UserId) ->
 request_lookup_challenged(UserId)->
     Sql_result = database:db_query(request_select_challanged, 
 				   <<"SELECT t1.id, t2.id as challenged_userId, 
-                                             t2.user_name, t1.time, t1.state, t1.distance 
-                                      FROM 
-                                       tRequest t1 inner join 
-                                       tUsers t2 on t1.userId = t2.id 
+                                             t3.userName as user_name, 
+                                             t2.time, t1.state, t2.distance
+                                     FROM
+                                      tRequestedUsers t1 inner join
+                                      tRequest t2 on t1.requestId = t2.id and 
+                                                     t2.userId != t1.userId inner join
+                                      tUsers t3 on t2.userId = t3.id
                                       WHERE 
-                                       t1.challenged_userId = ?;">>,
+                                       t1.userId = ?;">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
     
 
 
 %%@doc Accept a request with a given request id.
--spec request_accept(Request_id)-> ok when
-      Request_id :: integer().
+-spec request_accept(UserRequestId)-> ok when
+      UserRequestId :: integer().
 
-request_accept(Request_id)->
-    database:db_query(request_update_accept,
-		   <<"UPDATE tRequest SET state = 1 WHERE id = ?">>,
-		   [Request_id]),
-    ok.
+request_accept(UserRequestId)->
+    database:async_db_query(request_update_accept,
+		   <<"UPDATE tRequestedUsers SET state = 1 WHERE id = ?">>,
+		   [UserRequestId]).
 
 %%@doc Cancel a request.
--spec request_cancel(Request_id)-> ok when
-      Request_id :: integer().
+-spec request_cancel(UserRequestId)-> ok when
+      UserRequestId :: integer().
 
-request_cancel(Request_id)->
-    database:db_query(request_update_cancel,
-		   <<"UPDATE tRequest SET state = 2 WHERE id = ?">>,
-		   [Request_id]),
-    ok.
+request_cancel(UserRequestId)->
+    database:async_db_query(request_update_cancel,
+		   <<"UPDATE tRequestedUsers SET state = 2 WHERE id = ?">>,
+		   [UserRequestId]).
     
 
 
 %%@doc Get information about a request.
--spec get_request_info(Request_id)-> request_table() when
-      Request_id :: integer().
+-spec get_request_info(UserRequestId)-> request_table() when
+      UserRequestId :: integer().
 
 
-get_request_info(Request_id)->
-    Sql_result = database:db_query(request_get_users,
-				   <<"SELECT userId, challenged_userId
+get_request_info(UserRequestId)->
+    SqlResult = database:db_query(request_get_users,
+				   <<"SELECT requestId
                                       FROM
-                                       tRequest t1
+                                       tRequestedUsers t1
                                       WHERE
                                         t1.id = ?">>,
-				   [Request_id]),
-    database:get_row(database:result_to_record(Sql_result,request_info_table),1).
+				   [UserRequestId]),
+    database:get_row(database:result_to_record(SqlResult,request_info_table),1).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -122,42 +173,60 @@ get_request_info(Request_id)->
 
 %%@doc Create a new match for the given request id if there isn't already a match
 %% made for the request id. If the match is already created that match will be returned.
--spec match(Request_id)-> match_table() when
-      Request_id :: integer().
+-spec match(UserRequestId)-> match_table() when
+      UserRequestId :: integer().
 
-match(Request_id)->
-    Matchdata = get_match(Request_id),
+match(UserRequestId)->
+    Data = get_request_info(UserRequestId),
+    Matchdata = get_match(Data#request_info_table.requestId, UserRequestId),
     case Matchdata of
 	{error, no_item} ->
-	    create_match(Request_id),
-	    get_match(Request_id);
+	    create_match(Data#request_info_table.requestId),
+	    NewMatch = get_match(Data#request_info_table.requestId, UserRequestId),
+	    add_user_to_match(UserRequestId, NewMatch#match_table.id);
+
 	_ ->
+	    add_user_to_match(UserRequestId, Matchdata#match_table.id),
 	    Matchdata
     end.
 
 
 %%doc Create a new match
--spec create_match(Request_id)-> ok when
-      Request_id :: integer().
+-spec create_match(RequestId)-> ok when
+      RequestId :: integer().
 
-create_match(Request_id)->
-    Request_table = get_request_info(Request_id),
+create_match(RequestId)->
     database:db_query(match_insert,
-		   <<"INSERT INTO tMatch (main_userId, sec_userId, winner, requestId)
-                   VALUES(?, ?, ?, ?)">>,
-		   [Request_table#request_info_table.userId, 
-		    Request_table#request_info_table.challenged_userId, 0, Request_id]),
-    ok.
+		   <<"INSERT INTO tMatch (winnerUserId, requestId, time, state)
+                   VALUES(0, ?, now(), 0)">>,
+		   [RequestId]).
     
 %%@doc Get match from request id
--spec get_match(Request_id :: integer())-> match_table().
+-spec get_match(RequestId, UserRequestId)-> match_table() when
+      RequestId :: integer(),
+      UserRequestId :: integer().
 
-get_match(Request_id)->
+get_match(RequestId, UserRequestId)->
     Sql_result = database:db_query(match_select,
-		   <<"SELECT id, main_userId, sec_userId, winner, requestId
-                      FROM tMatch WHERE requestId = ?">>,
-		   [Request_id]),
-    database:get_row(database:result_to_record(Sql_result, match_table), 1).
+		   <<"select t1.id, t3.userId, t1.winnerUserId as winner, t1.requestId
+                      from
+                       tMatch t1 inner join
+                       tRequestedUsers t3 on t1.requestId = t3.requestId
+                      where
+                       t1.requestId = ? and
+                       t3.id != ?">>,
+		     [RequestId, UserRequestId]),
+    database:get_row(database:result_to_record(Sql_result, match_table),1).
+   
+    
+
+%%@doc add user to match
+
+add_user_to_match(UserRequestId, MatchId)->
+    database:db_query(insert_match_part,
+		      "INSERT INTO tMatchParticipant(requestedUserId, time, matchId, state)
+                       VALUES(?, now(), ?, 0)",
+		     [UserRequestId, MatchId]).
     
 
 %%@doc set match winner
@@ -166,7 +235,7 @@ get_match(Request_id)->
       WinnerId :: integer().
 
 set_winner(MatchId, WinnerId)->
-    database:db_query(match_select,
+    database:async_db_query(match_select,
 		      <<"UPDATE tMatch SET winner = ? WHERE id = ?">>,
 		      [WinnerId, MatchId]),
     ok.
@@ -188,7 +257,7 @@ set_winner(MatchId, WinnerId)->
 
 
 gps_save(User_id, Match_id, Longidtude, Latitude)->
-    database:db_query(gps_insert,
+    database:async_db_query(gps_insert,
 		   <<"INSERT INTO tGps (userId, matchId, longitude, latitude, time)
                    VALUES(?, ?, ?, ?, now())">>,
 		   [User_id, Match_id, Longidtude, Latitude]),
@@ -201,9 +270,9 @@ gps_save(User_id, Match_id, Longidtude, Latitude)->
 
 gps_get(User_id,Match_id)->
     Sql_result = database:db_query(gps_get,
-				   <<"SELECT longitude, latitude
+				   <<"SELECT longitude, latitude, time
                                       FROM
-                                        tgps
+                                        tGps
                                       WHERE
                                         userId = ? and
                                         matchId = ?">>,

@@ -17,28 +17,28 @@
 
 %%@doc Looks at the user and password combinations if it is valid 
 %% and matches a register user.
--spec login(User_name, Password) -> ok | {error, no_user} | {error, wrong_password} when
-      User_name :: string(),
+-spec login(UserName, Password) -> ok | {error, no_user} | {error, wrong_password} when
+      UserName :: string(),
       Password :: string().
 
   
-login(User_name, Password)->
-    User_data = get_user_data(User_name),  
-    login_helper(Password, User_data).
+login(UserName, Password)->
+    UserData = get_user_data(UserName),  
+    login_helper(Password, UserData).
 
 %%@doc Looks at the users data from the database and matches it with the
 %%input data to se if it is vaild.
--spec login_helper(Password, User_data) ->  {ok, integer()} | {error, no_user} | {error, wrong_password} when
+-spec login_helper(Password, UserData) ->  {ok, integer()} | {error, no_user} | {error, wrong_password} when
       Password :: string(),
-      User_data :: [login_table(), ...]. 
+      UserData :: [login_table(), ...]. 
 
 login_helper(_Password, [])->
     %%logg attempeted loggin?
     {error, no_user};
-login_helper(Password, User_data)->
-    Login_rec = database:get_row(User_data,1),
-    Password_salt = Password ++ binary_to_list(Login_rec#login_table.salt),
-    case check_password(Password_salt, Login_rec#login_table.password) of
+login_helper(Password, UserData)->
+    Login_rec = database:get_row(UserData,1),
+    PasswordSalt = Password ++ binary_to_list(Login_rec#login_table.salt),
+    case check_password(PasswordSalt, Login_rec#login_table.password) of
 	ok ->
 	    (case check_user_already_login(Login_rec#login_table.id) of
 		false ->
@@ -54,25 +54,25 @@ login_helper(Password, User_data)->
     
     
 %%@doc Get necessary data about the user from the database
--spec get_user_data(User_name) -> [login_table(), ...] when
-      User_name :: string().
+-spec get_user_data(UserName) -> [login_table(), ...] when
+      UserName :: string().
 
-get_user_data(User_name)->
+get_user_data(UserName)->
     Sql_result = database:db_query(login_user_info, 
-			    <<"SELECT id, salt, password from tUsers WHERE user_name = ?">>,
-		 [User_name]),
-			       database:result_to_record(Sql_result, login_table).
+				   <<"SELECT id, salt, password from tUsers WHERE userName = ?">>,
+				   [UserName]),
+    database:result_to_record(Sql_result, login_table).
 
     
 
 %%@doc Checks if two passwords match the input password with salt un hashed and
 %%the stored password hashed.
--spec check_password(Password_input :: string(),Password_stored :: string()) -> ok | false.
+-spec check_password(PasswordInput :: string(),PasswordStored :: string()) -> ok | false.
 
-check_password(Password_input,Password_stored) ->
-    Password = crypt(Password_input),
+check_password(PasswordInput,PasswordStored) ->
+    Password = crypt(PasswordInput),
     if
-	 Password == Password_stored ->
+	 Password == PasswordStored ->
 	    ok;
 	true ->
 	    false
@@ -80,21 +80,21 @@ check_password(Password_input,Password_stored) ->
 
 
 %%@doc Mark user as loggedin in the database
--spec set_loggedin(Userid) -> ok when
-      Userid :: integer().
+-spec set_loggedin(UserId) -> ok when
+      UserId :: integer().
 
-set_loggedin(Userid)->
-    database:db_query(login_log_login,
+set_loggedin(UserId)->
+    database:async_db_query(login_log_login,
 		   <<"INSERT INTO tLoginLog (userId,login) VALUES(?, now())">>,
-		   [Userid]),
+		   [UserId]),
     ok.
 
 %%@doc Check if user is already loggedin.
--spec check_user_already_login(Userid) -> boolean() when
-      Userid :: integer().
+-spec check_user_already_login(UserId) -> boolean() when
+      UserId :: integer().
 
-check_user_already_login(Userid)-> 
-    Loginlogrec = get_user_lastlogin(Userid),
+check_user_already_login(UserId)-> 
+    Loginlogrec = get_user_lastlogin(UserId),
     case Loginlogrec#loginlog_table.id of
 	undefined ->
 	    true;
@@ -123,34 +123,34 @@ check_user_already_login(Userid)->
 
 %%@doc Logout user from database, makes appropriate calls to define user
 %% as logged out.
--spec logout(Userid | Username) -> ok when
-      Userid :: integer(),
-      Username :: string().
+-spec logout(UserId | UserName) -> ok when
+      UserId :: integer(),
+      UserName :: string().
 
-logout(Userid) when is_integer(Userid) ->
-    set_loggedout(Userid),
+logout(UserId) when is_integer(UserId) ->
+    set_loggedout(UserId),
     ok;
-logout(Username) when is_list(Username) ->
-    Userdata = database:get_row(get_user_data(Username),1),
-    set_loggedout(Userdata#login_table.id),
+logout(UserName) when is_list(UserName) ->
+    UserData = database:get_row(get_user_data(UserName),1),
+    set_loggedout(UserData#login_table.id),
     ok.
 
 %@doc Mark user as logged out in the database.
--spec set_loggedout(Userid) -> ok when
-      Userid :: integer().
+-spec set_loggedout(UserId) -> ok when
+      UserId :: integer().
 
-set_loggedout(Userid)->
-    Loginlog_rec = get_user_lastlogin(Userid),
+set_loggedout(UserId)->
+    Loginlog_rec = get_user_lastlogin(UserId),
     set_logout_time(Loginlog_rec#loginlog_table.id).
 
 %%@doc Get the last time the user logged in.
--spec get_user_lastlogin(Userid) ->loginlog_table() | {error, no_item} when
-      Userid :: integer().
+-spec get_user_lastlogin(UserId) ->loginlog_table() | {error, no_item} when
+      UserId :: integer().
     
-get_user_lastlogin(Userid)->
+get_user_lastlogin(UserId)->
     Sql_result = database:db_query(loginlog_logout_select,
 				<<"SELECT max(id) as id FROM tLoginLog WHERE userId = ?">>,
-				[Userid]),
+				[UserId]),
     database:get_row(database:result_to_record(Sql_result, 
 					       loginlog_table),1).
     
@@ -160,7 +160,7 @@ get_user_lastlogin(Userid)->
       LoginlogId :: integer().
 
 set_logout_time(LoginlogId)->
-    database:db_query(loginlog_logout_update,
+    database:async_db_query(loginlog_logout_update,
 		   <<"UPDATE tLoginLog SET logout = now() WHERE id = ?">>,
 		   [LoginlogId]),
     ok.
@@ -171,58 +171,58 @@ set_logout_time(LoginlogId)->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%@doc Register a new user in the database, checks that the user doesn't already exist.
--spec register(User_name, Password, Email) -> ok | {error, user_already_exist} when
-      User_name :: string(),
+-spec register(UserName, Password, Email) -> ok | {error, user_already_exist} when
+      UserName :: string(),
       Password :: string(),
       Email :: string().
 
-register(User_name, Password, Email)->
-    case check_user_exists(User_name) of
+register(UserName, Password, Email)->
+    case check_user_exists(UserName) of
 	user_not_found ->
 	    Salt = base64:encode(crypto:strong_rand_bytes(50)),
-	    register_user(User_name,crypt(Password ++ binary_to_list(Salt)),Email, Salt);
+	    register_user(UserName,crypt(Password ++ binary_to_list(Salt)),Email, Salt);
 	user_found ->
 	    {error, user_already_exist}
     end.
 
 
 %%@doc Register user in the database.
--spec register_user(User_name,Password,Email,Salt) -> ok when
-      User_name :: string(),
+-spec register_user(UserName,Password,Email,Salt) -> ok when
+      UserName :: string(),
       Password :: string(),
       Email :: string(),
       Salt :: string().
 
-register_user(User_name,Password,Email,Salt)->
-    database:db_query(register_insert,
-		   <<"INSERT INTO tUsers (user_name, email, register_date,password,salt) 
+register_user(UserName,Password,Email,Salt)->
+    database:async_db_query(register_insert,
+		   <<"INSERT INTO tUsers (userName, email, registerDate,password,salt) 
                       VALUES(?,?,now(),?,?)">>,
-		  [User_name,Email,Password,Salt]),
+		  [UserName,Email,Password,Salt]),
     ok.
   
 %%@doc Check if user already exist, is already register in the DB.
--spec check_user_exists(User_name)-> user_found | user_not_found when
-      User_name :: string().
+-spec check_user_exists(UserName)-> user_found | user_not_found when
+      UserName :: string().
 
-check_user_exists(User_name)->
+check_user_exists(UserName)->
     Check_fun = fun(List) when length(List) == 0 ->
 			user_not_found;
 		   (_List) ->
 			user_found
 		end,
-    Check_fun(get_user(User_name)).
+    Check_fun(get_user(UserName)).
     
-	    
+ 
 	    
 %%@doc Get users information, for checking that no other user is already regisered
 %%with the given name.
--spec get_user(User_name) -> [register_table(), ...] when
-      User_name :: string().
+-spec get_user(UserName) -> [register_table(), ...] when
+      UserName :: string().
 
-get_user(User_name)->
+get_user(UserName)->
     Sql_result = database:db_query(register_select,
-				<<"SELECT id FROM tUsers WHERE user_name = ?">>,
-				[User_name]),
+				<<"SELECT id FROM tUsers WHERE userName = ?">>,
+				[UserName]),
     database:result_to_record(Sql_result, register_table).
 
 
@@ -235,12 +235,12 @@ get_user(User_name)->
       Userid :: integer().
 
 
-delete(Username) when is_list(Username) ->
-    Data = get_user(Username),
+delete(UserName) when is_list(UserName) ->
+    Data = get_user(UserName),
     [delete(X#register_table.id) || X<- Data],
     ok;
 delete(Userid)->    
-    database:db_query(delete_user,
+    database:async_db_query(delete_user,
 		      <<"CALL delete_user(?)">>,
 		      [Userid]),
     ok.

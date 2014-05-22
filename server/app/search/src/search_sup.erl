@@ -59,7 +59,8 @@ count_children() ->
 %%        CALLBACK FUNCTIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+%%@doc init callback function to start a new child with a 
+%%simple on for one restart plan.
 -spec init(Args) -> any() when
       Args :: none().
 
