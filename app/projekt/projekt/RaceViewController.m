@@ -119,7 +119,7 @@
                             forState:UIControlStateNormal];
     _totalCompetitorDistance = 2500;
     _competitorSlider.value = _totalCompetitorDistance;
-
+    
     _averageSpeedLabel.text = @"Calculating...";
     
     
@@ -130,7 +130,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     _stopWatch = [NSTimer scheduledTimerWithTimeInterval:(0.01) target:self selector:@selector(timerTicked:) userInfo:nil repeats:YES];
-
+    
 }
 
 - (NSTimer *)createTimer {
@@ -146,7 +146,8 @@
     
     if ((_currentTimeInSeconds % 500) == 0) {
         float avrg = ((_totalDistance*1000)/(_currentTimeInSeconds*3.6));
-    _averageSpeedLabel.text = [NSString stringWithFormat: @"%.0f km/h",avrg];
+        _averageSpeedLabel.text = [NSString stringWithFormat: @"%.0f km/h",avrg];
+        
     }
 }
 
@@ -293,17 +294,34 @@
 }
 
 - (IBAction)quitButtonPressed:(id)sender {
-    _check = 1;
-    self.mapView.showsUserLocation = NO;
-    [self.locationManager stopUpdatingLocation];
-    [self.navigationController popViewControllerAnimated:YES];
-    [_stopWatch invalidate];
-    [NetworkConnectionClass quitRace];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Quit"
+                                                    message:@"Are you sure you want to give up?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Yes"
+                                          otherButtonTitles:@"No",nil];
+    [alert show];
 }
 
 -(void)updateStopWatch {
     
     _timeLabel.text = [NSString stringWithFormat:@"%@", _stopWatch];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 0) {
+        _check = 1;
+        self.mapView.showsUserLocation = NO;
+        [self.locationManager stopUpdatingLocation];
+        [self.navigationController popViewControllerAnimated:YES];
+        [_stopWatch invalidate];
+        [NetworkConnectionClass quitRace];
+        
+    } else {
+        
+        
+    }
+    
 }
 
 

@@ -98,15 +98,17 @@
         
         [self.tableView reloadData];
         
+        lookUpResultGot->requestLookUp = nil;
+        lookUpResultMade->requestLookUp = nil;
+        lookUpResultGot = nil;
+        lookUpResultMade = nil;
+        
         free(lookUpResultGot->requestLookUp);
         free(lookUpResultMade->requestLookUp);
         free(lookUpResultGot);
         free(lookUpResultMade);
         
-        lookUpResultGot->requestLookUp = nil;
-        lookUpResultMade->requestLookUp = nil;
-        lookUpResultGot = nil;
-        lookUpResultMade = nil;
+        
         
         dispatch_async( dispatch_get_main_queue(), ^{
             // Add code here to update the UI/send notifications based on the
@@ -252,7 +254,7 @@
 -(void)declineButtonPressed:(id)sender {
     NSLog(@"declined!");
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
-    int reqID = [[_requestIDs objectAtIndex:indexPath.row] integerValue];
+    int reqID = (int) [[_requestIDs objectAtIndex:indexPath.row] integerValue];
     
     [NetworkConnectionClass cancelRequest:reqID];
     
@@ -266,7 +268,7 @@
 
 -(void)acceptButtonPressed:(id)sender {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
-    int reqID = [[_requestIDs objectAtIndex:indexPath.row] integerValue];
+    int reqID = (int)[[_requestIDs objectAtIndex:indexPath.row] integerValue];
     [NetworkConnectionClass acceptRequest:reqID];
     NSLog(@"Accepted with req id: %d", reqID);
     

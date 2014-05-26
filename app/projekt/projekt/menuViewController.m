@@ -38,8 +38,6 @@
     
             //fetch win ratio from server
             _winRatio = 0.33;
-            
-    
     
     [self updateHomeStats];
         

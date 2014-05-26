@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D9F6B601917ABA300937D62 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */; };
+		C733903D193343BE002B2E12 /* FinishlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C733903C193343BE002B2E12 /* FinishlineViewController.m */; };
 		C7908A02192B3D8B00E7053F /* UserSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7908A01192B3D8B00E7053F /* UserSearchTableViewController.m */; };
 		C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */; };
 		C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */; };
@@ -48,6 +49,8 @@
 
 /* Begin PBXFileReference section */
 		5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C733903B193343BE002B2E12 /* FinishlineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinishlineViewController.h; sourceTree = "<group>"; };
+		C733903C193343BE002B2E12 /* FinishlineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinishlineViewController.m; sourceTree = "<group>"; };
 		C7908A00192B3D8B00E7053F /* UserSearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSearchTableViewController.h; sourceTree = "<group>"; };
 		C7908A01192B3D8B00E7053F /* UserSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSearchTableViewController.m; sourceTree = "<group>"; };
 		C7A7ED3618FFD5BA00DE0740 /* requestTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = requestTableViewController.h; sourceTree = "<group>"; };
@@ -131,6 +134,8 @@
 				C7D0C2E8191B84AB00284B33 /* CountdownViewController.m */,
 				C7F584B51906A7F90040254A /* ChallengeViewController.h */,
 				C7F584B61906A7F90040254A /* ChallengeViewController.m */,
+				C733903B193343BE002B2E12 /* FinishlineViewController.h */,
+				C733903C193343BE002B2E12 /* FinishlineViewController.m */,
 			);
 			name = Challenge;
 			sourceTree = "<group>";
@@ -373,6 +378,7 @@
 				C7D0C2E6191B82B200284B33 /* RaceViewController.m in Sources */,
 				C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */,
 				C7F584B71906A7F90040254A /* ChallengeViewController.m in Sources */,
+				C733903D193343BE002B2E12 /* FinishlineViewController.m in Sources */,
 				C7CC2396190A81D40040E8C1 /* SignupViewController.m in Sources */,
 				C7908A02192B3D8B00E7053F /* UserSearchTableViewController.m in Sources */,
 				C7ECED5318FD4A0000C3EE81 /* menuViewController.m in Sources */,

@@ -107,13 +107,13 @@ static NSOutputStream *outputStream;
     //self.outputStream = outputStream;
     
 }
-+(void) readStream:(uint8_t *) buffer maxLength:(int)maxLength {
++(void)readStream:(uint8_t *) buffer maxLength:(int)maxLength {
     int bytesRead = 0;
     char tmpBuffer[maxLength];
     memset(tmpBuffer, 0, sizeof(char)*maxLength);
     
     while((bytesRead += [inputStream read:(uint8_t *)&tmpBuffer[bytesRead] maxLength:maxLength]) < maxLength){
-    
+        
     }
     //NSLog(@"Bytes read %d", bytesRead);
     memcpy(buffer, tmpBuffer, maxLength);
@@ -184,7 +184,6 @@ static NSOutputStream *outputStream;
     
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(signup)];
     
-    
     loginOutput result;
     result.type = 3;
     [inputStream read:(uint8_t *)&result maxLength:sizeof(result)];
@@ -251,7 +250,7 @@ static NSOutputStream *outputStream;
 }
 
 +(void *)getRequests:(int)type1 type2:(int)type2 {
-
+    
     requestLookUpResult *result = malloc(sizeof(requestLookUpResult));
     memset(result, 0, sizeof(requestLookUpResult));
     
@@ -272,13 +271,13 @@ static NSOutputStream *outputStream;
         
         for(int i = 0; i < numberOfPackages; i++) {
             [self readStream:(uint8_t *)(reqLookUp+i) maxLength:sizeof(requestLookUp)];
-            	
+            
         }
         result->requestLookUp = reqLookUp;
         
     }
     
-    return result;    
+    return result;
 }
 +(int)acceptRequest:(uint32_t) requestId {
     
@@ -288,26 +287,26 @@ static NSOutputStream *outputStream;
     packet.type[1] = 2;
     packet.msg = requestId;
     
-    return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestAccept)];
-
+    return (int)[outputStream write:(uint8_t *)&packet maxLength:sizeof(requestAccept)];
+    
 }
 
 +(int)cancelRequest:(uint32_t) requestId{
-
+    
     requestCancel packet;
     packet.length = CFSwapInt32HostToBig(6);
     packet.type[0] = 2;
     packet.type[1] = 3;
     packet.msg = requestId;
     
-    return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestCancel)];
-
-
+    return (int)[outputStream write:(uint8_t *)&packet maxLength:sizeof(requestCancel)];
+    
+    
 }
 
 
 +(int)makeRequest:(uint32_t) userId distance:(uint32_t)distance {
-
+    
     requestMake packet;
     packet.length = CFSwapInt32HostToBig(10);
     packet.type[0] = 2;
@@ -315,8 +314,8 @@ static NSOutputStream *outputStream;
     packet.userId = userId;
     packet.distance = distance;
     
-    return [outputStream write:(uint8_t *)&packet maxLength:sizeof(requestMake)];
-
+    return (int)[outputStream write:(uint8_t *)&packet maxLength:sizeof(requestMake)];
+    
 }
 
 +(void *)searchForUsers:(NSString *)username {
@@ -339,19 +338,23 @@ static NSOutputStream *outputStream;
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
     
     userArray *result = malloc(sizeof(userArray));
+    memset(result, 0, sizeof(userArray));
     
-    [self readStream:(uint8_t *)&result maxLength:6];
+    [inputStream read:(uint8_t *)result maxLength:6];
     
-     if ((result->type[0] == 5) && (result->type[1] == 1)) {
+    if ((result->type[0] == 5) && (result->type[1] == 1)) {
+        
+        result->length = ntohl(result->length)-2;
+        int numberOfPackages = ((result->length)/sizeof(userInfo));
+        userInfo *user = malloc(numberOfPackages*sizeof(userInfo));
+        for(int i = 0; i < numberOfPackages; i++) {
     
-     int numberOfPackages = ((result->length-6)/sizeof(user));
+            [self readStream:(uint8_t *)(user+i) maxLength:sizeof(userInfo)];
+            
+        }
+    }
     
-       for(int i = 0; i < numberOfPackages; i++) {
-        //user *userInfo = malloc(numberOfPackages*sizeof(user));
-       // [self readStream:(uint8_t *)(userInfo+i) maxLength:sizeof(userArray)];
-           
-       }
-     }
+    result->array = user;
     
     return result;
 }
@@ -360,7 +363,7 @@ static NSOutputStream *outputStream;
     
     uint32_t myInt32Value = 6;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
-
+    
     match packet;
     packet.length = myInt32AsABigEndianNumber;
     packet.type[0] = 4;
@@ -371,12 +374,14 @@ static NSOutputStream *outputStream;
     
     match *result = malloc(sizeof(match));
     [inputStream read:(uint8_t *)result maxLength:sizeof(*result)];
-
+    
     if ((result->type[0] == 4) && (result->type[1] == 1)) {
         NSLog(@"success");
+        free(result);
         return 1;
     } else {
         NSLog (@"not succesful");
+        free(result);
         return 0;
     }
 }
@@ -394,7 +399,7 @@ static NSOutputStream *outputStream;
     packet.longitude = longitude;
     
     if ((latitude != 0) && (longitude != 0)) {
-    [outputStream write:(uint8_t *)&packet maxLength:sizeof(GPSCoord)];
+        [outputStream write:(uint8_t *)&packet maxLength:sizeof(GPSCoord)];
     }
 }
 
