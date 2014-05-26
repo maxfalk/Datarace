@@ -18,11 +18,11 @@
 %% Server API
 %%====================================================================
 
+
 %% @doc Starts a new Listener process, waiting for incoming client
 %% connections. Once a connection is established, it will wait for the
 %% client to log in and spawn a new client_serv process to handle the
 %% connection.
-
 -spec start_link(ListenSocket) -> Result when
       Result :: {ok, pid()} | 
 		ignore | 
@@ -42,7 +42,6 @@ start_link(ListenSocket) ->
 
 %% @doc Initializes the Listener and tells the gen_fsm behaviour to  
 %% go to and execute the connect state directly.
-
 -spec init(ListenSocket) -> {ok, connect, ListenSocket} when
       ListenSocket :: socket().
 
@@ -55,7 +54,6 @@ init(ListenSocket) ->
 %% @doc Waits for incoming connections. Moves to the login state if 
 %% a connection was successfully established. Stops the process 
 %% otherwise.
- 
 -spec connect(initialized, ListenSocket) -> Result when
       ListenSocket :: socket(),
       AcceptSocket :: socket(),
@@ -83,7 +81,6 @@ connect(initialized, ListenSocket) ->
 %% and transfer control over AcceptSocket to the spawned process, 
 %% then terminate. When a user register packet is sent, the 
 %% callback will try the registration and terminate.
-
 -spec login(Event, AcceptSocket) -> Result when
       Type :: binary(),
       Event :: binary() | {Type, binary()},
@@ -106,8 +103,8 @@ login({?LOGIN, Packet}, AcceptSocket) ->
 			    account:logout(UserId)
 		    end;
 		{error, _Reason} ->
-		    log_serv:log("Could not spawn new client serv process for UID " ++ 
-				     integer_to_list(UserId)),
+		    gen_tcp:send(AcceptSocket, ?LOGIN_FALSE_LOGGED_IN),
+		    log_serv:log("Login failed because already logged in"),
 		    account:logout(UserId)
 	    end;
 	{error, no_user} -> 
@@ -140,7 +137,6 @@ login({?REGISTER, Packet}, AcceptSocket) ->
 %% Socket} if the message is {tcp_closed, Reason} or {tcp_error, 
 %% Socket, Reason}, which will terminate the process and execute 
 %% terminate/3.
-
 -spec handle_info(Event, State, Socket) -> Result when
       Packet :: binary(),
       Socket :: socket(),
@@ -166,7 +162,6 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
 
 
 %% @doc Executed when Listener is about to terminate.
-
 -spec terminate(Reason, State, Socket) -> undefined when
       Reason :: term(),
       State :: login | atom(),

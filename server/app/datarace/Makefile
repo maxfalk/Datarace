@@ -46,7 +46,7 @@ start: all
 	(cd ebin && $(PROP_ERL) -eval 'server:start(true)')
 
 test: all
-	(cd ebin && $(PROP_ERL) -noinput -eval 'server:start(false), eunit:test({dir, "."}, [verbose]), init:stop(), server:stop()')
+	(cd ebin && $(PROP_ERL) -noinput -eval 'server:start(false), timer:sleep(500), eunit:test({dir, "."}, [verbose]), init:stop(), server:stop()')
 
 doc: $(BEAM_FILES)
 	erl -noshell -eval "edoc:files($(EDOC_SRC_LIST), [{dir, 'doc/html'}])" -s init stop

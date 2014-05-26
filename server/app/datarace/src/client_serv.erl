@@ -3,6 +3,7 @@
 %% Client_serv
 %%====================================================================
 
+
 -module(client_serv).
 -behaviour(gen_fsm).
 
@@ -13,6 +14,10 @@
 -include("../include/database.hrl").
 
 -type socket() :: none().
+-type datetime() :: {datetime, 
+		     {{integer(), integer(), integer()}, 
+		      {integer(), integer(), integer()}}}.
+-type loop_data() :: {integer(), socket(), datetime(), match_table()}.
 
 -record(loop_data, {user_id, socket, start_time, match_table = #match_table{}}).
 
@@ -21,8 +26,8 @@
 %% Server API
 %%====================================================================
 
-%% @doc Starts a new Client_serv process. 
 
+%% @doc Starts a new Client Serv process. 
 -spec start_link(UserId, Socket) -> Result when
       UserId :: integer(),
       Socket :: socket(),
@@ -33,11 +38,10 @@ start_link(UserId, Socket) ->
     gen_fsm:start_link(?MODULE, {UserId, Socket}, []).
 
 
-%% @doc Sends an asynchronous message to the Client_serv with pid Pid
+%% @doc Sends an asynchronous message to the Client Serv with pid Pid
 %% telling it that it has the contol over a socket and may use it. 
 %% Only relevant just after initialization, when Client_serv is in its
 %% verify state. 
-
 -spec verify_control_transfer(Pid) -> ok when
       Pid :: pid().
 
@@ -49,12 +53,13 @@ verify_control_transfer(Pid) ->
 %% Callback functions
 %%====================================================================
 
-%% @doc Initialize the Client_serv by doing nothing.
 
--spec init(Args) -> {ok, verify, Args} when
+%% @doc Initialize the Client Serv.
+-spec init(Args) -> {ok, verify, LoopData} when
       UserId :: integer(),
       Socket :: socket(),
-      Args :: {UserId, Socket}.
+      Args :: {UserId, Socket},
+      LoopData :: loop_data().
 
 init({UserId, Socket}) ->
     process_flag(trap_exit, true),
@@ -67,11 +72,9 @@ init({UserId, Socket}) ->
 %% @doc Sends a LOGIN_TRUE message to the client when receiving a 
 %% control_transferred event, informing the client about a successful 
 %% login attempt.
-
--spec verify(control_transferred, {UserId, Socket}) -> Result when
-      UserId :: integer(),
-      Socket :: socket(),
-      Result :: {next_state, main, {UserId, Socket}}.
+-spec verify(control_transferred, LoopData) -> Result when
+      LoopData :: loop_data(),
+      Result :: {next_state, main, LoopData}.
 
 verify(control_transferred, LoopData) ->
     log_serv:log("Socket transfer for UID " ++ 
@@ -80,20 +83,17 @@ verify(control_transferred, LoopData) ->
     {next_state, main, LoopData}.
 
 
-%% @doc Handles request messages from a client and, when it recieves 
-%% a logout message from a client, logs out the user from the 
-%% database and stops the FSM.
-
--spec main(Message, {UserId, Socket}) -> Result when
+%% @doc Handles messages from a client during a session.
+-spec main(Message, LoopData) -> Result when
       Type :: binary(),
       Package :: binary(),
       Message :: {Type, Package} | Type,
-      UserId :: integer(),
-      Socket :: integer(),
-      Result :: {stop, normal, {UserId, Socket}}.
+      LoopData :: loop_data(),      
+      Result :: {stop, normal, LoopData}.
 
 main(?LOGIN_LOGOUT, LoopData) ->
     {stop, normal, LoopData};
+
 main({?REQUEST, <<ChallengeId:32/little-integer, Distance:32/little-integer>>}, LoopData) ->
     log_serv:log("Match request made by UID " ++ 
 		     integer_to_list(LoopData#loop_data.user_id) ++ " for " ++
@@ -101,6 +101,7 @@ main({?REQUEST, <<ChallengeId:32/little-integer, Distance:32/little-integer>>}, 
 		     integer_to_list(Distance)),
     usercom:request(LoopData#loop_data.user_id, ChallengeId, Distance),
     {next_state, main, LoopData};
+
 main(?REQUEST_LOOKUP, LoopData) ->
     log_serv:log("Match request lookup made by UID " ++ 
 		     integer_to_list(LoopData#loop_data.user_id)),
@@ -109,24 +110,28 @@ main(?REQUEST_LOOKUP, LoopData) ->
     ok = gen_tcp:send(LoopData#loop_data.socket, MadePack),
     ok = gen_tcp:send(LoopData#loop_data.socket, ChalPack),
     {next_state, main, LoopData};
+
 main({?REQUEST_ACCEPT, <<RequestId:32/little-integer>>}, LoopData) ->
     log_serv:log("Request accept made by UID " ++ 
 		     integer_to_list(LoopData#loop_data.user_id) ++ 
 		     " for RID " ++ integer_to_list(RequestId)),
     usercom:request_accept(RequestId),
     {next_state, main, LoopData};
+
 main({?REQUEST_CANCEL, <<RequestId:32/little-integer>>}, LoopData) ->
     log_serv:log("Request cancellation made by UID " ++ 
 		     integer_to_list(LoopData#loop_data.user_id) ++
 		     " for RID " ++ integer_to_list(RequestId)),
     usercom:request_cancel(RequestId),
     {next_state, main, LoopData};
+
 main(?GET_HOME_STATS, LoopData) ->
     log_serv:log("Get home stats for UID " ++ integer_to_list(LoopData#loop_data.user_id)),
     UserStatsTableTuple = usercom:get_home_stats(LoopData#loop_data.user_id),
     UserStatsTablePack = packconv:pack(?GET_HOME_STATS, UserStatsTableTuple),
     ok = gen_tcp:send(LoopData#loop_data.socket, UserStatsTablePack),
     {next_state, main, LoopData};
+
 main({?MATCH_START, <<RequestId:32/little-integer>>}, LoopData) ->
     log_serv:log("Match started with RID " ++ integer_to_list(RequestId)),
     MatchTable = usercom:match(RequestId),
@@ -134,6 +139,7 @@ main({?MATCH_START, <<RequestId:32/little-integer>>}, LoopData) ->
     NewLoopData = LoopData#loop_data{start_time = calendar:local_time(), 
 				     match_table = MatchTable},
     {next_state, match, NewLoopData};
+
 main({?SEARCH_STRING, Packet}, LoopData) ->
     case search_sup:start_search_serv() of
 	{ok, Pid} ->
@@ -148,6 +154,18 @@ main({?SEARCH_STRING, Packet}, LoopData) ->
     {next_state, main, LoopData}.
 
 
+%% @doc This state handles a match. It receives messages from the client 
+%% such as GPS data, requests for the competitors current position and
+%% requests to stop the match.
+-spec match(Message, LoopData) -> Result when
+      Type :: binary(),
+      Package :: binary(),
+      Message :: {Type, Package} | Type,
+      LoopData :: loop_data(),      
+      Result :: {stop, normal, LoopData} | 
+		{next_state, main, LoopData} |
+		{next_state, match, LoopData}.
+
 match({?MATCH_GPS, Packet}, LoopData) ->
     {Longitude, Latitude} = packconv:convert_pack(?MATCH_GPS, Packet),
     log_serv:log("Received GPS data from UID " ++ 
@@ -158,6 +176,7 @@ match({?MATCH_GPS, Packet}, LoopData) ->
 		     LoopData#loop_data.match_table#match_table.id, 
 		     Longitude, Latitude),
     {next_state, match, LoopData};
+
 match(?MATCH_COMP_POS, LoopData) ->
     ChallengerId = (LoopData#loop_data.match_table)#match_table.userId, 
     Distance = gps:calc_pointdistance(ChallengerId, 
@@ -170,30 +189,26 @@ match(?MATCH_COMP_POS, LoopData) ->
 		     "for MID " ++ 
 		     integer_to_list((LoopData#loop_data.match_table)#match_table.id)),
     {next_state, match, LoopData};
+
 match(?MATCH_STOP, LoopData) ->
     log_serv:log("Match stopped for MID " ++ 
 		     integer_to_list((LoopData#loop_data.match_table)#match_table.id)),
     {next_state, main, LoopData}.
 
 
-
-
-
-
 %% @doc Receives TCP packets and forwards them to the function 
 %% representing the current state or stops if the message is 
 %% erroneous.
-
--spec handle_info(Event, State, LoopSocket) -> Result when
+-spec handle_info(Event, State, LoopData) -> Result when
       Event :: {tcp, Socket, Packet} | 
 	       {tcp_closed, Socket} | 
 	       {tcp_error, Socket, Reason},
       State :: term(),
-      LoopSocket :: socket(),
+      LoopData :: loop_data(),
       Socket :: socket(),
       Packet :: binary(),
       Reason :: term(),
-      Result :: none() | {stop, normal, LoopSocket}.
+      Result :: none() | {stop, normal, LoopData}.
 
 handle_info({tcp, _, <<Type:2/binary>>}, State, LoopData) ->
     inet:setopts(LoopData#loop_data.socket, [{active, once}]),
@@ -214,14 +229,12 @@ handle_info({tcp_error, _, _Reason}, _State, LoopData) ->
 
 %% @doc The function is called upon termination and makes sure that
 %% the Socket is closed.
-
--spec terminate(Reason, State, {UserId, Socket}) -> none() when
+-spec terminate(Reason, State, LoopData) -> none() when
       Reason :: term(),
       State :: atom(),
-      UserId :: integer(),
-      Socket :: socket().
+      LoopData :: loop_data().
 
-terminate(Reason, State, LoopData) ->
+terminate(_Reason, State, LoopData) ->
     ok = account:logout(LoopData#loop_data.user_id),
     log_serv:log("Logged out UID " ++ integer_to_list(LoopData#loop_data.user_id)),
     log_serv:log("Terminating client server in state " ++ atom_to_list(State)).

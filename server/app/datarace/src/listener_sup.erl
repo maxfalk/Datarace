@@ -3,6 +3,7 @@
 %% listener_sup
 %%====================================================================
 
+
 -module(listener_sup).
 -behaviour(supervisor).
 
@@ -16,10 +17,10 @@
 %% Supervisor API
 %%====================================================================
 
+
 %% @doc Starts a new Listener supervisor, which in turn starts a 
 %% number of Listeners and opens a port for incoming server 
 %% connections.
-
 -spec start_link(Port, Listeners) -> Result when
       Port :: integer(),
       Listeners :: integer(),
@@ -34,7 +35,6 @@ start_link(Port, Listeners) when Listeners > 0 ->
 
 
 %% @doc Start a new Listener process dynamically.
-
 -spec start_listener() -> Result when
       Result :: {ok, pid()}
 	      | {error, Error},
@@ -45,7 +45,6 @@ start_listener() ->
 
 
 %% @doc Returns information concerning the number of active processes.
-
 -spec count_children() -> PropListOfCounts when
       PropListOfCounts :: [Count],
       Count :: {specs, integer()}
@@ -61,9 +60,9 @@ count_children() ->
 %% Callback functions
 %%====================================================================
 
+
 %% @doc Initializes the Listener supervisor by opening the port Port
 %% and starts Listeners number of Listener processes. 
-
 -spec init({Port, Listeners}) -> {ok, {SuperSpec, [ChildSpec]}} when
       Port :: integer(),
       Listeners :: integer(),
@@ -89,7 +88,6 @@ init({Port, Listeners}) ->
 
 %% @doc Function to help the supervisor start Listeners number of 
 %% listeners during init.
-
 -spec start_listeners(Listeners) -> ok when
       Listeners :: integer().
 

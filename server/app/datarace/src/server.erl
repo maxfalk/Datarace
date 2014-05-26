@@ -34,7 +34,7 @@ stop() ->
 	_ ->
 	    master_sup:stop_children()
     end,
-    application:start(search),
+    application:stop(search),
     application:stop(datarace),
     case whereis(log_sup) of
 	undefined -> 
