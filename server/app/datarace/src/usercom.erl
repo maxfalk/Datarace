@@ -6,8 +6,8 @@
 -module(usercom).
 
 -export([request/3,request_lookup/1,request_accept/1,request_cancel/1]).
--export([match/1, set_winner/2]).
--export([gps_save/4, gps_get/2]).
+-export([match/1, set_winner/2,set_match_participant_done/2, set_match_done/1]).
+-export([gps_save/4, gps_get/2, match_stop/3]).
 -export([get_home_stats/1,get_num_pending_requests/1]).
 
 -include("../include/database.hrl").
@@ -223,12 +223,140 @@ get_match(RequestId, UserRequestId)->
     
 
 %%@doc add user to match
+-spec add_user_to_match(UserRequestId, MatchId)-> ok when
+      UserRequestId :: integer(),
+      MatchId :: integer().
 
 add_user_to_match(UserRequestId, MatchId)->
-    database:db_query(insert_match_part,
-		      "INSERT INTO tMatchParticipant(requestedUserId, time, matchId, state)
-                       VALUES( ?, now(), ?, 0)",
-		     [UserRequestId, MatchId]).
+    case check_user_match(UserRequestId, MatchId) of
+	false ->
+	    database:async_db_query(insert_match_part,
+				    "INSERT INTO 
+                                     tMatchParticipant(requestedUserId, date, matchId, state)
+                                     VALUES( ?, now(), ?, 0)",
+				    [UserRequestId, MatchId]);
+	true ->
+	    ok
+    end.
+
+
+%%@doc Check if user already is present in the match
+-spec check_user_match(UserRequestId, MatchId)-> boolean() when
+      UserRequestId :: integer(),
+      MatchId :: integer().
+
+check_user_match(UserRequestId, MatchId)->
+   Result =  database:db_query(select_match_par,
+			      << "SELECT id FROM tMatchParticipant 
+                                WHERE requestedUserId = ? and matchid = ?">>,
+			       [UserRequestId, MatchId]),
+    length(database:as_list(Result)) > 0.
+
+
+
+
+%%@doc Stop the match and take actions to set the match as done.
+-spec match_stop(UserId, MatchId, UserRequestId)-> ok when
+      UserId :: integer(),
+      MatchId :: integer(),
+      UserRequestId :: integer().
+						   
+
+match_stop(UserId, MatchId, UserRequestId)->
+    user_match_stop(UserId, MatchId, UserRequestId),
+    MatchDetails = get_match_details(MatchId),
+    match_stophelper(MatchId, MatchDetails).
+
+
+match_stophelper(MatchId, MatchDetails) when length(MatchDetails) > 1 ->        	
+    case check_winner(MatchDetails, {0, 0}) of
+	WinnerId when WinnerId > 0 ->
+	    set_winner(MatchId, WinnerId);
+	_ -> no_winner
+    end,
+    set_match_done(MatchId);
+match_stophelper(_MatchId, _MatchDetails)  ->
+    ok.
+
+
+%%@doc Make mathc stop actions for each user
+-spec user_match_stop(UserId, MatchId, UserRequestId)-> ok when
+      UserId :: integer(),
+      MatchId :: integer(),
+      UserRequestId :: integer().
+
+user_match_stop(UserId, MatchId, UserRequestId)->
+    RunedDistance = gps:calc_totaldistance(UserId, MatchId),
+    Distance = get_distance(UserRequestId),
+    if
+	RunedDistance >= Distance ->
+	    set_match_participant_done(UserRequestId, MatchId),
+	    set_match_time(UserId, MatchId, UserRequestId);
+	RunedDistance < Distance ->
+	    set_match_participant_forfeit(UserRequestId, MatchId),
+	    set_match_time(UserId, MatchId, UserRequestId)
+    end.
+
+
+%%@doc get the distance of the request
+-spec get_distance(UserRequestId)-> integer() when
+      UserRequestId :: integer().
+
+get_distance(UserRequestId)->
+    Sql_result = database:db_query(select_distance,
+				  <<"SELECT t1.distance
+                                     FROM
+                                      tRequest t1 inner join
+                                      tRequestedUsers t2 on t1.id = t2.requestId
+                                     WHERE
+                                      t2.id = ?">>,
+				   [UserRequestId]),
+    [[{<<"distance">>, Distance}]] = database:as_list(Sql_result),
+    Distance.
+
+%%@doc check if match is done
+
+get_match_details(MatchId)->
+    Sql_result = database:db_query(select_match_is_done,
+				  <<"SELECT t3.userId, t2.state, t2.time 
+                                     FROM tMatch t1 inner join
+                                        tMatchParticipant t2 on t1.id = t2.matchId inner join
+                                        tRequestedUsers t3 on t1.requestId = t3.requestId
+                                     WHERE
+                                       t1.id = ? and t2.state = 1">>,
+				   [MatchId]),
+    database:as_list(Sql_result).
+
+%%@doc Check which user won the match.
+-spec check_winner(DetailsList, Result)-> {WinnerId, WinnerTime} when
+      DetailsList :: [[{binary(), integer()}, ...], ...],
+      Result :: {WinnerId, WinnerTime},
+      WinnerId :: integer(),
+      WinnerTime :: integer().
+
+check_winner([], {WinnerId, _})->
+    WinnerId;
+check_winner([[{<<"userId">>, UserId}, _,{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when WinnerTime == 0, Time < WinnerTime ->
+    check_winner(T,{UserId, Time});
+check_winner([[{<<"userId">>, _UserId}, _,{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when WinnerTime == 0, Time == WinnerTime -> 
+    check_winner(T, {0, Time});
+check_winner([_|T], Result) ->
+    check_winner(T, Result).
+
+    
+    
+%%@doc set match participant time
+-spec set_match_time(UserId, MatchId, UserRequestId)-> ok when
+      UserId :: integer(),
+      MatchId :: integer(),
+      UserRequestId :: integer().
+
+set_match_time(UserId, MatchId, UserRequestId)->
+    Total_time = gps:total_time(UserId, MatchId),
+    database:db_query(insert_matchParticiapnt_time,
+		     <<"UPDATE tMatchParticipant SET time = ?
+                        WHERE matchId = ? and requestedUserId = ?">>,
+		     [Total_time, MatchId, UserRequestId]).
     
 
 %%@doc set match winner
@@ -242,7 +370,40 @@ set_winner(MatchId, WinnerId)->
 		      [WinnerId, MatchId]),
     ok.
     
+%%@doc Set flag in the db that the user is finished running her turn.
+-spec set_match_participant_done(UserRequestId, MatchId)-> ok when
+      UserRequestId :: integer(),
+      MatchId :: integer().
 
+set_match_participant_done(UserRequestId, MatchId)->
+    database:db_query(set_match_participant_done,
+			   <<"UPDATE tMatchParticipant SET state = 1 
+                            WHERE requestedUserId = ? and matchId = ?">>,
+			   [UserRequestId, MatchId]).
+
+
+%%@doc Set flag in the db that the user is finished running her turn.
+-spec set_match_participant_forfeit(UserRequestId, MatchId)-> ok when
+      UserRequestId :: integer(),
+      MatchId :: integer().
+
+set_match_participant_forfeit(UserRequestId, MatchId)->
+    database:db_query(set_match_participant_forefeit,
+			   <<"UPDATE tMatchParticipant SET state = 2 
+                            WHERE requestedUserId = ? and matchId = ?">>,
+			   [UserRequestId, MatchId]).
+
+
+%%@doc Set a flag that the match is completed
+-spec set_match_done(MatchId)-> ok when
+      MatchId :: integer().
+
+set_match_done(MatchId)->
+    database:async_db_query(set_match_done,
+			   <<"UPDATE tMatch SET state = 1 
+                            WHERE id = ?">>,
+			   [MatchId]).
+    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%         GPS                %%

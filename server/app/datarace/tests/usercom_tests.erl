@@ -153,7 +153,7 @@ request_accept({U1, _U2})->
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),   
     usercom:request_accept(Result#request_table.id),
-    timer:sleep(100),
+    timer:sleep(200),
     {R2, R3} = usercom:request_lookup(U1),
     Result_after = hd(R2),
     [?_assertEqual(Result_after#request_table.state, 1)].
@@ -162,7 +162,7 @@ request_cancel({U1, _U2})->
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),  
     usercom:request_cancel(Result#request_table.id),
-    timer:sleep(100),
+    timer:sleep(200),
     {R2, R3} = usercom:request_lookup(U1),
     Result_after = hd(R2),  
     [?_assertEqual(Result_after#request_table.state, 2)].
@@ -171,7 +171,7 @@ request_cancel({U1, _U2})->
 
 match({UserRequestId, U1, U2})->
     Result = usercom:match(UserRequestId),
-    [?_assertEqual(Result#match_table.userId, U2),
+    [?_assertEqual(Result#match_table.userId, U1),
     ?_assertEqual(Result#match_table.requestId, UserRequestId)].
 
     

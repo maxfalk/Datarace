@@ -1,24 +1,24 @@
-%%@doc Author: Max Falk Nilsson
-%%This module holds functions for converting a incoming packet
-%% to a more Erlang-esque form.
+%% @doc This module holds functions for converting an incoming and 
+%% outgoing network packets
 
 -module(packconv).
 
 -export([convert_pack/2, pack/2]).
 
 -include("../include/types.hrl").
+-include("../include/database.hrl").
 
 
 %%====================================================================
-%% 
+%% Exported functions
 %%====================================================================
 
-%%@doc Convert a received message to an easier read format.
+
+%% @doc Convert a received binary message to a .
 -spec convert_pack(Type, Data) -> Result when
       Type :: binary(),
       Data :: binary(),
-      Result :: {[integer()], [integer()]} | 
-		{[integer()], [integer()], [integer()]}.
+      Result :: term().
 
 convert_pack(Type, Data)->
     ListData = binary_to_list(Data),
@@ -34,42 +34,11 @@ convert_pack(Type, Data)->
     end.
 
 
-%%@doc Convert a login packet.
--spec login_pack(Packet) -> {Username, Password} when
-      Packet :: [integer()],
-      Username :: [integer()],
-      Password :: [integer()].
-
-login_pack(List)->
-    {Username, Password} = lists:split(50, List),
-    {[X || X <- Username, X =/= 0], [X || X <- Password, X =/= 0]}.
-
-
-%%@doc Convert a register packet to tuple.
--spec register_pack(Packet) -> {Username, Password, Email} when 
-      Packet :: [integer()],
-      Username :: [integer()],
-      Password :: [integer()],
-      Email :: [integer()].
-
-register_pack(List) ->
-    {Username, Rest} = lists:split(50, List),
-    {Password, Email} = lists:split(50, Rest),    
-    {[X || X <- Username, X =/= 0], 
-     [X || X <- Password, X =/= 0], 
-     [X || X <- Email, X =/= 0]}.
-
-
-match_gps_pack(Data) ->
-    <<Longitude/little-float, Latitude/little-float>> = Data,
-    {Longitude, Latitude}.
-
-
-search_pack(SearchString) ->
-    [X || X <- SearchString, X =/= 0].
-
-
-%%@doc Convert a set of data to a binary packet
+%% @doc Convert a set of data to a binary packet
+-spec pack(Type, Data) -> Result when
+      Type :: binary(),
+      Data :: term(),
+      Result :: binary() | {binary(), binary()}.
 
 pack(Type, Data) ->
     case Type of
@@ -80,7 +49,72 @@ pack(Type, Data) ->
 	?SEARCH_RESULTS ->
 	    search_results_pack(Data)
     end.
+
+
+%%====================================================================
+%% Local functions for convert_pack
+%%====================================================================
+
+%% @doc Convert a login packet.
+-spec login_pack(Packet) -> {Username, Password} when
+      Packet :: binary(),
+      Username :: list(),
+      Password :: list().
+
+login_pack(List)->
+    {Username, Password} = lists:split(50, List),
+    {[X || X <- Username, X =/= 0], [X || X <- Password, X =/= 0]}.
+
+
+%% @doc Convert a register packet.
+-spec register_pack(Packet) -> {Username, Password, Email} when 
+      Packet :: binary(),
+      Username :: list(),
+      Password :: list(),
+      Email :: list().
+
+register_pack(List) ->
+    {Username, Rest} = lists:split(50, List),
+    {Password, Email} = lists:split(50, Rest),    
+    {[X || X <- Username, X =/= 0], 
+     [X || X <- Password, X =/= 0], 
+     [X || X <- Email, X =/= 0]}.
+
+
+%% @doc Convert a GPS packet.
+-spec match_gps_pack(Data) -> {Longitude, Latitude} when
+      Data :: binary(),
+      Longitude :: float(),
+      Latitude :: float().
+
+match_gps_pack(Data) ->
+    <<Longitude/little-float, Latitude/little-float>> = Data,
+    {Longitude, Latitude}.
+
+
+%% @doc Convert a search packet.
+-spec search_pack(SearchBinary) -> SearchString when
+      SearchBinary :: binary(),
+      SearchString :: list().
+
+search_pack(SearchString) ->
+    [X || X <- SearchString, X =/= 0].
     
+
+%%====================================================================
+%% Local functions for pack
+%%====================================================================
+
+
+%% @doc Make a binary packet out of request lookup results
+-spec request_lookup_pack(RequestLookup) -> Result when
+      MadeRequestTable :: [request_table()],
+      ReceivedRequestTable :: [request_table()],
+      MadeRequestBinary :: binary(),
+      ReceivedRequestBinary :: binary(),      
+      RequestLookup :: {MadeRequestTable, ReceivedRequestTable},
+      Result :: {MadeRequestBinary, ReceivedRequestBinary}.
+
 
 request_lookup_pack({MadeRequestTable, ReceivedRequestTable}) ->
     MadeRequestPack = [ request_entry_pack(Entry) || Entry <- MadeRequestTable ],
@@ -88,6 +122,11 @@ request_lookup_pack({MadeRequestTable, ReceivedRequestTable}) ->
     {binary_join(?REQUEST_LOOKUP_REPLY_MADE, MadeRequestPack), 
      binary_join(?REQUEST_LOOKUP_REPLY_CHAL, ReceivedRequestPack)}.
 
+
+%% @doc Make a binary packet out of a request_table.
+-spec request_entry_pack(RequestTable) -> Result when
+      RequestTable :: request_table(),
+      Result :: binary().
 
 request_entry_pack({request_table, RequestId, ChallengeId, UserName,
 		    {datetime, {{Year, Month, Day}, {Hour, Minute, Second}}}, 
@@ -103,6 +142,11 @@ request_entry_pack({request_table, RequestId, ChallengeId, UserName,
     >>. %% 90 bytes in total
 
 
+%% @doc Make a binary packet out of a user stats table.
+-spec get_home_stats_pack(UserStatsTable) -> Result when
+      UserStatsTable :: user_stats_table(),
+      Result :: binary().
+
 get_home_stats_pack({user_stats_table, UserName, AverageSpeed, AverageDistance, 
 		     Wins, Matches, Requests}) ->
     NamePad = 8*(50-byte_size(UserName)),
@@ -116,13 +160,18 @@ get_home_stats_pack({user_stats_table, UserName, AverageSpeed, AverageDistance,
     >>. %% 80 bytes in total
 
 
+%% @doc Make a binary packet out of a search result
+-spec search_results_pack(SearchResults) -> Result when
+      SearchResults :: [user_search_table()],
+      Result :: binary().
+
 search_results_pack(Data) ->
     Packets = [ <<UserId:32/little-integer, Username/binary, 0:(8*(50-byte_size(Username)))>> 
 		    || {user_search_table, UserId, Username} <- Data ],
     binary_join(?SEARCH_RESULTS, Packets).
 
 
-%%@doc Join a list of binaries into a single binary.
+%% @doc Join a list of binaries into a single binary.
 -spec binary_join(Type, [Binary]) -> Result when
       Type :: binary(),
       Binary :: binary(),

@@ -3,7 +3,7 @@
 %%====================================================================
 %% Packet types
 %% ------------------------------------------------------------------
-%% This file contains macros to identify all login types. Use these
+%% This file contains macros to identify all packet types. Use these
 %% instead of constants when pattern matching packets et c.
 %%====================================================================
 

@@ -3,6 +3,7 @@
 %% client_serv_sup
 %%====================================================================
 
+
 -module(client_serv_sup).
 -behaviour(supervisor).
 
@@ -16,9 +17,9 @@
 %% Supervisor API
 %%====================================================================
 
-%% @doc Start a new Client_serv supervisor, which will wait for 
-%% instructions to start new Client_servs. 
 
+%% @doc Start a new Client Serv supervisor, which will wait for 
+%% instructions to start new Client Servs. 
 -spec start_link() -> Result when
       Result :: {ok, pid()} | 
 		ignore | 
@@ -32,7 +33,6 @@ start_link() ->
 
 
 %% @doc Start a new client_serv dynamically. 
-
 -spec start_client_serv(UserId, Socket) -> Result when
       UserId :: integer(),
       Socket :: socket(),
@@ -48,7 +48,6 @@ start_client_serv(UserId, Socket) ->
 
 
 %% @doc Returns information concerning the number of active processes.
-
 -spec count_children() -> PropListOfCounts when
       PropListOfCounts :: [Count],
       Count :: {specs, integer()}
@@ -64,8 +63,8 @@ count_children() ->
 %% Callback functions
 %%====================================================================
 
-%% @doc Initializes the Client_serv supervisor.
 
+%% @doc Initializes the Client_serv supervisor.
 -spec init(Args) -> {ok, {SuperSpec, []}} when
       Args :: none(),
       SuperSpec :: {simple_one_for_one, 60, 3600}.
