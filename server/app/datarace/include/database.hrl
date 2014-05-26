@@ -8,7 +8,7 @@
 -record(loginlog_table, {id}).
 -record(register_table,{id}).
 
--record(request_table,{id, challenged_userId, user_name, time, state, distance}).
+-record(request_table,{id, challenged_userId, user_name, date, state, distance}).
 -record(request_info_table, {requestId}).
 
 -record(match_table,{id,userId, winner, requestId}).

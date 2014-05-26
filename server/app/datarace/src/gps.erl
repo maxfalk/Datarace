@@ -1,6 +1,6 @@
 -module(gps).
 -export([distance/4, speed/2, averagespeed/2, averagedistance/2, statistics_compare/3]).
--export([calc_pointdistance/3]).
+-export([calc_pointdistance/3,calc_totaldistance/2, total_time/2]).
 
 -include_lib("../include/database.hrl").
 
@@ -76,7 +76,16 @@ calc_totaldistancehelp([First,Sec | Tl], Distance) ->
 			     Sec#gps_table.longitude, Sec#gps_table.latitude),
     calc_totaldistancehelp([Sec|Tl], Sum_distance + Distance).
 
+%%@doc total gps time
+total_time(UserId, MatchId)->
+    total_timehelper(usercom:gps_get(UserId, MatchId), 0).
 
+total_timehelper([], Time)->
+    Time;
+total_timehelper([_First], Time)->
+    Time;
+total_timehelper([First, Sec | T], Time)->
+    total_timehelper(T, Time + calc_timediff(First#gps_table.time, Sec#gps_table.time)).
 
 
 %%@doc calculate the difference in time of two date times.
@@ -107,28 +116,57 @@ calc_timediff(T1,T2) ->
 calc_pointdistance(UserId, MatchId, StartTime)->
     Gps = usercom:gps_get(UserId, MatchId),
     Time = calc_timediff(calendar:local_time(), StartTime),
-    calc_pointdistancehelp(Gps, Time, 0, 0).
+    calc_pointdistancehelp(Gps, Time, 0, 0, UserId).
 
 
-calc_pointdistancehelp([], _, Distance, _) ->
-    Distance;
-calc_pointdistancehelp([_Last], _, Distance, _) ->
-    Distance;
-calc_pointdistancehelp([First,Sec | Tl], Maxtime, Distance, Time) ->
+calc_pointdistancehelp([], _, Distance, Time, UserId) ->
+    Distance + calc_avgdistance_from_avgspeed(UserId, Time);
+calc_pointdistancehelp([_Last], _, Distance, Time, UserId) ->
+        Distance + calc_avgdistance_from_avgspeed(UserId, Time);
+calc_pointdistancehelp([First,Sec | Tl], Maxtime, Distance, Time, UserId) ->
     NewTime = Time + calc_timediff(First#gps_table.time, Sec#gps_table.time),
     if
 	NewTime =< Maxtime ->
 	    Sum_distance = distance(First#gps_table.longitude, First#gps_table.latitude, 
 				    Sec#gps_table.longitude, Sec#gps_table.latitude),
-	    calc_pointdistancehelp([Sec|Tl], Maxtime, Sum_distance + Distance, NewTime);
+	    calc_pointdistancehelp([Sec|Tl], Maxtime, Sum_distance + Distance, NewTime, UserId);
 	 NewTime > Maxtime ->
 	    Distance
     end.
 
+%%@doc calculate distance for a given time using average speed of a user,
+%% time is in seconds.
+-spec calc_avgdistance_from_avgspeed(UserId, Time)-> float() when
+      UserId :: integer(),
+      Time :: integer().
 
-
-
+calc_avgdistance_from_avgspeed(UserId, Time)->
+    AvgSpeed = get_averagespeed(UserId),
+    case AvgSpeed of
+	0 ->
+	    averagedistance(10, (Time/36000));
+	_ ->
+	    averagedistance(AvgSpeed, (Time/36000))
+    end.
     
+
+
+%%@doc Get averagespeed fomr the db
+-spec get_averagespeed(UserId)-> float() when
+      UserId :: integer().
+
+get_averagespeed(UserId)->
+    Result = database:db_query(average_speed_avgdistance,
+		     "SELECT t1.averageSpeed 
+                      FROM tUserStatistics t1
+                      WHERE
+                       t1.userId = ?",
+		      [UserId]),
+    [[{<<"averageSpeed">>, AverageSpeed}]] = database:as_list(Result),
+    AverageSpeed.
+    
+
+
 
 %%@doc==============================================%
 %% get the gps coordinates and speed from the other %
