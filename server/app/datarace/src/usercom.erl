@@ -265,12 +265,19 @@ check_user_match(UserRequestId, MatchId)->
 match_stop(UserId, MatchId, UserRequestId)->
     user_match_stop(UserId, MatchId, UserRequestId),
     MatchDetails = get_match_details(MatchId),
+    match_stophelper(MatchId, MatchDetails).
+
+
+match_stophelper(MatchId, MatchDetails) when length(MatchDetails) > 1 ->        	
     case check_winner(MatchDetails, {0, 0}) of
 	WinnerId when WinnerId > 0 ->
-	    set_winner(MatchId, WinnerId)
+	    set_winner(MatchId, WinnerId);
+	_ -> no_winner
     end,
-    set_match_done(MatchId).
-    
+    set_match_done(MatchId);
+match_stophelper(_MatchId, _MatchDetails)  ->
+    ok.
+
 
 %%@doc Make mathc stop actions for each user
 -spec user_match_stop(UserId, MatchId, UserRequestId)-> ok when
