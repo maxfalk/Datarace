@@ -146,10 +146,9 @@ terminate(_Reason, _State)->
 
 handle_call(UserName, From, State)->
     InternalMatches = search_internal_state(State, UserName),
-    send(From, InternalMatches),
     NewElements = remove_duplicates(database_lookup(UserName),InternalMatches),
-    send(From, NewElements),
-    {noreply, NewElements ++ lists:sublist(InternalMatches, ?MAXLEN - length(NewElements))}.
+    NewState = NewElements ++ lists:sublist(InternalMatches, ?MAXLEN - length(NewElements)),
+    {reply, NewState, NewState}. 
 
 
 

@@ -104,9 +104,11 @@ request_lookup_made(UserId) ->
                                                 t2.userId = t1.userId inner join
                                        tRequestedUsers t3 on t2.id = t3.requestId and 
                                                 t2.userId != t3.userId inner join
-                                       tUsers t4 on t3.userId = t4.id
+                                       tUsers t4 on t3.userId = t4.id left join
+                                       tMatchParticipant t5 on t5.requestedUserId = t1.id
                                       WHERE
-                                       t1.userId = ?">>,
+                                       t1.userId = ? and 
+                                       t5.id in null">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
 
@@ -124,9 +126,11 @@ request_lookup_challenged(UserId)->
                                       tRequestedUsers t1 inner join
                                       tRequest t2 on t1.requestId = t2.id and 
                                                      t2.userId != t1.userId inner join
-                                      tUsers t3 on t2.userId = t3.id
+                                      tUsers t3 on t2.userId = t3.id left join
+                                      tMatchParticipant t4 on t4.requestedUserId = t1.id
                                       WHERE 
-                                       t1.userId = ?;">>,
+                                       t1.userId = ? and
+                                       t4.id is null;">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
     
@@ -517,3 +521,7 @@ get_num_pending_requests(UserId)->
 pad_num_pending_requests({error, no_item})->
     0;
 pad_num_pending_requests(R) -> hd(R).
+
+
+
+%%@doc Get match statistics
