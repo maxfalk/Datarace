@@ -125,7 +125,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -138,14 +138,21 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section==0)
-    {
-        return ([_competitorsReady count]+[_competitorsPending count]);
-    }
-    else {
-        return [_competitors count];
-    }
+
+    int count = (int)[_competitorsReady count]+[_competitorsPending count];
+    
+    if (count == 0) {
+        self.tableView.separatorColor = [UIColor clearColor];
+        UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nochallengesfound"]];
+        self.tableView.backgroundView = tempImageView;
+
+        return 0;
+    } else
+        return count;
+        self.tableView.backgroundView.hidden = YES;
+
 }
+
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -194,8 +201,6 @@
 }
 
 
-
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     CustomCell *cell = (CustomCell *)[tableView cellForRowAtIndexPath:indexPath];
@@ -236,7 +241,6 @@
 }
 
 
-
 - (void)addFooter {
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     v.backgroundColor = [UIColor clearColor];
@@ -245,7 +249,6 @@
 
 - (IBAction)searchButtonPressed:(id)sender {
     [self performSegueWithIdentifier:@"search" sender:self];
-    NSLog(@"Searchbutton pressed");
 }
 
 @end

@@ -351,10 +351,12 @@ static NSOutputStream *outputStream;
     
             [self readStream:(uint8_t *)(user+i) maxLength:sizeof(userInfo)];
             
+            result->array = user;
         }
+        
     }
     
-    result->array = user;
+    //result->array = user;
     
     return result;
 }
@@ -414,6 +416,35 @@ static NSOutputStream *outputStream;
     packet.type[1] = 3;
     
     [outputStream write:(uint8_t *)&packet maxLength:sizeof(quitMatch)];
+}
+
++(void *)requestCompetitorsCoordinates {
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    requestLookUpMeta packet;
+
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 4;
+    packet.type[1] = 4;
+    
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
+    
+    competitorsDistance *result = malloc(sizeof(competitorsDistance));
+    memset(result, 0, sizeof(competitorsDistance));
+    
+    [inputStream read:(uint8_t *)result maxLength:6];
+    
+    if ((result->type[0] == 4) && (result->type[1] == 5)) {
+        
+        return result;
+    } else {
+    
+    //result->array = user;
+    
+    return nil;
+        
+    }
 }
 
 @end

@@ -33,11 +33,10 @@
     [super viewDidLoad];
     _searchTextField.delegate = self;
      _arrayWithUsers = [[NSMutableArray alloc] init];
-    //_users = [[NSMutableArray alloc] initWithArray:@[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J"]];
     _users = [[NSMutableArray alloc] init];
     _usersID = [[NSMutableArray alloc] init];
+    self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
 
-    
     [self addFooter];
 }
 
@@ -54,7 +53,6 @@
         return [searchResults count];
     } else {
         return [_users count];
-        //[_users count];
     }
 }
 
@@ -90,24 +88,43 @@
     
     }
     
-   // [_users addObjectsFromArray:array];
     [theTextField resignFirstResponder];
-    NSLog(@"%@",theTextField.text);
     [self.tableView reloadData];
+    
+    if ([_users count] == 0) {
+        UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nouserfound"]];
+        self.tableView.backgroundView = tempImageView;
+    } else {
+        self.tableView.backgroundView.hidden = YES;
+    }
     return YES;
 }
 
-/*
- -(BOOL)textViewShouldEndEditing:(UITextView *)textView{
- [textView resignFirstResponder];
- NSLog(@"%@",textView.text);
- return YES;
- }
- */
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+   // UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    [self performSegueWithIdentifier:@"challenge" sender:indexPath];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([segue.identifier isEqualToString:@"challenge"]) {
+        NSIndexPath *indexPath = sender;
+        
+        ChallengeViewController *class = (ChallengeViewController *) [segue destinationViewController];
+        class.challengerUsername = [_users objectAtIndex:indexPath.row];
+        NSLog(@"challengerID: %ld", (long)[[_usersID objectAtIndex:indexPath.row] integerValue]);
+        class.challengerID = (long)[[_usersID objectAtIndex:indexPath.row] integerValue];
+    
+    }
+}
+
 
 - (void)addFooter {
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     v.backgroundColor = [UIColor clearColor];
     [self.tableView setTableFooterView:v];
 }
+
 @end

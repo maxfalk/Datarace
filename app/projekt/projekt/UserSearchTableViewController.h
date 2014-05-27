@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CustomCell.h"
 #import "NetworkConnectionClass.h"
+#import "ChallengeViewController.h"
 
 
 @interface UserSearchTableViewController : UITableViewController <UITextFieldDelegate>

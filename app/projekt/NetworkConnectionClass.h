@@ -55,6 +55,11 @@ typedef struct __attribute__ ((packed)) {
     userInfo *array;
 } userArray;
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    double distance;
+} competitorsDistance;
 
 
 
@@ -119,5 +124,8 @@ typedef struct __attribute__ ((packed)) {
 +(void)sendUpdatedCoordinates:(double)latitude longitude:(double)longitude;
 
 +(void)quitRace;
+
++(void *)requestCompetitorsCoordinates;
+
 
 @end
