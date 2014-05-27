@@ -106,10 +106,8 @@ remove_duplicates(List1, List2)->
       Packet :: any(),
       Pid :: pid().
 
-send(From, Packet) when length(Packet) > 0 ->
-    gen_server:reply(From, Packet);
-send(_From, Packet) ->
-    Packet.
+send(From, Packet) ->
+    gen_server:reply(From, Packet).
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %% CALLBACK FUNCTIONS
