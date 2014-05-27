@@ -59,8 +59,8 @@ search_test(_)->
     User0 = hd(search_serv:search(Pid, "search_test0")),
     User1 = hd(search_serv:search(Pid, "search_test1")),
     User2 = search_serv:search(Pid, "search_test"),
-    [?_assertEqual(User0#user_search_table.user_name, "search_test0"),
-    ?_assertEqual(User1#user_search_table.user_name, "search_test1"),
+    [?_assertEqual(User0#user_search_table.userName, "search_test0"),
+    ?_assertEqual(User1#user_search_table.userName, "search_test1"),
     ?_assertEqual(length(User2),2)].
     
 

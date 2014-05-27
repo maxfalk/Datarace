@@ -1,0 +1,11 @@
+%% rel generated at {2014,5,26} {22,55,35}
+{release,{"datarace","0.0.0"},
+         {erts,"5.9.1"},
+         [{kernel,"2.15.1"},
+          {stdlib,"1.18.1"},
+          {crypto,"2.1"},
+          {emysql,"0.4.1",transient},
+          {log,"0.0.0",transient},
+          {datarace,"0.0.0",transient},
+          {search,"0.0.0",transient}]}.
+
