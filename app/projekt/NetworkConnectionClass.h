@@ -125,7 +125,7 @@ typedef struct __attribute__ ((packed)) {
 
 +(void)quitRace;
 
-+(void *)requestCompetitorsCoordinates;
++(void *)requestCompetitorsDistance;
 
 
 @end

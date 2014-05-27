@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "NetworkConnectionClass.h"
+#import "RaceViewController.h"
+#import "FinishlineViewController.h"
 
 @interface menuViewController : UIViewController
 {

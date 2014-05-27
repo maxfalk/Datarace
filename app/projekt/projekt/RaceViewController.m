@@ -160,11 +160,13 @@
     } else {
         return [NSString stringWithFormat:@"%02d:%02d:%02d:%02d",hours, minutes, seconds, milliSeconds];
     }
+    
+    
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
-    
+     [self getCompetitorsDistance];
     float spanX = fabs(_mapView.userLocation.coordinate.longitude - (_firstPosition.coordinate.longitude))*1.6;
     float spanY = fabs(_mapView.userLocation.coordinate.latitude - (_firstPosition.coordinate.latitude))*2.5;
     
@@ -223,8 +225,7 @@
         
         [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
         [NetworkConnectionClass sendUpdatedCoordinates:_previousPosition.latitude longitude:_previousPosition.longitude];
-        _competitorSlider.value = (int)[NetworkConnectionClass requestCompetitorsCoordinates];
-        NSLog(@"competitors distance: %f", _competitorSlider.value);
+        
     }
 }
 
@@ -291,8 +292,8 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Quit"
                                                     message:@"Are you sure you want to give up?"
                                                    delegate:self
-                                          cancelButtonTitle:@"Yes"
-                                          otherButtonTitles:@"No",nil];
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes",nil];
     [alert show];
 }
 
@@ -303,19 +304,26 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
-    if (buttonIndex == 0) {
+    if (buttonIndex == 1) {
         _check = 1;
         self.mapView.showsUserLocation = NO;
         [self.locationManager stopUpdatingLocation];
-        [self.navigationController popViewControllerAnimated:YES];
+        [self performSegueWithIdentifier:@"finish" sender:self];
         [_stopWatch invalidate];
         [NetworkConnectionClass quitRace];
         
-    } else {
-        
-        
+    }    
+}
+
+-(void)getCompetitorsDistance {
+    competitorsDistance *result = [NetworkConnectionClass requestCompetitorsDistance];
+
+    if ((result->type[0] == 4) && (result->type[1] == 5)) {
+        _totalCompetitorDistance = result->distance*1000;
+    NSLog(@"competitors distance: %f", _competitorSlider.value);
+        _competitorSlider.value = _totalCompetitorDistance;
+
     }
-    
 }
 
 

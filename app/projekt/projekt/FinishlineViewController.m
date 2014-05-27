@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationItem setHidesBackButton:YES];
     // Do any additional setup after loading the view.
 }
 
@@ -33,6 +34,9 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (IBAction)doneButtonPressed:(id)sender {
+    [self performSegueWithIdentifier:@"goBack" sender:self];
 }
 
 /*

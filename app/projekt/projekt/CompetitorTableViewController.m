@@ -43,7 +43,6 @@
     _requests = [[NSMutableArray alloc] init];
     _distances  = [[NSMutableArray alloc] init];
     _requestIDs = [[NSMutableArray alloc] init];
-    _competitors = [[NSMutableArray alloc] initWithArray:@[@"Babak Toghiani-Rizi", @"Marina Jaksic", @"Namn Namnsson"]];
     self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
     
     

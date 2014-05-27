@@ -186,13 +186,16 @@
      */
 }
 
-- (void)spinIt {
-	/*CALayer *layer = [self.view.layer sublayers][0];
-	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.x"];
-	animation.duration = 1.25f;
-	animation.toValue = @(DEGREES_TO_RADIANS(360));
-	[layer addAnimation:animation forKey:@"spinAnimation"];
-     */
+
+- (IBAction)unwindToAd:(UIStoryboardSegue *)unwindSegue
+{
+    
+    UIViewController* sourceViewController = unwindSegue.sourceViewController;
+    
+    if ([sourceViewController isKindOfClass:[FinishlineViewController class]])
+    {
+        NSLog(@"Coming from race!");
+    }
 }
 
 
