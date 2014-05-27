@@ -56,7 +56,9 @@
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // Add code here to do background processing
         
-        
+        [_competitorsReady removeAllObjects];
+        [_distances removeAllObjects];
+        [_requestIDs removeAllObjects];
         
         [NetworkConnectionClass sendRequest];
         requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
@@ -116,7 +118,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -221,16 +222,14 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([segue.identifier isEqualToString:@"challengeSettings"]) {
-        NSIndexPath *indexPath = sender;
         CustomCell *cell = (CustomCell *)[self.tableView cellForRowAtIndexPath:sender];
         NSString *string = cell.competitorLabel.text;
         ChallengeViewController *class = (ChallengeViewController *) [segue destinationViewController];
         class.challengerUsername = string;
     } else if ([segue.identifier isEqualToString:@"startChallenge"]) {
         NSIndexPath *indexPath = sender;
-        CustomCell *cell = (CustomCell *)[self.tableView cellForRowAtIndexPath:sender];
         RaceViewController *class = (RaceViewController *) [segue destinationViewController];
-        class.reqID = [[_requestIDs objectAtIndex:indexPath.row] integerValue];
+        class.reqID = (int)[[_requestIDs objectAtIndex:indexPath.row] integerValue];
     } else if ([segue.identifier isEqualToString:@"search"]) {
         NSLog(@"Search ready to segue");
     }

@@ -11,6 +11,7 @@
 @interface UserSearchTableViewController ()
 
 @property (nonatomic, strong) NSMutableArray *users;
+@property (nonatomic, strong) NSMutableArray *usersID;
 @property (strong,nonatomic) NSMutableArray *arrayWithUsers;
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
 
@@ -33,7 +34,9 @@
     _searchTextField.delegate = self;
      _arrayWithUsers = [[NSMutableArray alloc] init];
     //_users = [[NSMutableArray alloc] initWithArray:@[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J"]];
-    
+    _users = [[NSMutableArray alloc] init];
+    _usersID = [[NSMutableArray alloc] init];
+
     
     [self addFooter];
 }
@@ -50,7 +53,7 @@
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         return [searchResults count];
     } else {
-        return 0;
+        return [_users count];
         //[_users count];
     }
 }
@@ -64,7 +67,7 @@
         temp = [searchResults objectAtIndex:indexPath.row];
         cell.textLabel.text = temp;
     } else {
-        //cell.textLabel.text = [_users objectAtIndex:indexPath.row];
+        cell.textLabel.text = [_users objectAtIndex:indexPath.row];
     }
     
     return cell;
@@ -72,23 +75,25 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
     
-    //dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // Add code here to do background processing
-      userArray *array = [NetworkConnectionClass searchForUsers:theTextField.text];
+
+    //[_users addObjectsFromArray:
+   userArray *result = [NetworkConnectionClass searchForUsers:theTextField.text];
+    [_users removeAllObjects];
+    [_usersID removeAllObjects];
+
+    int numberOfUsers = ((result->length)/(sizeof(userInfo)));
+    for (int i = 0; i < numberOfUsers; i++) {
         
-       
+        [_users addObject:[NSString stringWithFormat:@"%s",result->array[i].username]];
         
-        
-        //dispatch_async( dispatch_get_main_queue(), ^{
-            // Add code here to update the UI/send notifications based on the
-            // results of the background processing
-          //  [self.tableView reloadData];
-       // });
-   // });
+        [_usersID addObject:[NSNumber numberWithInt:result->array[i].userID]];
     
+    }
+    
+   // [_users addObjectsFromArray:array];
     [theTextField resignFirstResponder];
     NSLog(@"%@",theTextField.text);
-    
+    [self.tableView reloadData];
     return YES;
 }
 

@@ -45,15 +45,17 @@ typedef struct __attribute__ ((packed)) {
 } requestLookUpResult;
 
 typedef struct __attribute__ ((packed)) {
-    uint32_t length;
-    char type[2];
-    struct user *userArray;
-} userArray;
-
-typedef struct __attribute__ ((packed)) {
     int userID;
     char username[50];
-} user;
+} userInfo;
+
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    userInfo *array;
+} userArray;
+
+
 
 
 @interface NetworkConnectionClass : NSObject <NSStreamDelegate>
