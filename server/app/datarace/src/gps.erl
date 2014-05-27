@@ -162,8 +162,12 @@ get_averagespeed(UserId)->
                       WHERE
                        t1.userId = ?",
 		      [UserId]),
-    [[{<<"averageSpeed">>, AverageSpeed}]] = database:as_list(Result),
-    AverageSpeed.
+    case database:as_list(Result) of
+	 [[{<<"averageSpeed">>, AverageSpeed}]] -> 
+	    AverageSpeed;
+	_ ->
+	    0
+    end.
     
 
 
