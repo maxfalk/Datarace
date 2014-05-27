@@ -7,8 +7,9 @@
 
 -export([request/3,request_lookup/1,request_accept/1,request_cancel/1]).
 -export([match/1, set_winner/2,set_match_participant_done/2, set_match_done/1]).
--export([gps_save/4, gps_get/2, match_stop/3]).
+-export([gps_save/4, gps_get/2, match_stop/3, get_winner/1]).
 -export([get_home_stats/1,get_num_pending_requests/1]).
+-export([get_history/1, get_match_end_stats/1]).
 
 -include("../include/database.hrl").
 
@@ -374,6 +375,18 @@ set_winner(MatchId, WinnerId)->
 		      [WinnerId, MatchId]),
     ok.
     
+%%@doc get match winner
+-spec get_winner(MatchId)-> integer() when
+      MatchId :: integer().
+
+get_winner(MatchId)->
+    Sql_result = database:db_query(get_match_winner,
+				   <<"SELECT winnerUserId FROM tMatch WHERE id = ?">>,
+				   [MatchId]),
+    [[{<<"winnerUserId">>, Id}]] = database:as_list(Sql_result),
+    Id.
+    
+
 %%@doc Set flag in the db that the user is finished running her turn.
 -spec set_match_participant_done(UserRequestId, MatchId)-> ok when
       UserRequestId :: integer(),
@@ -524,4 +537,24 @@ pad_num_pending_requests(R) -> hd(R).
 
 
 
-%%@doc Get match statistics
+%%@doc Get match statistics, match_stats_table
+-spec get_history(UserId) -> [match_stats_table(), ...] when
+      UserId :: integer().
+
+get_history(UserId)->
+    [Sql_result, _] = database:db_query(history_all_table,
+				   <<"CALL all_match_stats(?)">>,
+				   [UserId]),
+    database:result_to_record(Sql_result, match_stats_table).
+
+
+%%@doc Get match statistics, match_stats_table
+-spec get_match_end_stats(MatchId)-> [match_stats_table(), ...] when
+      MatchId :: integer().
+
+get_match_end_stats(MatchId)->
+    [Sql_result, _] = database:db_query(history_table,
+				   <<"CALL match_stats(?)">>,
+				   [MatchId]),
+    database:result_to_record(Sql_result, match_stats_table).
+    
