@@ -98,7 +98,7 @@ request_lookup_made(UserId) ->
     Sql_result = database:db_query(request_select_made, 
 				   <<"SELECT t1.id, t4.id as challenged_userId, 
                                              t4.userName as user_name, 
-                                             t2.time, t3.state, t2.distance
+                                             t2.time as date, t3.state, t2.distance
                                        FROM                               
                                        tRequestedUsers t1 inner join
                                        tRequest t2 on t1.requestId = t2.id and 
@@ -122,7 +122,7 @@ request_lookup_challenged(UserId)->
     Sql_result = database:db_query(request_select_challanged, 
 				   <<"SELECT t1.id, t3.id as challenged_userId, 
                                              t3.userName as user_name, 
-                                             t2.time, t1.state, t2.distance
+                                             t2.time as date, t1.state, t2.distance
                                      FROM
                                       tRequestedUsers t1 inner join
                                       tRequest t2 on t1.requestId = t2.id and 

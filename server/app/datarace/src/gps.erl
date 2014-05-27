@@ -1,7 +1,7 @@
 -module(gps).
 -export([distance/4, speed/2, averagespeed/2, averagedistance/2, statistics_compare/3]).
 -export([calc_pointdistance/3,calc_totaldistance/2, total_time/2]).
-
+-compile(export_all).
 -include_lib("../include/database.hrl").
 
 %%@doc===============================================%
@@ -119,10 +119,10 @@ calc_pointdistance(UserId, MatchId, StartTime)->
     calc_pointdistancehelp(Gps, Time, 0, 0, UserId).
 
 
-calc_pointdistancehelp([], _, Distance, Time, UserId) ->
-    Distance + calc_avgdistance_from_avgspeed(UserId, Time);
-calc_pointdistancehelp([_Last], _, Distance, Time, UserId) ->
-        Distance + calc_avgdistance_from_avgspeed(UserId, Time);
+calc_pointdistancehelp([], Maxtime, Distance, Time, UserId) ->
+    Distance + calc_avgdistance_from_avgspeed(UserId,Maxtime- Time);
+calc_pointdistancehelp([_Last], Maxtime, Distance, Time, UserId) ->
+        Distance + calc_avgdistance_from_avgspeed(UserId,Maxtime- Time);
 calc_pointdistancehelp([First,Sec | Tl], Maxtime, Distance, Time, UserId) ->
     NewTime = Time + calc_timediff(First#gps_table.time, Sec#gps_table.time),
     if
@@ -162,8 +162,12 @@ get_averagespeed(UserId)->
                       WHERE
                        t1.userId = ?",
 		      [UserId]),
-    [[{<<"averageSpeed">>, AverageSpeed}]] = database:as_list(Result),
-    AverageSpeed.
+    case database:as_list(Result) of
+	 [[{<<"averageSpeed">>, AverageSpeed}]] -> 
+	    AverageSpeed;
+	_ ->
+	    0
+    end.
     
 
 

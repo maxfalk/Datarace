@@ -7,7 +7,7 @@
 
 -module(search_serv).
 
--export([start_link/0, stop/1, search/2]).
+-export([start_link/0, stop/1, search/3]).
 -export([init/1, handle_cast/2, handle_call/3, terminate/2]).
 
 -include_lib("../include/types.hrl").
@@ -39,12 +39,13 @@ stop(Pid)->
 
 %%@doc Search for a user like the one with the sent username
 %% ordering by the best match first.
--spec search(Pid, Username)-> [user_search_table(), ...] when
+-spec search(Pid, Username, MyId)-> [user_search_table(), ...] when
       Pid :: pid(),
+      MyId :: integer(),
       Username :: string().
 
-search(Pid, Username)->
-    gen_server:call(Pid, Username).
+search(Pid, Username, MyId)->
+    gen_server:call(Pid, {Username, MyId}).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,18 +56,19 @@ search(Pid, Username)->
 
 %%@doc Search the database for the 5 best matches to the given 
 %%username. 
--spec database_lookup(UserName) -> [user_search_table(), ...] when
-      UserName :: string().
+-spec database_lookup(UserName, MyId) -> [user_search_table(), ...] when
+      UserName :: string(),
+      MyId :: integer().
 
-database_lookup(UserName)->
+database_lookup(UserName, MyId)->
     Sql_result = database:db_query(username_search,
 				   <<"SELECT t1.id, t1.userName
                                       FROM
                                        tUsers t1
                                       WHERE
-                                       t1.userName like ?
+                                       t1.userName like ? and t1.id != ?
                                       LIMIT 5;">>,
-				   [UserName ++ "%"]),
+				   [UserName ++ "%", MyId]),
     database:result_to_record(Sql_result, user_search_table).
 
    
@@ -101,13 +103,6 @@ remove_duplicates(List1, List2)->
     sets:to_list(sets:subtract(Set1,Set2)).
 
 
-%%@doc Send Packet to Pid if there is something to send.
--spec send(Pid, Packet) -> Packet when
-      Packet :: any(),
-      Pid :: pid().
-
-send(From, Packet) ->
-    gen_server:reply(From, Packet).
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %% CALLBACK FUNCTIONS
@@ -144,9 +139,9 @@ terminate(_Reason, _State)->
       State :: [user_search_table(), ...],
       NewState :: [user_search_table(), ...].
 
-handle_call(UserName, From, State)->
+handle_call({UserName, MyId}, _From, State)->
     InternalMatches = search_internal_state(State, UserName),
-    NewElements = remove_duplicates(database_lookup(UserName),InternalMatches),
+    NewElements = remove_duplicates(database_lookup(UserName, MyId),InternalMatches),
     NewState = NewElements ++ lists:sublist(InternalMatches, ?MAXLEN - length(NewElements)),
     {reply, NewState, NewState}. 
 
