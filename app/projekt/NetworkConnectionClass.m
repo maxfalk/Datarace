@@ -255,8 +255,8 @@ static NSOutputStream *outputStream;
     memset(result, 0, sizeof(requestLookUpResult));
     
     
-    [self readStream:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
-    [self readStream:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
+    [inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
+    [inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
     
     if ((result->requestLookUpMeta.type[0] == type1) && (result->requestLookUpMeta.type[1] == type2)) {
         
