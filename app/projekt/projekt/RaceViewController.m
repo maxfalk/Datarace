@@ -115,7 +115,7 @@
                       forState:UIControlStateNormal];
     [_competitorSlider setThumbImage:image
                             forState:UIControlStateNormal];
-    _totalCompetitorDistance = 2500;
+    _totalCompetitorDistance = 0;
     _competitorSlider.value = _totalCompetitorDistance;
     
     _averageSpeedLabel.text = @"Calculating...";
@@ -224,6 +224,7 @@
         [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
         [NetworkConnectionClass sendUpdatedCoordinates:_previousPosition.latitude longitude:_previousPosition.longitude];
         _competitorSlider.value = (int)[NetworkConnectionClass requestCompetitorsCoordinates];
+        NSLog(@"competitors distance: %f", _competitorSlider.value);
     }
 }
 
