@@ -108,7 +108,7 @@ request_lookup_made(UserId) ->
                                        tMatchParticipant t5 on t5.requestedUserId = t1.id
                                       WHERE
                                        t1.userId = ? and 
-                                       t5.id in null">>,
+                                       t5.id is null">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
 
