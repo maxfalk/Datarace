@@ -11,6 +11,8 @@
 		C7315B3F19347D3B0029BB98 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7315B3E19347D3B0029BB98 /* Images.xcassets */; };
 		C7315B4219349CFE0029BB98 /* HistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7315B4119349CFE0029BB98 /* HistoryTableViewCell.m */; };
 		C7315B451934A1B20029BB98 /* HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7315B441934A1B20029BB98 /* HistoryTableViewController.m */; };
+		C7315B491934C8F60029BB98 /* RequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7315B481934C8F60029BB98 /* RequestTableViewCell.m */; };
+		C7315B4C1934D61D0029BB98 /* RequestsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7315B4B1934D61D0029BB98 /* RequestsTableViewController.m */; };
 		C733903D193343BE002B2E12 /* FinishlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C733903C193343BE002B2E12 /* FinishlineViewController.m */; };
 		C7908A02192B3D8B00E7053F /* UserSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7908A01192B3D8B00E7053F /* UserSearchTableViewController.m */; };
 		C7A7ED3818FFD5BA00DE0740 /* requestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */; };
@@ -56,6 +58,10 @@
 		C7315B4119349CFE0029BB98 /* HistoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableViewCell.m; sourceTree = "<group>"; };
 		C7315B431934A1B20029BB98 /* HistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTableViewController.h; sourceTree = "<group>"; };
 		C7315B441934A1B20029BB98 /* HistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableViewController.m; sourceTree = "<group>"; };
+		C7315B471934C8F60029BB98 /* RequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestTableViewCell.h; sourceTree = "<group>"; };
+		C7315B481934C8F60029BB98 /* RequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestTableViewCell.m; sourceTree = "<group>"; };
+		C7315B4A1934D61D0029BB98 /* RequestsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestsTableViewController.h; sourceTree = "<group>"; };
+		C7315B4B1934D61D0029BB98 /* RequestsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestsTableViewController.m; sourceTree = "<group>"; };
 		C733903B193343BE002B2E12 /* FinishlineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinishlineViewController.h; sourceTree = "<group>"; };
 		C733903C193343BE002B2E12 /* FinishlineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinishlineViewController.m; sourceTree = "<group>"; };
 		C7908A00192B3D8B00E7053F /* UserSearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSearchTableViewController.h; sourceTree = "<group>"; };
@@ -160,6 +166,8 @@
 			children = (
 				C7A7ED3618FFD5BA00DE0740 /* requestTableViewController.h */,
 				C7A7ED3718FFD5BA00DE0740 /* requestTableViewController.m */,
+				C7315B4A1934D61D0029BB98 /* RequestsTableViewController.h */,
+				C7315B4B1934D61D0029BB98 /* RequestsTableViewController.m */,
 			);
 			name = Request;
 			sourceTree = "<group>";
@@ -180,6 +188,8 @@
 				C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */,
 				C7315B4019349CFE0029BB98 /* HistoryTableViewCell.h */,
 				C7315B4119349CFE0029BB98 /* HistoryTableViewCell.m */,
+				C7315B471934C8F60029BB98 /* RequestTableViewCell.h */,
+				C7315B481934C8F60029BB98 /* RequestTableViewCell.m */,
 			);
 			name = "Custom objects";
 			sourceTree = "<group>";
@@ -385,7 +395,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7315B4C1934D61D0029BB98 /* RequestsTableViewController.m in Sources */,
 				C7B7C7ED18FD17EC0096DB88 /* projektAppDelegate.m in Sources */,
+				C7315B491934C8F60029BB98 /* RequestTableViewCell.m in Sources */,
 				C7B7C7E918FD17EC0096DB88 /* main.m in Sources */,
 				C7EB1192190E77C600861F26 /* RegisteredViewController.m in Sources */,
 				C7CC2392190A5A9A0040E8C1 /* NetworkConnectionClass.m in Sources */,

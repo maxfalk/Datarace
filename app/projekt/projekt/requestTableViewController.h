@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "CustomCell.h"
 #import "NetworkConnectionClass.h"
+#import "RequestTableViewCell.h"
 
 @interface requestTableViewController : UITableViewController <UIAlertViewDelegate>
+
 
 @end

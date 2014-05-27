@@ -10,7 +10,6 @@
 
 @interface HistoryTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *distance;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *username;
 @property (weak, nonatomic) IBOutlet UIButton *btn;
 
