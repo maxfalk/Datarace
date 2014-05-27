@@ -46,79 +46,12 @@
     
     self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
     
+    @autoreleasepool {
+        [self performSelectorInBackground:@selector(getRequests) withObject:nil];
+    }
     
-    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // Add code here to do background processing
-        
-        requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
-        requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
-        
-        _requests = [[NSMutableArray alloc] init];
-        _distances  = [[NSMutableArray alloc] init];
-        _requestIDs = [[NSMutableArray alloc] init];
-        
-        
-        
-        //int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
-        //int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
-        
-        if (lookUpResultMade != nil) {
-            int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
-            
-            for(int i = 0; i < numOfPackesMade; i++){
-                
-                if (lookUpResultMade->requestLookUp[i].state == 0) {
-                    NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
-                    int distance = lookUpResultMade->requestLookUp[i].distance;
-                    int requestID = lookUpResultMade->requestLookUp[i].requestID;
-                    [_myRequests addObject:usernameMade];
-                    [_myRequestsDistances addObject:[NSNumber numberWithInt:distance]];
-                    [_myRequestsIDs addObject:[NSNumber numberWithInt:requestID]];
-                    
-                }
-            }
-        }
-        
-        if (lookUpResultGot != nil) {
-            int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
-            
-            for(int i = 0; i < numOfPackesGot; i++){
-                if (lookUpResultGot->requestLookUp[i].state == 0) {
-                    NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
-                    int distance = lookUpResultGot->requestLookUp[i].distance;
-                    int requestID = lookUpResultGot->requestLookUp[i].requestID;
-                    [_requests addObject:usernameGot];
-                    [_distances addObject:[NSNumber numberWithInt:distance]];
-                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
-                    
-                }
-            }
-        }
-        
-        
-        [self.tableView reloadData];
-        
-        lookUpResultGot->requestLookUp = nil;
-        lookUpResultMade->requestLookUp = nil;
-        lookUpResultGot = nil;
-        lookUpResultMade = nil;
-        
-        free(lookUpResultGot->requestLookUp);
-        free(lookUpResultMade->requestLookUp);
-        free(lookUpResultGot);
-        free(lookUpResultMade);
-        
-        
-        
-        dispatch_async( dispatch_get_main_queue(), ^{
-            // Add code here to update the UI/send notifications based on the
-            // results of the background processing
-            
+
             [self addFooter];
-            
-            
-        });
-    });
     
 }
 
@@ -238,7 +171,7 @@
         
     } else if (indexPath.section == 1) {
         if (_myRequests != nil) {
-            cell.primaryLabel.text = [NSString stringWithFormat:@"%li", (long)indexPath.row+1];
+            cell.primaryLabel.text = [_myRequests objectAtIndex:indexPath.row];
             //[_myRequests objectAtIndex:indexPath.row];
             
             
@@ -299,7 +232,68 @@
     
 }
 
+-(void)getRequests {
 
+        [NetworkConnectionClass sendRequest];
+
+        requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
+        requestLookUpResult *lookUpResultGot = [NetworkConnectionClass getRequests:2 type2:5];
+        
+        _requests = [[NSMutableArray alloc] init];
+        _distances  = [[NSMutableArray alloc] init];
+        _requestIDs = [[NSMutableArray alloc] init];
+        
+    
+        if (lookUpResultMade != nil) {
+            int numOfPackesMade = lookUpResultMade->requestLookUpMeta.length/(sizeof(requestLookUp));
+            
+            for(int i = 0; i < numOfPackesMade; i++){
+                
+                if (lookUpResultMade->requestLookUp[i].state == 0) {
+                    NSString *usernameMade =[NSString stringWithFormat:@"%s",lookUpResultMade->requestLookUp[i].username];
+                    int distance = lookUpResultMade->requestLookUp[i].distance;
+                    int requestID = lookUpResultMade->requestLookUp[i].requestID;
+                    [_myRequests addObject:usernameMade];
+                    [_myRequestsDistances addObject:[NSNumber numberWithInt:distance]];
+                    [_myRequestsIDs addObject:[NSNumber numberWithInt:requestID]];
+                    
+                }
+            }
+        }
+        
+        if (lookUpResultGot != nil) {
+            int numOfPackesGot = lookUpResultGot->requestLookUpMeta.length/(sizeof(requestLookUp));
+            
+            for(int i = 0; i < numOfPackesGot; i++){
+                if (lookUpResultGot->requestLookUp[i].state == 0) {
+                    NSString *usernameGot = [NSString stringWithFormat:@"%s",lookUpResultGot->requestLookUp[i].username];
+                    int distance = lookUpResultGot->requestLookUp[i].distance;
+                    int requestID = lookUpResultGot->requestLookUp[i].requestID;
+                    [_requests addObject:usernameGot];
+                    [_distances addObject:[NSNumber numberWithInt:distance]];
+                    [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
+                    
+                }
+            }
+        }
+        
+        
+        [self.tableView reloadData];
+        /*
+        lookUpResultGot->requestLookUp = nil;
+        lookUpResultMade->requestLookUp = nil;
+        lookUpResultGot = nil;
+        lookUpResultMade = nil;
+        
+        free(lookUpResultGot->requestLookUp);
+        free(lookUpResultMade->requestLookUp);
+        free(lookUpResultGot);
+        free(lookUpResultMade);
+         */
+        
+        
+    
+}
 
 
 - (void)addFooter {

@@ -100,8 +100,6 @@
             self.routeLine = [[MKPolyline alloc] init];
             [self.mapView addOverlay:self.routeLine];
             
-            
-            
         }];
     }];
     
@@ -117,20 +115,15 @@
                       forState:UIControlStateNormal];
     [_competitorSlider setThumbImage:image
                             forState:UIControlStateNormal];
-    _totalCompetitorDistance = 2500;
+    _totalCompetitorDistance = 0;
     _competitorSlider.value = _totalCompetitorDistance;
     
     _averageSpeedLabel.text = @"Calculating...";
-    
-    
-    
-    //[self updateStopWatch];
     
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     _stopWatch = [NSTimer scheduledTimerWithTimeInterval:(0.01) target:self selector:@selector(timerTicked:) userInfo:nil repeats:YES];
-    
 }
 
 - (NSTimer *)createTimer {
@@ -147,7 +140,6 @@
     if ((_currentTimeInSeconds % 500) == 0) {
         float avrg = ((_totalDistance*1000)/(_currentTimeInSeconds*3.6));
         _averageSpeedLabel.text = [NSString stringWithFormat: @"%.0f km/h",avrg];
-        
     }
 }
 
@@ -231,6 +223,8 @@
         
         [self mapView:self.mapView didUpdateUserLocation:self.mapView.userLocation];
         [NetworkConnectionClass sendUpdatedCoordinates:_previousPosition.latitude longitude:_previousPosition.longitude];
+        _competitorSlider.value = (int)[NetworkConnectionClass requestCompetitorsCoordinates];
+        NSLog(@"competitors distance: %f", _competitorSlider.value);
     }
 }
 
