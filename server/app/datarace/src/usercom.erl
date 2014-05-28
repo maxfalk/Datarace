@@ -108,7 +108,8 @@ request_lookup_made(UserId) ->
                                        tUsers t4 on t3.userId = t4.id left join
                                        tMatchParticipant t5 on t5.requestedUserId = t1.id
                                       WHERE
-                                       t1.userId = ? and 
+                                       t1.userId = ? and
+                                       t3.state != 2 and
                                        t5.id is null">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
@@ -131,6 +132,7 @@ request_lookup_challenged(UserId)->
                                       tMatchParticipant t4 on t4.requestedUserId = t1.id
                                       WHERE 
                                        t1.userId = ? and
+                                       t1.state != 2 and
                                        t4.id is null;">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
@@ -216,12 +218,15 @@ create_match(RequestId)->
 
 get_match(RequestId, UserRequestId)->
     Sql_result = database:db_query(match_select,
-		   <<"select t1.id, t3.userId, t1.winnerUserId as winner, t3.id as requestId
+		   <<"select t1.id, t4.userId, t1.winnerUserId as winner, t3.id as requestId
                       from
                        tMatch t1 inner join
-                       tRequestedUsers t3 on t1.requestId = t3.requestId                                           where
+                       tRequestedUsers t3 on t1.requestId = t3.requestId inner join
+                       tRequestedUsers t4 on t1.requestId = t4.requestId and t3.userId != t4.userId
+                      where
                        t1.requestId = ? and
-                       t3.id = ?">>,
+                       t3.id = ?
+                      LIMIT 1;">>,
 		     [RequestId, UserRequestId]),
     database:get_row(database:result_to_record(Sql_result, match_table),1).
    
@@ -516,7 +521,7 @@ get_num_pending_requests(UserId)->
     {_, _, _, R, _} = database:db_query(get_user_pending_requests,
 				   "SELECT count(t1.id) as pendingRequests
                                     FROM
-                                      tRequest t1
+                                      tRequestedUsers t1 
                                     WHERE
                                       t1.userId = ? and
                                       t1.state = 0
