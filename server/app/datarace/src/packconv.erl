@@ -47,7 +47,11 @@ pack(Type, Data) ->
 	?GET_HOME_STATS ->
 	    get_home_stats_pack(Data);
 	?SEARCH_RESULTS ->
-	    search_results_pack(Data)
+	    search_results_pack(Data);
+	?GET_HISTORY ->
+	    get_history_pack(Data);
+	?MATCH_STOP ->
+	    get_match_end_pack(Data)
     end.
 
 
@@ -170,6 +174,26 @@ search_results_pack(Data) ->
 		    || {user_search_table, UserId, Username} <- Data ],
     binary_join(?SEARCH_RESULTS, Packets).
 
+
+get_history_pack(History) ->
+    PackList = [ match_stats(X) || X <- History ],
+    binary_join(?GET_HISTORY_REPLY, PackList).
+
+
+get_match_end_pack(MatchStats) ->
+    PackList = [ match_stats(X) || X <- MatchStats ],
+    binary_join(?MATCH_STOP_REPLY, PackList).
+
+
+match_stats({match_stats_table, UserId, Time, Winner, Distance, AverageSpeed, State}) -> 
+    <<UserId:32/little-integer, % 4 bytes
+      Time:32/little-integer, % 4 bytes
+      Winner:32/little-integer, % 4 bytes
+      Distance:32/little-integer, % 4 bytes
+      AverageSpeed/little-float, % 8 bytes
+      State:32/little-integer % 4 bytes
+    >>. % 28 bytes total
+    
 
 %% @doc Join a list of binaries into a single binary.
 -spec binary_join(Type, [Binary]) -> Result when

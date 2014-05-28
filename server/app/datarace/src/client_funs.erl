@@ -11,6 +11,12 @@
 	 register/4,
 	 request/3,
 	 request_lookup/1,
+	 search_string/2,
+	 get_history/1,
+	 get_home_stats/1,
+	 request_accept/2,
+	 start_match/2,
+	 stop_match/1,
 	 close/1]).
 
 -include("../include/types.hrl").
@@ -74,7 +80,7 @@ request(Socket, ChallengeId, Distance) ->
     gen_tcp:send(Socket, RequestPacket).
 
 
-%% @doc Gets status for a new and made race requests.
+%% @doc Gets status for a new and made race requests for a logged in user.
 -spec request_lookup(Socket) -> Result when
       Socket :: socket(),
       Result :: ok | {error, Reason},
@@ -82,6 +88,69 @@ request(Socket, ChallengeId, Distance) ->
 
 request_lookup(Socket) ->
     gen_tcp:send(Socket, ?REQUEST_LOOKUP).
+
+
+%% @doc Gets stats for a logged in user.
+-spec get_home_stats(Socket) -> Result when
+      Socket :: socket(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
+
+get_home_stats(Socket) ->
+    gen_tcp:send(Socket, ?GET_HOME_STATS).
+
+
+%% @doc Gets status for a new and made race requests.
+-spec search_string(Socket, SearchString) -> Result when
+      Socket :: socket(),
+      SearchString :: list(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
+
+search_string(Socket, SearchString) ->
+    SearchBinary = list_to_binary(SearchString),
+    StringLength = (8*length(SearchString)),
+    SearchPacket = <<?SEARCH_STRING/binary,
+		     SearchBinary/binary, 
+		     0:StringLength>>,
+    gen_tcp:send(Socket, SearchPacket).
+
+
+request_accept(Socket, RequestId) ->
+    gen_tcp:send(Socket, <<?REQUEST_ACCEPT/binary,
+			   RequestId:32/little-integer>>).
+
+%% @doc Start a match.
+-spec start_match(Socket, RequestId) -> Result when
+      Socket :: socket(),
+      RequestId :: integer(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
+
+start_match(Socket, RequestId) ->
+    gen_tcp:send(Socket, <<?MATCH_START/binary, 
+			   RequestId:32/little-integer>>).
+
+
+stop_match(Socket) ->
+    gen_tcp:send(Socket, ?MATCH_STOP).
+
+
+gps_match(Socket, Latitude, Longitude) ->
+    gen_tcp:send(Socket, <<?MATCH_GPS/binary, 
+			   Latitude/little-float,
+			   Longitude/little-float>>).
+
+pos_match(Socket) ->
+    gen_tcp:send(Socket, ?MATCH_COMP_POS).
+
+
+get_history(Socket) ->
+    gen_tcp:send(Socket, ?GET_HISTORY).
+
+
+logout(Socket) ->
+    gen_tcp:send(Socket, ?LOGIN_LOGOUT).
 
 
 %% @doc Close a connection.

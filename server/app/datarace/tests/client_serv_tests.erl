@@ -10,16 +10,23 @@
 %% Test description
 %%====================================================================
 
-client_serv_test_()->
-    {"Test client_serv functionality: lots...",
+client_serv_test_()-> 
+    {"Test client_serv functionality: lots...", 
       {setup, 
        fun start/0, 
        fun stop/1, 
-       fun (SetupData) ->
-	       [client_serv_init(SetupData),
-		client_serv_request(SetupData),
-		client_serv_request_lookup(SetupData)]
-       end}}.
+       fun (SetupData) -> 
+	       [client_serv_init(SetupData), 
+		client_serv_request(SetupData), 
+		client_serv_request_lookup(SetupData), 
+		client_serv_search_string(SetupData), 
+		client_serv_get_home_stats(SetupData), 
+		client_serv_start_match(SetupData), 
+		%client_serv_run_match(SetupData)
+		client_serv_stop_match(SetupData)
+		%client_serv_logout(SetupData)
+	       ] 
+       end}}. 
 
 
 %%====================================================================
@@ -38,7 +45,7 @@ start() ->
 
 
 stop({_NoUsers, LoggedInUsers}) ->
-    [ account:delete(Username) || {Username,_,_UID} <- LoggedInUsers ].
+    [ account:delete(UID) || {_,_,UID} <- LoggedInUsers ].
 
 
 %%====================================================================
@@ -64,6 +71,39 @@ client_serv_request({_NoUsers, LoggedInUsers}) ->
 
 client_serv_request_lookup({_NoUsers, LoggedInUsers}) ->
     [ make_request_lookup(User) || User <- LoggedInUsers].
+
+
+client_serv_get_home_stats({_NoUsers, LoggedInUsers}) ->
+    [ get_home_stats(User) || User <- LoggedInUsers ].
+
+
+client_serv_search_string({NoUsers, LoggedInUsers}) ->
+    [ search_string(NoUsers, User) || User <- LoggedInUsers ].
+
+
+client_serv_start_match({_NoUsers, LoggedInUsers}) ->
+    [ start_match(User) || User <- LoggedInUsers ].
+
+
+client_serv_run_match({_NoUsers, LoggedInUsers}) ->
+    [ gps_match(User) || User <- LoggedInUsers ],
+    [ pos_match(User) || User <- LoggedInUsers ].
+
+
+client_serv_stop_match({_NoUsers, LoggedInUsers}) ->
+    [ stop_match(User) || User <- LoggedInUsers ].
+
+
+client_serv_logout({_NoUsers, LoggedInUsers}) ->
+    timer:sleep(1000),
+    [ logout(User) || User <- LoggedInUsers ],
+    timer:sleep(1000),
+    Children = count_children(client_serv_sup),
+    [ ?_assertEqual([{specs, 0}, 
+		     {active, 0}, 
+		     {supervisors, 0}, 
+		     {workers, 0}], 
+		    Children)].
 
 
 %%====================================================================
@@ -104,7 +144,7 @@ login_user(Port, Username) ->
   
 make_requests(LoggedInUsers) ->
     lists:zipwith(fun({Socket,_,_}, {_,_,UID}) ->
-			  timer:sleep(10),
+			  timer:sleep(100),
 			  client_funs:request(Socket, UID, 1),
 			  UID
 		  end,
@@ -116,12 +156,82 @@ make_request_lookup({Socket, _,_}) ->
     Made = receive
 	       {tcp, _, Packet1} -> Packet1
 	   after
-	       1000 -> timeout
+	       1000 -> <<0>>
 	   end,
     Chal = receive
 	       {tcp, _, Packet2} -> Packet2
 	   after
-	       1000 -> timeout
+	       1000 -> <<0>>
 	   end,
     [?_assertEqual(92, byte_size(Made)), ?_assertEqual(92, byte_size(Chal))].
 
+
+get_home_stats({Socket, _,_}) ->
+    client_funs:get_home_stats(Socket),
+    HomeStats = receive 
+		    {tcp, _, Packet} -> Packet
+		after
+		    1000 -> <<0>>
+		end,
+    ?_assertEqual(80, byte_size(HomeStats)).
+
+
+search_string(_NoUsers, {Socket, _,_}) ->
+    client_funs:search_string(Socket, "ClientServBosse"),
+    SearchResults = receive
+			{tcp, _, Packet} -> Packet
+		    after
+			1000 -> <<0>>
+		    end,
+    ?_assertEqual(2+54*5, byte_size(SearchResults)).
+
+
+start_match({Socket, _, UID}) ->
+    RequestId = get_request_id(UID),
+    client_funs:request_accept(Socket, RequestId),
+    client_funs:start_match(Socket, RequestId),
+    receive 
+	{tcp, _, Packet} -> 
+	    ?_assertEqual(?MATCH_CONFIRM, Packet)
+    after
+	5000 -> 
+	    ?_assertEqual(true, timeout)
+    end.
+
+
+gps_match({Socket, _,_}) ->
+    client_funs:gps_match(Socket, 0.0, 0.0).
+
+
+pos_match({Socket, _,_}) ->
+    client_funs:pos_match(Socket),
+    receive
+	{tcp, _, Packet} ->
+	    ?_assertEqual(<<?MATCH_COMP_REPLY/binary, 
+			    0.0/little-float>>, 
+			  Packet)
+    after
+	1000 -> 
+	    ?_assertEqual(true, timeout)
+    end.
+
+
+stop_match({Socket, _,_}) ->
+    client_funs:stop_match(Socket),
+    receive
+	{tcp, _, Packet} ->
+	    ?_assertEqual(30, byte_size(Packet))
+    after
+	1000 ->
+	    ?_assertEqual(true, timeout)
+    end.
+
+
+get_request_id(UID) ->
+    {_Made, Chal} = usercom:request_lookup(UID),
+    {request_table, RequestId, _,_,_,_,_} = hd(Chal),
+    RequestId.
+
+
+logout({Socket, _,_}) ->
+    client_funs:logout(Socket).
