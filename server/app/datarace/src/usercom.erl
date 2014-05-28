@@ -300,9 +300,11 @@ user_match_stop(UserId, MatchId, UserRequestId)->
     Distance = get_distance(UserRequestId),
     if
 	RunedDistance >= Distance ->
+	    log_serv:log("UID: " ++ integer_to_list(UserId) ++ "MID: " ++ integer_to_list(MatchId) ++ "finished the race"),
 	    set_match_participant_done(UserRequestId, MatchId),
 	    set_match_time(UserId, MatchId, UserRequestId);
 	RunedDistance < Distance ->
+	    log_serv:log("UID: " ++ integer_to_list(UserId) ++ "MID: " ++ integer_to_list(MatchId) ++ "forefeited the race"),
 	    set_match_participant_forfeit(UserRequestId, MatchId),
 	    set_match_time(UserId, MatchId, UserRequestId)
     end.
