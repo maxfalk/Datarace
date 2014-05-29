@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 
-@interface FinishlineViewController : UIViewController
+@interface FinishlineViewController : UIViewController <MKMapViewDelegate>
+
+@property (nonatomic, strong) NSMutableArray *coordinates;
+@property (nonatomic, retain) NSArray* pts;
+@property int distance;
 
 @end

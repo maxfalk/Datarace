@@ -9,10 +9,12 @@
 #import "FinishlineViewController.h"
 
 @interface FinishlineViewController ()
+@property (strong, nonatomic) IBOutlet MKMapView *mapView;
 
 @end
 
 @implementation FinishlineViewController
+@synthesize coordinates = _coordinates;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -25,29 +27,152 @@
 
 - (void)viewDidLoad
 {
+    //_coordinates = [[NSMutableArray alloc] init];
     [super viewDidLoad];
     [self.navigationItem setHidesBackButton:YES];
-    // Do any additional setup after loading the view.
+    self.mapView.delegate = self;
+    //self.mapView.userInteractionEnabled=NO;
+    self.mapView.showsUserLocation=NO;
+    self.mapView.tintColor = [UIColor blackColor];
+    //self.mapView.camera =
+    
+    [self.mapView setShowsBuildings:YES];
+    MKCoordinateRegion mapRegion;
+    CLLocation *firstObject = [_coordinates objectAtIndex:0];
+    CLLocation *lastObject = [_coordinates lastObject];
+    double firstLong =  firstObject.coordinate.longitude;
+    double lastLong = lastObject.coordinate.longitude;
+    double firstLat = firstObject.coordinate.latitude;
+    double lastLat = lastObject.coordinate.latitude;
+    
+    
+    float spanX = fabs(firstObject.coordinate.longitude - lastObject.coordinate.longitude)*2;
+    float spanY = fabs(firstObject.coordinate.latitude - lastObject.coordinate.latitude)*2.5;
+    
+    mapRegion.center.latitude =
+    (firstObject.coordinate.latitude + lastObject.coordinate.latitude)/2;
+    
+    mapRegion.center.longitude =
+    (firstObject.coordinate.longitude + lastObject.coordinate.longitude)/2;
+    
+    mapRegion.span.latitudeDelta = spanY;
+    mapRegion.span.longitudeDelta = spanX;
+    
+    [self.mapView setRegion:[self.mapView regionThatFits:mapRegion] animated:YES];
+    
+    if ([self.mapView respondsToSelector:@selector(camera)]) {
+        
+        MKMapCamera *newCamera = [[self.mapView camera] copy];
+        [newCamera setPitch:55.0];
+        [newCamera setAltitude:_distance/3];
+        CLLocationCoordinate2D cent = CLLocationCoordinate2DMake(mapRegion.center.latitude, mapRegion.center.longitude);
+        [newCamera setCenterCoordinate:cent];
+        
+
+        [self.mapView setCamera:newCamera animated:YES];
+    }
+    [self drawRoute:_coordinates];
+
+    [self.mapView setShowsBuildings:YES];
+    /*
+    mapRegion.center.latitude = ([_coordinates objectAtIndex:0] - [_coordinates lastObject])/2;
+    mapRegion.center.longitude = self.mapView.userLocation.coordinate.longitude;
+    mapRegion.span.latitudeDelta = 0.02;
+    mapRegion.span.longitudeDelta = 0.02;
+    [self.mapView setRegion:mapRegion animated: YES];
+        */
 }
+// Do any additional setup after loading the view.
+
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
+
 - (IBAction)doneButtonPressed:(id)sender {
     [self performSegueWithIdentifier:@"goBack" sender:self];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    
+    MKCoordinateRegion mapRegion;
+    CLLocation *firstObject = [_coordinates objectAtIndex:0];
+    CLLocation *lastObject = [_coordinates lastObject];
+    double firstLong =  firstObject.coordinate.longitude;
+    double lastLong = lastObject.coordinate.longitude;
+    double firstLat = firstObject.coordinate.latitude;
+    double lastLat = lastObject.coordinate.latitude;
+    
+    
+    float spanX = fabs(firstObject.coordinate.longitude - lastObject.coordinate.longitude)*2;
+    float spanY = fabs(firstObject.coordinate.latitude - lastObject.coordinate.latitude)*2.5;
+    
+    mapRegion.center.latitude =
+    (firstObject.coordinate.latitude + lastObject.coordinate.latitude)/2;
+    
+    mapRegion.center.longitude =
+    (firstObject.coordinate.longitude + lastObject.coordinate.longitude)/2;
+    
+    mapRegion.span.latitudeDelta = spanY;
+    mapRegion.span.longitudeDelta = spanX;
+    
+    [self.mapView setRegion:[self.mapView regionThatFits:mapRegion] animated:YES];
+    
+    if ([self.mapView respondsToSelector:@selector(camera)]) {
+        [self.mapView setShowsBuildings:YES];
+        MKMapCamera *newCamera = [[self.mapView camera] copy];
+        [newCamera setPitch:35.0];
+        [newCamera setHeading:0.0];
+        [newCamera setAltitude:2000*((spanX+spanY)/2)];
+        CLLocationCoordinate2D cent = CLLocationCoordinate2DMake(mapRegion.center.latitude, mapRegion.center.longitude);
+        [newCamera setCenterCoordinate:cent];
+        [self.mapView setCamera:newCamera animated:YES];
+    }
 }
-*/
+
+- (void)drawRoute:(NSMutableArray *)path
+{
+    NSInteger numberOfSteps = [path count];
+    
+    CLLocationCoordinate2D coordinates[numberOfSteps];
+    for (NSInteger i = 0; i < numberOfSteps; i++) {
+        CLLocation *location = [path objectAtIndex:i];
+        CLLocationCoordinate2D coordinate = location.coordinate;
+        
+        coordinates[i] = coordinate;
+    }
+    
+    MKPolyline *polyLine = [MKPolyline polylineWithCoordinates:coordinates count:[path count]];
+    [self.mapView addOverlay:polyLine];
+}
+
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {
+    MKPolylineView *polylineView = [[MKPolylineView alloc] initWithPolyline:overlay];
+    polylineView.strokeColor = [UIColor redColor];
+    polylineView.lineWidth = 17.0;
+    polylineView.lineCap = kCGLineCapRound;
+    polylineView.alpha = 1;
+    
+    return polylineView;
+}
+
+
+/*
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+ {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

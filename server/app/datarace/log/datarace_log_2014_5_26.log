@@ -1,0 +1,1219 @@
+[2014-5-26 10:34:37] User connected with IP 127.0.0.1 on port 58086
+[2014-5-26 10:34:44] Logged in UID 3118
+[2014-5-26 10:34:44] Spawned new client_serv for UID 3118
+[2014-5-26 10:34:44] Terminating listener: Reason: normal, State: login
+[2014-5-26 10:34:44] Socket transfer for UID 3118
+[2014-5-26 10:37:58] Logged out UID 3118
+[2014-5-26 10:37:58] Terminating client server in state main
+[2014-5-26 10:39:1] User connected with IP 127.0.0.1 on port 47617
+[2014-5-26 10:39:11] Logged in UID 3118
+[2014-5-26 10:39:11] Spawned new client_serv for UID 3118
+[2014-5-26 10:39:11] Terminating listener: Reason: normal, State: login
+[2014-5-26 10:39:11] Socket transfer for UID 3118
+[2014-5-26 10:42:47] Logged out UID 3118
+[2014-5-26 10:42:47] Terminating client server in state main
+[2014-5-26 10:44:49] User connected with IP 127.0.0.1 on port 40209
+[2014-5-26 10:44:56] Logged in UID 3118
+[2014-5-26 10:44:56] Spawned new client_serv for UID 3118
+[2014-5-26 10:44:56] Terminating listener: Reason: normal, State: login
+[2014-5-26 10:44:56] Socket transfer for UID 3118
+[2014-5-26 10:45:7] Logged out UID 3118
+[2014-5-26 10:45:7] Terminating client server in state main
+[2014-5-26 10:51:53] User connected with IP 130.238.92.156 on port 53959
+[2014-5-26 10:51:54] Login failed because wrong username
+[2014-5-26 10:51:54] Terminating listener: Reason: normal, State: login
+[2014-5-26 10:51:59] User connected with IP 130.238.92.156 on port 53960
+[2014-5-26 10:51:59] Login failed because wrong username
+[2014-5-26 10:51:59] Terminating listener: Reason: normal, State: login
+[2014-5-26 10:52:7] User connected with IP 130.238.92.156 on port 53961
+[2014-5-26 10:52:8] Logged in UID 44
+[2014-5-26 10:52:8] Spawned new client_serv for UID 44
+[2014-5-26 10:52:8] Terminating listener: Reason: normal, State: login
+[2014-5-26 10:52:8] Socket transfer for UID 44
+[2014-5-26 10:52:8] Get home stats for UID 44
+[2014-5-26 10:52:10] Match request lookup made by UID 44
+[2014-5-26 10:52:18] Logged out UID 44
+[2014-5-26 10:52:18] Terminating client server in state main
+[2014-5-26 10:52:24] User connected with IP 130.238.92.156 on port 53962
+[2014-5-26 10:52:24] Logged in UID 2
+[2014-5-26 10:52:24] Spawned new client_serv for UID 2
+[2014-5-26 10:52:25] Terminating listener: Reason: normal, State: login
+[2014-5-26 10:52:25] Socket transfer for UID 2
+[2014-5-26 10:52:25] Get home stats for UID 2
+[2014-5-26 10:52:26] Match request lookup made by UID 2
+[2014-5-26 10:52:27] Match started with RID 226
+[2014-5-26 10:52:40] Match stopped for MID 33
+[2014-5-26 10:52:40] Match request lookup made by UID 2
+[2014-5-26 11:10:48] User connected with IP 109.58.149.81 on port 59836
+[2014-5-26 11:10:49] Logged in UID 44
+[2014-5-26 11:10:49] Spawned new client_serv for UID 44
+[2014-5-26 11:10:49] Terminating listener: Reason: normal, State: login
+[2014-5-26 11:10:49] Socket transfer for UID 44
+[2014-5-26 11:10:50] Get home stats for UID 44
+[2014-5-26 11:10:55] Match request lookup made by UID 44
+[2014-5-26 11:10:58] Logged out UID 44
+[2014-5-26 11:10:58] Terminating client server in state main
+[2014-5-26 11:11:10] User connected with IP 109.58.149.81 on port 59859
+[2014-5-26 11:11:11] Login failed because already logged in
+[2014-5-26 11:11:11] Terminating listener: Reason: normal, State: login
+[2014-5-26 11:11:18] User connected with IP 109.58.149.81 on port 42488
+[2014-5-26 11:11:19] Login failed because already logged in
+[2014-5-26 11:11:19] Terminating listener: Reason: normal, State: login
+[2014-5-26 11:11:26] User connected with IP 109.58.149.81 on port 59882
+[2014-5-26 11:11:26] Login failed because already logged in
+[2014-5-26 11:11:26] Terminating listener: Reason: normal, State: login
+[2014-5-26 11:12:10] UID 2 disconnected unexpectedly
+[2014-5-26 11:12:10] Logged out UID 2
+[2014-5-26 11:12:10] Terminating client server in state main
+[2014-5-26 11:12:12] User connected with IP 109.58.149.81 on port 42534
+[2014-5-26 11:12:13] Logged in UID 2
+[2014-5-26 11:12:13] Spawned new client_serv for UID 2
+[2014-5-26 11:12:13] Terminating listener: Reason: normal, State: login
+[2014-5-26 11:12:13] Socket transfer for UID 2
+[2014-5-26 11:12:13] Get home stats for UID 2
+[2014-5-26 11:12:19] Match request lookup made by UID 2
+[2014-5-26 11:12:25] Match request lookup made by UID 2
+[2014-5-26 11:12:36] UID 2 disconnected unexpectedly
+[2014-5-26 11:12:36] Logged out UID 2
+[2014-5-26 11:12:36] Terminating client server in state main
+[2014-5-26 11:12:43] User connected with IP 109.58.149.81 on port 59928
+[2014-5-26 11:12:43] Logged in UID 2
+[2014-5-26 11:12:43] Spawned new client_serv for UID 2
+[2014-5-26 11:12:43] Terminating listener: Reason: normal, State: login
+[2014-5-26 11:12:43] Socket transfer for UID 2
+[2014-5-26 11:12:44] Get home stats for UID 2
+[2014-5-26 11:12:48] Match request lookup made by UID 2
+[2014-5-26 11:12:48] Match request made by UID 2 for 1 distance 5
+[2014-5-26 11:12:52] Match request lookup made by UID 2
+[2014-5-26 11:12:52] Match started with RID 226
+[2014-5-26 11:12:52] Database error while executing a query: Unknown column 'time' in 'field list'
+[2014-5-26 11:13:12] UID 2 disconnected unexpectedly
+[2014-5-26 11:13:12] Logged out UID 2
+[2014-5-26 11:13:12] Terminating client server in state match
+[2014-5-26 11:13:31] User connected with IP 109.58.149.81 on port 59951
+[2014-5-26 11:13:32] Logged in UID 2
+[2014-5-26 11:13:32] Spawned new client_serv for UID 2
+[2014-5-26 11:13:32] Terminating listener: Reason: normal, State: login
+[2014-5-26 11:13:33] Socket transfer for UID 2
+[2014-5-26 11:13:33] Get home stats for UID 2
+[2014-5-26 11:13:35] Match request lookup made by UID 2
+[2014-5-26 11:13:54] Match started with RID 226
+[2014-5-26 11:13:55] Database error while executing a query: Unknown column 'time' in 'field list'
+[2014-5-26 11:13:55] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:13:56] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:13:57] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:13:58] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:13:59] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:0] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:1] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:2] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:3] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:4] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:5] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:6] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:7] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:8] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:9] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:10] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:11] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:12] Received GPS data from UID 2: Long 1.76478799525812704019e+01, Lat 5.98416560702583169018e+01
+[2014-5-26 11:14:13] Received GPS data from UID 2: Long 1.76478516314716067370e+01, Lat 5.98416400540952082565e+01
+[2014-5-26 11:14:14] Received GPS data from UID 2: Long 1.76478637066406065514e+01, Lat 5.98416456601466393295e+01
+[2014-5-26 11:14:15] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:16] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:17] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:18] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:19] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:20] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:21] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:22] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:23] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:24] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:25] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:26] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:27] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:28] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:29] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:30] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:31] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:32] Received GPS data from UID 2: Long 1.76478633564129907541e+01, Lat 5.98416420724800204312e+01
+[2014-5-26 11:14:32] UID 2 disconnected unexpectedly
+[2014-5-26 11:14:32] Logged out UID 2
+[2014-5-26 11:14:32] Terminating client server in state match
+[2014-5-26 11:14:37] User connected with IP 109.58.149.81 on port 59997
+[2014-5-26 11:14:37] Logged in UID 2
+[2014-5-26 11:14:37] Spawned new client_serv for UID 2
+[2014-5-26 11:14:37] Terminating listener: Reason: normal, State: login
+[2014-5-26 11:14:37] Socket transfer for UID 2
+[2014-5-26 11:14:38] Get home stats for UID 2
+[2014-5-26 11:15:50] UID 2 disconnected unexpectedly
+[2014-5-26 11:15:50] Logged out UID 2
+[2014-5-26 11:15:50] Terminating client server in state main
+[2014-5-26 13:19:28] User connected with IP 130.238.92.156 on port 54953
+[2014-5-26 13:19:28] Logged in UID 2
+[2014-5-26 13:19:28] Spawned new client_serv for UID 2
+[2014-5-26 13:19:28] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:19:29] Socket transfer for UID 2
+[2014-5-26 13:19:29] Get home stats for UID 2
+[2014-5-26 13:19:30] Match request lookup made by UID 2
+[2014-5-26 13:19:59] UID 2 disconnected unexpectedly
+[2014-5-26 13:19:59] Logged out UID 2
+[2014-5-26 13:19:59] Terminating client server in state main
+[2014-5-26 13:20:1] User connected with IP 130.238.92.156 on port 54956
+[2014-5-26 13:20:3] Logged in UID 2
+[2014-5-26 13:20:4] Spawned new client_serv for UID 2
+[2014-5-26 13:20:4] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:20:4] Socket transfer for UID 2
+[2014-5-26 13:20:4] Get home stats for UID 2
+[2014-5-26 13:20:5] Match request lookup made by UID 2
+[2014-5-26 13:23:23] Logged out UID 2
+[2014-5-26 13:23:23] Terminating client server in state main
+[2014-5-26 13:28:58] User connected with IP 130.238.92.156 on port 55035
+[2014-5-26 13:28:59] Logged in UID 2
+[2014-5-26 13:28:59] Spawned new client_serv for UID 2
+[2014-5-26 13:28:59] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:28:59] Socket transfer for UID 2
+[2014-5-26 13:28:59] Get home stats for UID 2
+[2014-5-26 13:29:1] Match request lookup made by UID 2
+[2014-5-26 13:29:4] Search was made by UID 2 for test                                              
+[2014-5-26 13:29:33] UID 2 disconnected unexpectedly
+[2014-5-26 13:29:33] Logged out UID 2
+[2014-5-26 13:29:33] Terminating client server in state main
+[2014-5-26 13:30:16] User connected with IP 130.238.92.156 on port 55038
+[2014-5-26 13:30:17] Logged in UID 2
+[2014-5-26 13:30:17] Spawned new client_serv for UID 2
+[2014-5-26 13:30:17] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:30:17] Socket transfer for UID 2
+[2014-5-26 13:30:17] Get home stats for UID 2
+[2014-5-26 13:30:18] Match request lookup made by UID 2
+[2014-5-26 13:30:20] Search was made by UID 2 for test                                              
+[2014-5-26 13:32:54] UID 2 disconnected unexpectedly
+[2014-5-26 13:32:54] Logged out UID 2
+[2014-5-26 13:32:54] Terminating client server in state main
+[2014-5-26 13:32:57] User connected with IP 130.238.92.156 on port 55044
+[2014-5-26 13:32:57] Logged in UID 2
+[2014-5-26 13:32:57] Spawned new client_serv for UID 2
+[2014-5-26 13:32:57] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:32:57] Socket transfer for UID 2
+[2014-5-26 13:32:57] Get home stats for UID 2
+[2014-5-26 13:32:59] Match request lookup made by UID 2
+[2014-5-26 13:33:2] Search was made by UID 2 for m                                                 
+[2014-5-26 13:33:23] User connected with IP 127.0.0.1 on port 47863
+[2014-5-26 13:33:52] Logged in UID 1
+[2014-5-26 13:33:52] Spawned new client_serv for UID 1
+[2014-5-26 13:33:52] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:33:52] Socket transfer for UID 1
+[2014-5-26 13:34:13] Search was made by UID 1 for hej   
+[2014-5-26 13:34:18] Logged out UID 1
+[2014-5-26 13:34:18] Terminating client server in state main
+[2014-5-26 13:35:5] User connected with IP 127.0.0.1 on port 45892
+[2014-5-26 13:35:10] Logged in UID 1
+[2014-5-26 13:35:10] Spawned new client_serv for UID 1
+[2014-5-26 13:35:10] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:35:10] Socket transfer for UID 1
+[2014-5-26 13:36:32] Search was made by UID 1 for m                                                 
+[2014-5-26 13:39:2] UID 1 disconnected unexpectedly
+[2014-5-26 13:39:2] Logged out UID 1
+[2014-5-26 13:39:2] Terminating client server in state main
+[2014-5-26 13:50:1] User connected with IP 127.0.0.1 on port 54544
+[2014-5-26 13:50:14] Logged in UID 1
+[2014-5-26 13:50:14] Spawned new client_serv for UID 1
+[2014-5-26 13:50:14] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:50:15] Socket transfer for UID 1
+[2014-5-26 13:50:46] Search was made by UID 1 for m                                                 
+[2014-5-26 13:51:0] Search was made by UID 1 for palle                                             
+[2014-5-26 13:51:7] UID 2 disconnected unexpectedly
+[2014-5-26 13:51:7] Logged out UID 2
+[2014-5-26 13:51:7] Terminating client server in state main
+[2014-5-26 13:51:11] User connected with IP 130.238.92.156 on port 55170
+[2014-5-26 13:51:11] Logged in UID 2
+[2014-5-26 13:51:11] Spawned new client_serv for UID 2
+[2014-5-26 13:51:11] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:51:11] Socket transfer for UID 2
+[2014-5-26 13:51:11] Get home stats for UID 2
+[2014-5-26 13:51:15] Match request lookup made by UID 2
+[2014-5-26 13:51:20] Match started with RID 226
+[2014-5-26 13:51:28] Match stopped for MID 205
+[2014-5-26 13:51:28] Match request lookup made by UID 2
+[2014-5-26 13:51:32] Match request lookup made by UID 2
+[2014-5-26 13:51:35] Search was made by UID 1 for max                                               
+[2014-5-26 13:51:36] Search was made by UID 2 for test                                              
+[2014-5-26 13:52:1] Search was made by UID 1 for test                                               
+[2014-5-26 13:52:34] UID 2 disconnected unexpectedly
+[2014-5-26 13:52:34] Logged out UID 2
+[2014-5-26 13:52:34] Terminating client server in state main
+[2014-5-26 13:52:36] User connected with IP 130.238.92.156 on port 55174
+[2014-5-26 13:52:37] Logged in UID 2
+[2014-5-26 13:52:37] Spawned new client_serv for UID 2
+[2014-5-26 13:52:37] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:52:37] Socket transfer for UID 2
+[2014-5-26 13:52:37] Get home stats for UID 2
+[2014-5-26 13:52:39] Match request lookup made by UID 2
+[2014-5-26 13:52:45] Search was made by UID 2 for test                                              
+[2014-5-26 13:53:8] Search was made by UID 1 for viktor                                               
+[2014-5-26 13:53:14] Logged out UID 1
+[2014-5-26 13:53:14] Terminating client server in state main
+[2014-5-26 13:53:52] User connected with IP 127.0.0.1 on port 60707
+[2014-5-26 13:53:58] Logged in UID 1
+[2014-5-26 13:53:58] Spawned new client_serv for UID 1
+[2014-5-26 13:53:58] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:53:58] Socket transfer for UID 1
+[2014-5-26 13:55:42] UID 1 disconnected unexpectedly
+[2014-5-26 13:55:42] Logged out UID 1
+[2014-5-26 13:55:43] Terminating client server in state main
+[2014-5-26 13:56:14] User connected with IP 127.0.0.1 on port 59252
+[2014-5-26 13:56:32] Logged in UID 1
+[2014-5-26 13:56:32] Spawned new client_serv for UID 1
+[2014-5-26 13:56:32] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:56:32] Socket transfer for UID 1
+[2014-5-26 13:56:58] Search was made by UID 1 for viktor                                            
+[2014-5-26 13:57:3] Logged out UID 1
+[2014-5-26 13:57:3] Terminating client server in state main
+[2014-5-26 13:58:22] UID 2 disconnected unexpectedly
+[2014-5-26 13:58:22] Logged out UID 2
+[2014-5-26 13:58:22] Terminating client server in state main
+[2014-5-26 13:58:26] User connected with IP 130.238.92.156 on port 55267
+[2014-5-26 13:58:26] Logged in UID 2
+[2014-5-26 13:58:26] Spawned new client_serv for UID 2
+[2014-5-26 13:58:26] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:58:26] Socket transfer for UID 2
+[2014-5-26 13:58:26] Get home stats for UID 2
+[2014-5-26 13:58:28] Match request lookup made by UID 2
+[2014-5-26 13:58:31] Match request lookup made by UID 2
+[2014-5-26 13:58:33] Search was made by UID 2 for test                                              
+[2014-5-26 13:58:58] User connected with IP 127.0.0.1 on port 53903
+[2014-5-26 13:59:2] Logged in UID 1
+[2014-5-26 13:59:2] Spawned new client_serv for UID 1
+[2014-5-26 13:59:2] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:59:2] Socket transfer for UID 1
+[2014-5-26 13:59:54] UID 2 disconnected unexpectedly
+[2014-5-26 13:59:54] Logged out UID 2
+[2014-5-26 13:59:54] Terminating client server in state main
+[2014-5-26 13:59:57] User connected with IP 130.238.92.156 on port 55271
+[2014-5-26 13:59:58] Logged in UID 2
+[2014-5-26 13:59:58] Spawned new client_serv for UID 2
+[2014-5-26 13:59:58] Terminating listener: Reason: normal, State: login
+[2014-5-26 13:59:58] Socket transfer for UID 2
+[2014-5-26 13:59:58] Get home stats for UID 2
+[2014-5-26 13:59:59] Match request lookup made by UID 2
+[2014-5-26 14:0:0] Search was made by UID 1 for                                                   
+[2014-5-26 14:0:3] Search was made by UID 2 for test                                              
+[2014-5-26 14:0:35] Search was made by UID 1 for abc                                               
+[2014-5-26 14:1:4] UID 2 disconnected unexpectedly
+[2014-5-26 14:1:4] Logged out UID 2
+[2014-5-26 14:1:4] Terminating client server in state main
+[2014-5-26 14:1:12] User connected with IP 130.238.92.156 on port 55278
+[2014-5-26 14:1:13] Logged in UID 2
+[2014-5-26 14:1:13] Spawned new client_serv for UID 2
+[2014-5-26 14:1:13] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:1:13] Socket transfer for UID 2
+[2014-5-26 14:1:13] Get home stats for UID 2
+[2014-5-26 14:1:14] Match request lookup made by UID 2
+[2014-5-26 14:1:16] Match request lookup made by UID 2
+[2014-5-26 14:1:18] Search was made by UID 2 for TEst                                              
+[2014-5-26 14:1:33] Search was made by UID 1 for test                                               
+[2014-5-26 14:2:15] Search was made by UID 1 for test                                        
+[2014-5-26 14:2:41] Search was made by UID 1 for test
+[2014-5-26 14:3:42] Search was made by UID 1 for 0
+[2014-5-26 14:3:47] Logged out UID 1
+[2014-5-26 14:3:47] Terminating client server in state main
+[2014-5-26 14:5:52] UID 2 disconnected unexpectedly
+[2014-5-26 14:5:52] Logged out UID 2
+[2014-5-26 14:5:52] Terminating client server in state main
+[2014-5-26 14:5:54] User connected with IP 130.238.92.156 on port 55283
+[2014-5-26 14:5:54] Logged in UID 2
+[2014-5-26 14:5:54] Spawned new client_serv for UID 2
+[2014-5-26 14:5:54] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:5:54] Socket transfer for UID 2
+[2014-5-26 14:5:55] Get home stats for UID 2
+[2014-5-26 14:5:56] Match request lookup made by UID 2
+[2014-5-26 14:5:59] Logged out UID 2
+[2014-5-26 14:5:59] Terminating client server in state main
+[2014-5-26 14:6:11] User connected with IP 130.238.92.156 on port 55286
+[2014-5-26 14:6:11] Logged in UID 2
+[2014-5-26 14:6:11] Spawned new client_serv for UID 2
+[2014-5-26 14:6:11] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:6:11] Socket transfer for UID 2
+[2014-5-26 14:6:11] Get home stats for UID 2
+[2014-5-26 14:6:13] Match request lookup made by UID 2
+[2014-5-26 14:6:16] Logged out UID 2
+[2014-5-26 14:6:16] Terminating client server in state main
+[2014-5-26 14:8:9] User connected with IP 130.238.92.156 on port 55290
+[2014-5-26 14:8:11] Logged in UID 2
+[2014-5-26 14:8:11] Spawned new client_serv for UID 2
+[2014-5-26 14:8:11] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:8:11] Socket transfer for UID 2
+[2014-5-26 14:8:11] Get home stats for UID 2
+[2014-5-26 14:8:13] Match request lookup made by UID 2
+[2014-5-26 14:8:23] Search was made by UID 2 for test                                              
+[2014-5-26 14:9:56] UID 2 disconnected unexpectedly
+[2014-5-26 14:9:56] Logged out UID 2
+[2014-5-26 14:9:56] Terminating client server in state main
+[2014-5-26 14:9:58] User connected with IP 130.238.92.156 on port 55303
+[2014-5-26 14:9:58] Logged in UID 2
+[2014-5-26 14:9:58] Spawned new client_serv for UID 2
+[2014-5-26 14:9:58] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:9:58] Socket transfer for UID 2
+[2014-5-26 14:9:59] Get home stats for UID 2
+[2014-5-26 14:10:0] Match request lookup made by UID 2
+[2014-5-26 14:10:4] Match started with RID 226
+[2014-5-26 14:10:13] Match stopped for MID 205
+[2014-5-26 14:10:14] Match request lookup made by UID 2
+[2014-5-26 14:10:18] Search was made by UID 2 for test                                              
+[2014-5-26 14:10:47] UID 2 disconnected unexpectedly
+[2014-5-26 14:10:47] Logged out UID 2
+[2014-5-26 14:10:47] Terminating client server in state main
+[2014-5-26 14:10:49] User connected with IP 130.238.92.156 on port 55308
+[2014-5-26 14:10:49] Logged in UID 2
+[2014-5-26 14:10:49] Spawned new client_serv for UID 2
+[2014-5-26 14:10:50] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:10:50] Socket transfer for UID 2
+[2014-5-26 14:10:50] Get home stats for UID 2
+[2014-5-26 14:10:51] Match request lookup made by UID 2
+[2014-5-26 14:11:12] UID 2 disconnected unexpectedly
+[2014-5-26 14:11:12] Logged out UID 2
+[2014-5-26 14:11:12] Terminating client server in state main
+[2014-5-26 14:11:15] User connected with IP 130.238.92.156 on port 55311
+[2014-5-26 14:11:15] Logged in UID 2
+[2014-5-26 14:11:15] Spawned new client_serv for UID 2
+[2014-5-26 14:11:15] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:11:15] Socket transfer for UID 2
+[2014-5-26 14:11:15] Get home stats for UID 2
+[2014-5-26 14:11:17] Match request lookup made by UID 2
+[2014-5-26 14:11:19] Search was made by UID 2 for test                                              
+[2014-5-26 14:12:5] User connected with IP 127.0.0.1 on port 51735
+[2014-5-26 14:12:14] Logged in UID 1
+[2014-5-26 14:12:14] Spawned new client_serv for UID 1
+[2014-5-26 14:12:14] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:12:14] Socket transfer for UID 1
+[2014-5-26 14:12:36] UID 2 disconnected unexpectedly
+[2014-5-26 14:12:36] Logged out UID 2
+[2014-5-26 14:12:36] Terminating client server in state main
+[2014-5-26 14:12:41] User connected with IP 130.238.92.156 on port 55314
+[2014-5-26 14:12:41] Logged in UID 2
+[2014-5-26 14:12:41] Spawned new client_serv for UID 2
+[2014-5-26 14:12:41] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:12:41] Socket transfer for UID 2
+[2014-5-26 14:12:41] Get home stats for UID 2
+[2014-5-26 14:12:42] Match request lookup made by UID 2
+[2014-5-26 14:12:46] Search was made by UID 2 for test                                              
+[2014-5-26 14:13:5] Search was made by UID 1 for  
+[2014-5-26 14:13:50] UID 2 disconnected unexpectedly
+[2014-5-26 14:13:50] Logged out UID 2
+[2014-5-26 14:13:50] Terminating client server in state main
+[2014-5-26 14:13:53] User connected with IP 130.238.92.156 on port 55320
+[2014-5-26 14:13:54] Logged in UID 2
+[2014-5-26 14:13:54] Spawned new client_serv for UID 2
+[2014-5-26 14:13:54] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:13:54] Socket transfer for UID 2
+[2014-5-26 14:13:54] Get home stats for UID 2
+[2014-5-26 14:13:56] Match request lookup made by UID 2
+[2014-5-26 14:14:0] Search was made by UID 2 for teast                                             
+[2014-5-26 14:14:5] Logged out UID 2
+[2014-5-26 14:14:5] Terminating client server in state main
+[2014-5-26 14:15:0] User connected with IP 130.238.92.156 on port 55324
+[2014-5-26 14:15:0] Logged in UID 2
+[2014-5-26 14:15:1] Spawned new client_serv for UID 2
+[2014-5-26 14:15:1] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:15:1] Socket transfer for UID 2
+[2014-5-26 14:15:1] Get home stats for UID 2
+[2014-5-26 14:15:2] Match request lookup made by UID 2
+[2014-5-26 14:15:5] Search was made by UID 2 for m                                                 
+[2014-5-26 14:15:20] UID 2 disconnected unexpectedly
+[2014-5-26 14:15:21] Logged out UID 2
+[2014-5-26 14:15:21] Terminating client server in state main
+[2014-5-26 14:15:23] User connected with IP 130.238.92.156 on port 55327
+[2014-5-26 14:15:23] Logged in UID 2
+[2014-5-26 14:15:23] Spawned new client_serv for UID 2
+[2014-5-26 14:15:23] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:15:23] Socket transfer for UID 2
+[2014-5-26 14:15:23] Get home stats for UID 2
+[2014-5-26 14:15:26] Match request lookup made by UID 2
+[2014-5-26 14:15:29] Search was made by UID 2 for m                                                 
+[2014-5-26 14:16:18] Search was made by UID 1 for max
+[2014-5-26 14:17:32] UID 2 disconnected unexpectedly
+[2014-5-26 14:17:32] Logged out UID 2
+[2014-5-26 14:17:32] Terminating client server in state main
+[2014-5-26 14:17:38] User connected with IP 130.238.92.156 on port 55340
+[2014-5-26 14:17:39] Logged in UID 2
+[2014-5-26 14:17:39] Spawned new client_serv for UID 2
+[2014-5-26 14:17:39] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:17:39] Socket transfer for UID 2
+[2014-5-26 14:17:39] Get home stats for UID 2
+[2014-5-26 14:17:40] Match request lookup made by UID 2
+[2014-5-26 14:17:45] Search was made by UID 2 for m                                                 
+[2014-5-26 14:18:37] UID 1 disconnected unexpectedly
+[2014-5-26 14:18:37] Logged out UID 1
+[2014-5-26 14:18:37] Terminating client server in state main
+[2014-5-26 14:18:53] UID 2 disconnected unexpectedly
+[2014-5-26 14:18:53] Logged out UID 2
+[2014-5-26 14:18:53] Terminating client server in state main
+[2014-5-26 14:19:13] User connected with IP 130.238.92.156 on port 55346
+[2014-5-26 14:19:14] Logged in UID 2
+[2014-5-26 14:19:14] Spawned new client_serv for UID 2
+[2014-5-26 14:19:14] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:19:14] Socket transfer for UID 2
+[2014-5-26 14:19:14] Get home stats for UID 2
+[2014-5-26 14:19:15] Match request lookup made by UID 2
+[2014-5-26 14:19:20] Search was made by UID 2 for lkasflknas                                        
+[2014-5-26 14:19:25] Logged out UID 2
+[2014-5-26 14:19:25] Terminating client server in state main
+[2014-5-26 14:23:34] User connected with IP 130.238.92.156 on port 55360
+[2014-5-26 14:23:35] Logged in UID 2
+[2014-5-26 14:23:35] Spawned new client_serv for UID 2
+[2014-5-26 14:23:35] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:23:35] Socket transfer for UID 2
+[2014-5-26 14:23:35] Get home stats for UID 2
+[2014-5-26 14:23:37] Match request lookup made by UID 2
+[2014-5-26 14:23:40] Match started with RID 226
+[2014-5-26 14:23:54] Received GPS data from UID 2: Long -1.22030386419999999248e+02, Lat 3.73318208100000035188e+01
+[2014-5-26 14:23:55] Received GPS data from UID 2: Long -1.22030433320000000208e+02, Lat 3.73318196499999999105e+01
+[2014-5-26 14:23:56] Received GPS data from UID 2: Long -1.22030527749793435532e+02, Lat 3.73318110136415484135e+01
+[2014-5-26 14:23:57] Received GPS data from UID 2: Long -1.22030586307732249907e+02, Lat 3.73318043584408911784e+01
+[2014-5-26 14:23:58] Received GPS data from UID 2: Long -1.22030669167205815029e+02, Lat 3.73317741565751433086e+01
+[2014-5-26 14:23:59] Received GPS data from UID 2: Long -1.22030669167205815029e+02, Lat 3.73317741565751433086e+01
+[2014-5-26 14:24:0] Received GPS data from UID 2: Long -1.22030698126649312485e+02, Lat 3.73317371929094079519e+01
+[2014-5-26 14:24:1] Received GPS data from UID 2: Long -1.22030698801854271096e+02, Lat 3.73316958155680183040e+01
+[2014-5-26 14:24:2] Received GPS data from UID 2: Long -1.22030693368474999261e+02, Lat 3.73316587058450437553e+01
+[2014-5-26 14:24:2] Match stopped for MID 205
+[2014-5-26 14:24:3] Match request lookup made by UID 2
+[2014-5-26 14:24:4] User connected with IP 212.25.155.206 on port 44652
+[2014-5-26 14:24:5] Match request lookup made by UID 2
+[2014-5-26 14:24:14] Search was made by UID 2 for m                                                 
+[2014-5-26 14:24:36] UID 2 disconnected unexpectedly
+[2014-5-26 14:24:37] Logged out UID 2
+[2014-5-26 14:24:37] Terminating client server in state main
+[2014-5-26 14:24:39] User connected with IP 130.238.92.156 on port 55365
+[2014-5-26 14:24:39] Logged in UID 2
+[2014-5-26 14:24:39] Spawned new client_serv for UID 2
+[2014-5-26 14:24:39] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:24:40] Socket transfer for UID 2
+[2014-5-26 14:24:40] Get home stats for UID 2
+[2014-5-26 14:24:42] Match request lookup made by UID 2
+[2014-5-26 14:24:44] Search was made by UID 2 for m                                                 
+[2014-5-26 14:25:2] UID 2 disconnected unexpectedly
+[2014-5-26 14:25:2] Logged out UID 2
+[2014-5-26 14:25:2] Terminating client server in state main
+[2014-5-26 14:25:9] User connected with IP 130.238.92.156 on port 55372
+[2014-5-26 14:25:10] Logged in UID 2
+[2014-5-26 14:25:10] Spawned new client_serv for UID 2
+[2014-5-26 14:25:10] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:25:10] Socket transfer for UID 2
+[2014-5-26 14:25:10] Get home stats for UID 2
+[2014-5-26 14:25:14] Match request lookup made by UID 2
+[2014-5-26 14:25:20] Search was made by UID 2 for m                                                 
+[2014-5-26 14:25:37] User disconnected unexpectedly.
+[2014-5-26 14:25:37] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:26:19] UID 2 disconnected unexpectedly
+[2014-5-26 14:26:19] Logged out UID 2
+[2014-5-26 14:26:20] Terminating client server in state main
+[2014-5-26 14:26:22] User connected with IP 130.238.92.156 on port 55377
+[2014-5-26 14:26:22] Logged in UID 2
+[2014-5-26 14:26:22] Spawned new client_serv for UID 2
+[2014-5-26 14:26:22] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:26:22] Socket transfer for UID 2
+[2014-5-26 14:26:22] Get home stats for UID 2
+[2014-5-26 14:26:24] Match request lookup made by UID 2
+[2014-5-26 14:26:28] Search was made by UID 2 for m                                                 
+[2014-5-26 14:26:39] UID 2 disconnected unexpectedly
+[2014-5-26 14:26:39] Logged out UID 2
+[2014-5-26 14:26:39] Terminating client server in state main
+[2014-5-26 14:26:42] User connected with IP 130.238.92.156 on port 55381
+[2014-5-26 14:26:42] Logged in UID 2
+[2014-5-26 14:26:42] Spawned new client_serv for UID 2
+[2014-5-26 14:26:42] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:26:42] Socket transfer for UID 2
+[2014-5-26 14:26:42] Get home stats for UID 2
+[2014-5-26 14:26:44] Match request lookup made by UID 2
+[2014-5-26 14:26:53] Search was made by UID 2 for m                                                 
+[2014-5-26 14:27:12] User connected with IP 212.25.155.206 on port 57212
+[2014-5-26 14:27:22] Logged in UID 1
+[2014-5-26 14:27:22] Spawned new client_serv for UID 1
+[2014-5-26 14:27:23] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:27:23] Socket transfer for UID 1
+[2014-5-26 14:28:22] UID 1 disconnected unexpectedly
+[2014-5-26 14:28:22] Logged out UID 1
+[2014-5-26 14:28:22] Terminating client server in state main
+[2014-5-26 14:28:26] UID 2 disconnected unexpectedly
+[2014-5-26 14:28:26] Logged out UID 2
+[2014-5-26 14:28:26] Terminating client server in state main
+[2014-5-26 14:28:53] User connected with IP 212.25.155.206 on port 47579
+[2014-5-26 14:29:4] Logged in UID 1
+[2014-5-26 14:29:4] Spawned new client_serv for UID 1
+[2014-5-26 14:29:4] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:29:4] Socket transfer for UID 1
+[2014-5-26 14:29:21] Search was made by UID 1 for m                                                 
+[2014-5-26 14:29:27] User connected with IP 130.238.92.156 on port 55394
+[2014-5-26 14:29:28] Logged in UID 2
+[2014-5-26 14:29:28] Spawned new client_serv for UID 2
+[2014-5-26 14:29:28] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:29:28] Socket transfer for UID 2
+[2014-5-26 14:29:28] Get home stats for UID 2
+[2014-5-26 14:29:32] Match request lookup made by UID 2
+[2014-5-26 14:29:39] Search was made by UID 2 for m                                                 
+[2014-5-26 14:29:50] UID 2 disconnected unexpectedly
+[2014-5-26 14:29:50] Logged out UID 2
+[2014-5-26 14:29:50] Terminating client server in state main
+[2014-5-26 14:29:54] User connected with IP 130.238.92.156 on port 55399
+[2014-5-26 14:29:54] Logged in UID 2
+[2014-5-26 14:29:54] Spawned new client_serv for UID 2
+[2014-5-26 14:29:54] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:29:54] Socket transfer for UID 2
+[2014-5-26 14:29:54] Get home stats for UID 2
+[2014-5-26 14:30:4] Match request lookup made by UID 2
+[2014-5-26 14:30:7] Match request made by UID 2 for 1 distance 7
+[2014-5-26 14:30:9] Match request lookup made by UID 2
+[2014-5-26 14:30:9] Match started with RID 226
+[2014-5-26 14:30:22] Received GPS data from UID 2: Long -1.22030386419999999248e+02, Lat 3.73318208100000035188e+01
+[2014-5-26 14:30:22] Received GPS data from UID 2: Long -1.22030433320000000208e+02, Lat 3.73318196499999999105e+01
+[2014-5-26 14:30:23] Received GPS data from UID 2: Long -1.22030530883921002783e+02, Lat 3.73318107351323789089e+01
+[2014-5-26 14:30:24] Received GPS data from UID 2: Long -1.22030586297929417583e+02, Lat 3.73318043594158979204e+01
+[2014-5-26 14:30:25] Received GPS data from UID 2: Long -1.22030627721398332142e+02, Lat 3.73317925124539300441e+01
+[2014-5-26 14:30:26] Received GPS data from UID 2: Long -1.22030669172866041094e+02, Lat 3.73317741549728197015e+01
+[2014-5-26 14:30:27] Received GPS data from UID 2: Long -1.22030698491164358188e+02, Lat 3.73317369344814764531e+01
+[2014-5-26 14:30:28] Match stopped for MID 205
+[2014-5-26 14:30:28] Match request lookup made by UID 2
+[2014-5-26 14:30:54] Match request lookup made by UID 2
+[2014-5-26 14:30:59] Match started with RID 226
+[2014-5-26 14:30:59] Received GPS data from UID 2: Long -1.22030684460000003355e+02, Lat 3.73317286099999989801e+01
+[2014-5-26 14:30:59] Received GPS data from UID 2: Long -1.22030684460000003355e+02, Lat 3.73317286099999989801e+01
+[2014-5-26 14:31:0] Received GPS data from UID 2: Long -1.22030348235351652875e+02, Lat 3.73307151419132168257e+01
+[2014-5-26 14:31:1] Received GPS data from UID 2: Long -1.22030264954707121206e+02, Lat 3.73306871430551225899e+01
+[2014-5-26 14:31:2] Received GPS data from UID 2: Long -1.22030264954707121206e+02, Lat 3.73306871430551225899e+01
+[2014-5-26 14:31:3] Received GPS data from UID 2: Long -1.22030245196916609984e+02, Lat 3.73306781325699859053e+01
+[2014-5-26 14:31:4] Received GPS data from UID 2: Long -1.22030217960688403878e+02, Lat 3.73306584625512272169e+01
+[2014-5-26 14:31:5] Received GPS data from UID 2: Long -1.22030180089426877998e+02, Lat 3.73306830791801544933e+01
+[2014-5-26 14:31:6] Received GPS data from UID 2: Long -1.22030144522844281596e+02, Lat 3.73306683979266296092e+01
+[2014-5-26 14:31:7] Received GPS data from UID 2: Long -1.22030068944252931828e+02, Lat 3.73306734588672597397e+01
+[2014-5-26 14:31:8] Received GPS data from UID 2: Long -1.22030068944252931828e+02, Lat 3.73306734588672597397e+01
+[2014-5-26 14:31:9] Received GPS data from UID 2: Long -1.22029988462779172664e+02, Lat 3.73306686764390676103e+01
+[2014-5-26 14:31:10] Received GPS data from UID 2: Long -1.22029988462779172664e+02, Lat 3.73306686764390676103e+01
+[2014-5-26 14:31:11] Received GPS data from UID 2: Long -1.22029899729909288908e+02, Lat 3.73306773914858140984e+01
+[2014-5-26 14:31:12] Received GPS data from UID 2: Long -1.22029899729909288908e+02, Lat 3.73306773914858140984e+01
+[2014-5-26 14:31:13] Received GPS data from UID 2: Long -1.22029856923668589275e+02, Lat 3.73306848478067152541e+01
+[2014-5-26 14:31:14] Received GPS data from UID 2: Long -1.22029802348153054936e+02, Lat 3.73306814903561416941e+01
+[2014-5-26 14:31:15] Received GPS data from UID 2: Long -1.22029756135235956549e+02, Lat 3.73306926217020418335e+01
+[2014-5-26 14:31:16] Received GPS data from UID 2: Long -1.22029714336049124768e+02, Lat 3.73306931232885403915e+01
+[2014-5-26 14:31:17] Received GPS data from UID 2: Long -1.22029666914139099276e+02, Lat 3.73306977411623819307e+01
+[2014-5-26 14:31:17] Match stopped for MID 205
+[2014-5-26 14:31:18] Match request lookup made by UID 2
+[2014-5-26 14:31:20] Match started with RID 226
+[2014-5-26 14:31:20] Received GPS data from UID 2: Long -1.22029616138642154510e+02, Lat 3.73307021038592168338e+01
+[2014-5-26 14:31:20] Received GPS data from UID 2: Long -1.22029616138642154510e+02, Lat 3.73307021038592168338e+01
+[2014-5-26 14:31:21] Received GPS data from UID 2: Long -1.22029473693309142845e+02, Lat 3.73307020078523379425e+01
+[2014-5-26 14:31:22] Received GPS data from UID 2: Long -1.22029429322946697312e+02, Lat 3.73306926515285368851e+01
+[2014-5-26 14:31:23] Received GPS data from UID 2: Long -1.22029381214450637572e+02, Lat 3.73306948890758576454e+01
+[2014-5-26 14:31:24] Received GPS data from UID 2: Long -1.22029332836954210961e+02, Lat 3.73306942024836629912e+01
+[2014-5-26 14:31:25] Received GPS data from UID 2: Long -1.22029286499398551769e+02, Lat 3.73306953744524250283e+01
+[2014-5-26 14:31:26] Received GPS data from UID 2: Long -1.22029191757761836357e+02, Lat 3.73307022806071628906e+01
+[2014-5-26 14:31:27] Received GPS data from UID 2: Long -1.22029148068723984011e+02, Lat 3.73307132350003527677e+01
+[2014-5-26 14:31:28] Received GPS data from UID 2: Long -1.22029148068723984011e+02, Lat 3.73307132350003527677e+01
+[2014-5-26 14:31:29] Received GPS data from UID 2: Long -1.22029059992407525215e+02, Lat 3.73307036180061331265e+01
+[2014-5-26 14:31:30] Received GPS data from UID 2: Long -1.22029059992407525215e+02, Lat 3.73307036180061331265e+01
+[2014-5-26 14:31:31] Received GPS data from UID 2: Long -1.22029026245289671238e+02, Lat 3.73306774601438675631e+01
+[2014-5-26 14:31:32] Received GPS data from UID 2: Long -1.22028998132944053623e+02, Lat 3.73306394354816504233e+01
+[2014-5-26 14:31:33] Match stopped for MID 205
+[2014-5-26 14:31:37] Match request lookup made by UID 2
+[2014-5-26 14:31:37] Match started with RID 226
+[2014-5-26 14:31:45] UID 2 disconnected unexpectedly
+[2014-5-26 14:31:45] Logged out UID 2
+[2014-5-26 14:31:46] Terminating client server in state match
+[2014-5-26 14:32:5] Search was made by UID 1 for                                                   
+[2014-5-26 14:39:17] User connected with IP 130.238.92.156 on port 55425
+[2014-5-26 14:39:17] Logged in UID 2
+[2014-5-26 14:39:18] Spawned new client_serv for UID 2
+[2014-5-26 14:39:18] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:39:18] Socket transfer for UID 2
+[2014-5-26 14:39:18] Get home stats for UID 2
+[2014-5-26 14:39:23] Match request lookup made by UID 2
+[2014-5-26 14:39:25] Search was made by UID 2 for m                                                 
+[2014-5-26 14:39:26] Search was made by UID 2 for m                                                 
+[2014-5-26 14:39:26] Search was made by UID 2 for m                                                 
+[2014-5-26 14:39:26] Search was made by UID 2 for m                                                 
+[2014-5-26 14:39:26] Search was made by UID 2 for m                                                 
+[2014-5-26 14:41:34] Logged out UID 2
+[2014-5-26 14:41:34] Terminating client server in state main
+[2014-5-26 14:41:35] Logged out UID 1
+[2014-5-26 14:41:35] Terminating client server in state main
+[2014-5-26 14:43:11] User connected with IP 130.238.92.156 on port 55432
+[2014-5-26 14:43:12] Logged in UID 2
+[2014-5-26 14:43:12] Spawned new client_serv for UID 2
+[2014-5-26 14:43:12] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:43:12] Socket transfer for UID 2
+[2014-5-26 14:43:12] Get home stats for UID 2
+[2014-5-26 14:43:14] Match request lookup made by UID 2
+[2014-5-26 14:43:20] Search was made by UID 2 for m                                                 
+[2014-5-26 14:45:6] User connected with IP 212.25.155.206 on port 38508
+[2014-5-26 14:45:21] Logged in UID 1
+[2014-5-26 14:45:21] Spawned new client_serv for UID 1
+[2014-5-26 14:45:21] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:45:21] Socket transfer for UID 1
+[2014-5-26 14:45:30] Search was made by UID 1 for                                                   
+[2014-5-26 14:45:36] UID 2 disconnected unexpectedly
+[2014-5-26 14:45:36] Logged out UID 2
+[2014-5-26 14:45:36] Terminating client server in state main
+[2014-5-26 14:45:38] User connected with IP 130.238.92.156 on port 55448
+[2014-5-26 14:45:38] Logged in UID 2
+[2014-5-26 14:45:38] Spawned new client_serv for UID 2
+[2014-5-26 14:45:38] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:45:38] Socket transfer for UID 2
+[2014-5-26 14:45:38] Get home stats for UID 2
+[2014-5-26 14:45:40] Match request lookup made by UID 2
+[2014-5-26 14:45:42] Search was made by UID 2 for m                                                 
+[2014-5-26 14:53:15] UID 2 disconnected unexpectedly
+[2014-5-26 14:53:15] Logged out UID 2
+[2014-5-26 14:53:15] Terminating client server in state main
+[2014-5-26 14:54:17] User connected with IP 130.238.92.156 on port 55515
+[2014-5-26 14:54:17] Logged in UID 2
+[2014-5-26 14:54:17] Spawned new client_serv for UID 2
+[2014-5-26 14:54:17] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:54:18] Socket transfer for UID 2
+[2014-5-26 14:54:18] Get home stats for UID 2
+[2014-5-26 14:54:19] Match request lookup made by UID 2
+[2014-5-26 14:54:21] Search was made by UID 2 for m                                                 
+[2014-5-26 14:54:29] UID 2 disconnected unexpectedly
+[2014-5-26 14:54:29] Logged out UID 2
+[2014-5-26 14:54:29] Terminating client server in state main
+[2014-5-26 14:54:36] User connected with IP 130.238.92.156 on port 55519
+[2014-5-26 14:54:36] Logged in UID 2
+[2014-5-26 14:54:36] Spawned new client_serv for UID 2
+[2014-5-26 14:54:36] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:54:36] Socket transfer for UID 2
+[2014-5-26 14:54:36] Get home stats for UID 2
+[2014-5-26 14:54:39] Match request lookup made by UID 2
+[2014-5-26 14:54:41] UID 2 disconnected unexpectedly
+[2014-5-26 14:54:41] Logged out UID 2
+[2014-5-26 14:54:41] Terminating client server in state main
+[2014-5-26 14:54:44] User connected with IP 130.238.92.156 on port 55523
+[2014-5-26 14:54:44] Logged in UID 2
+[2014-5-26 14:54:45] Spawned new client_serv for UID 2
+[2014-5-26 14:54:45] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:54:45] Socket transfer for UID 2
+[2014-5-26 14:54:45] Get home stats for UID 2
+[2014-5-26 14:54:46] Match request lookup made by UID 2
+[2014-5-26 14:54:49] Search was made by UID 2 for m                                                 
+[2014-5-26 14:55:41] UID 2 disconnected unexpectedly
+[2014-5-26 14:55:41] Logged out UID 2
+[2014-5-26 14:55:41] Terminating client server in state main
+[2014-5-26 14:55:43] User connected with IP 130.238.92.156 on port 55526
+[2014-5-26 14:55:44] Logged in UID 2
+[2014-5-26 14:55:44] Spawned new client_serv for UID 2
+[2014-5-26 14:55:44] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:55:44] Socket transfer for UID 2
+[2014-5-26 14:55:44] Get home stats for UID 2
+[2014-5-26 14:55:45] Match request lookup made by UID 2
+[2014-5-26 14:55:48] Search was made by UID 2 for m                                                 
+[2014-5-26 14:55:55] UID 1 disconnected unexpectedly
+[2014-5-26 14:55:55] Logged out UID 1
+[2014-5-26 14:55:55] Terminating client server in state main
+[2014-5-26 14:56:0] UID 2 disconnected unexpectedly
+[2014-5-26 14:56:0] Logged out UID 2
+[2014-5-26 14:56:0] Terminating client server in state main
+[2014-5-26 14:56:2] User connected with IP 130.238.92.156 on port 55530
+[2014-5-26 14:56:2] User connected with IP 212.25.155.206 on port 44761
+[2014-5-26 14:56:2] Logged in UID 2
+[2014-5-26 14:56:2] Spawned new client_serv for UID 2
+[2014-5-26 14:56:2] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:56:2] Socket transfer for UID 2
+[2014-5-26 14:56:2] Get home stats for UID 2
+[2014-5-26 14:56:4] Match request lookup made by UID 2
+[2014-5-26 14:56:7] Search was made by UID 2 for m                                                 
+[2014-5-26 14:56:12] Logged in UID 1
+[2014-5-26 14:56:12] Spawned new client_serv for UID 1
+[2014-5-26 14:56:12] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:56:12] Socket transfer for UID 1
+[2014-5-26 14:56:23] Search was made by UID 1 for                                                   
+[2014-5-26 14:56:36] Search was made by UID 1 for m                                                 
+[2014-5-26 14:56:40] UID 2 disconnected unexpectedly
+[2014-5-26 14:56:40] Logged out UID 2
+[2014-5-26 14:56:40] Terminating client server in state main
+[2014-5-26 14:56:48] Search was made by UID 1 for test                                             
+[2014-5-26 14:56:50] User connected with IP 130.238.92.156 on port 55534
+[2014-5-26 14:56:53] Logged in UID 2
+[2014-5-26 14:56:53] Spawned new client_serv for UID 2
+[2014-5-26 14:56:53] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:56:53] Socket transfer for UID 2
+[2014-5-26 14:56:53] Get home stats for UID 2
+[2014-5-26 14:56:54] Match request lookup made by UID 2
+[2014-5-26 14:56:59] Search was made by UID 2 for m                                                 
+[2014-5-26 14:57:10] UID 2 disconnected unexpectedly
+[2014-5-26 14:57:10] Logged out UID 2
+[2014-5-26 14:57:10] Terminating client server in state main
+[2014-5-26 14:57:41] User connected with IP 130.238.92.156 on port 55540
+[2014-5-26 14:57:42] Logged in UID 2
+[2014-5-26 14:57:42] Spawned new client_serv for UID 2
+[2014-5-26 14:57:42] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:57:42] Socket transfer for UID 2
+[2014-5-26 14:57:42] Get home stats for UID 2
+[2014-5-26 14:57:43] Match request lookup made by UID 2
+[2014-5-26 14:57:48] Search was made by UID 2 for test                                              
+[2014-5-26 14:57:57] UID 2 disconnected unexpectedly
+[2014-5-26 14:57:57] Logged out UID 2
+[2014-5-26 14:57:57] Terminating client server in state main
+[2014-5-26 14:58:11] User connected with IP 130.238.92.156 on port 55543
+[2014-5-26 14:58:11] Logged in UID 2
+[2014-5-26 14:58:11] Spawned new client_serv for UID 2
+[2014-5-26 14:58:11] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:58:11] Socket transfer for UID 2
+[2014-5-26 14:58:11] Get home stats for UID 2
+[2014-5-26 14:58:14] Match request lookup made by UID 2
+[2014-5-26 14:58:18] Search was made by UID 2 for ast                                               
+[2014-5-26 14:58:23] Logged out UID 2
+[2014-5-26 14:58:23] Terminating client server in state main
+[2014-5-26 14:58:29] User connected with IP 130.238.92.156 on port 55546
+[2014-5-26 14:58:29] Logged in UID 2
+[2014-5-26 14:58:29] Spawned new client_serv for UID 2
+[2014-5-26 14:58:29] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:58:29] Socket transfer for UID 2
+[2014-5-26 14:58:29] Get home stats for UID 2
+[2014-5-26 14:58:31] Match request lookup made by UID 2
+[2014-5-26 14:58:38] Search was made by UID 2 for d                                                 
+[2014-5-26 14:58:43] Logged out UID 2
+[2014-5-26 14:58:43] Terminating client server in state main
+[2014-5-26 14:58:46] User connected with IP 130.238.92.156 on port 55550
+[2014-5-26 14:58:46] Logged in UID 2
+[2014-5-26 14:58:46] Spawned new client_serv for UID 2
+[2014-5-26 14:58:46] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:58:46] Socket transfer for UID 2
+[2014-5-26 14:58:46] Get home stats for UID 2
+[2014-5-26 14:58:49] Match request lookup made by UID 2
+[2014-5-26 14:58:54] Search was made by UID 2 for a                                                 
+[2014-5-26 14:58:59] UID 2 disconnected unexpectedly
+[2014-5-26 14:58:59] Logged out UID 2
+[2014-5-26 14:58:59] Terminating client server in state main
+[2014-5-26 14:59:18] User connected with IP 130.238.92.156 on port 55554
+[2014-5-26 14:59:18] Logged in UID 2
+[2014-5-26 14:59:18] Spawned new client_serv for UID 2
+[2014-5-26 14:59:18] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:59:18] Socket transfer for UID 2
+[2014-5-26 14:59:18] Get home stats for UID 2
+[2014-5-26 14:59:19] Match request lookup made by UID 2
+[2014-5-26 14:59:24] Search was made by UID 2 for a                                                 
+[2014-5-26 14:59:28] UID 2 disconnected unexpectedly
+[2014-5-26 14:59:28] Logged out UID 2
+[2014-5-26 14:59:28] Terminating client server in state main
+[2014-5-26 14:59:43] User connected with IP 130.238.92.156 on port 55557
+[2014-5-26 14:59:43] Logged in UID 2
+[2014-5-26 14:59:43] Spawned new client_serv for UID 2
+[2014-5-26 14:59:44] Terminating listener: Reason: normal, State: login
+[2014-5-26 14:59:44] Socket transfer for UID 2
+[2014-5-26 14:59:44] Get home stats for UID 2
+[2014-5-26 14:59:45] Match request lookup made by UID 2
+[2014-5-26 14:59:51] Search was made by UID 2 for a                                                 
+[2014-5-26 14:59:56] UID 2 disconnected unexpectedly
+[2014-5-26 14:59:56] Logged out UID 2
+[2014-5-26 14:59:56] Terminating client server in state main
+[2014-5-26 15:0:19] User connected with IP 130.238.92.156 on port 55560
+[2014-5-26 15:0:19] Logged in UID 2
+[2014-5-26 15:0:19] Spawned new client_serv for UID 2
+[2014-5-26 15:0:19] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:0:19] Socket transfer for UID 2
+[2014-5-26 15:0:19] Get home stats for UID 2
+[2014-5-26 15:0:21] Match request lookup made by UID 2
+[2014-5-26 15:0:25] Search was made by UID 2 for asg                                               
+[2014-5-26 15:0:30] Logged out UID 2
+[2014-5-26 15:0:30] Terminating client server in state main
+[2014-5-26 15:0:55] User connected with IP 130.238.92.156 on port 55564
+[2014-5-26 15:0:56] Logged in UID 2
+[2014-5-26 15:0:56] Spawned new client_serv for UID 2
+[2014-5-26 15:0:56] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:0:56] Socket transfer for UID 2
+[2014-5-26 15:0:56] Get home stats for UID 2
+[2014-5-26 15:0:58] Match request lookup made by UID 2
+[2014-5-26 15:1:2] Search was made by UID 2 for mxm                                               
+[2014-5-26 15:1:7] Logged out UID 2
+[2014-5-26 15:1:7] Terminating client server in state main
+[2014-5-26 15:1:33] User connected with IP 130.238.92.156 on port 55567
+[2014-5-26 15:1:34] Logged in UID 2
+[2014-5-26 15:1:34] Spawned new client_serv for UID 2
+[2014-5-26 15:1:34] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:1:34] Socket transfer for UID 2
+[2014-5-26 15:1:34] Get home stats for UID 2
+[2014-5-26 15:1:37] Match request lookup made by UID 2
+[2014-5-26 15:1:41] Search was made by UID 2 for asf                                               
+[2014-5-26 15:1:46] Logged out UID 2
+[2014-5-26 15:1:46] Terminating client server in state main
+[2014-5-26 15:2:2] User connected with IP 130.238.92.156 on port 55570
+[2014-5-26 15:2:3] Logged in UID 2
+[2014-5-26 15:2:3] Spawned new client_serv for UID 2
+[2014-5-26 15:2:3] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:2:3] Socket transfer for UID 2
+[2014-5-26 15:2:3] Get home stats for UID 2
+[2014-5-26 15:2:4] Match request lookup made by UID 2
+[2014-5-26 15:2:8] Search was made by UID 2 for asf                                               
+[2014-5-26 15:2:13] Logged out UID 2
+[2014-5-26 15:2:13] Terminating client server in state main
+[2014-5-26 15:3:27] User connected with IP 130.238.92.156 on port 55582
+[2014-5-26 15:3:28] Logged in UID 2
+[2014-5-26 15:3:28] Spawned new client_serv for UID 2
+[2014-5-26 15:3:28] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:3:28] Socket transfer for UID 2
+[2014-5-26 15:3:28] Get home stats for UID 2
+[2014-5-26 15:3:35] Match request lookup made by UID 2
+[2014-5-26 15:3:52] UID 2 disconnected unexpectedly
+[2014-5-26 15:3:52] Logged out UID 2
+[2014-5-26 15:3:52] Terminating client server in state main
+[2014-5-26 15:3:55] User connected with IP 130.238.92.156 on port 55585
+[2014-5-26 15:3:55] Logged in UID 2
+[2014-5-26 15:3:55] Spawned new client_serv for UID 2
+[2014-5-26 15:3:55] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:3:55] Socket transfer for UID 2
+[2014-5-26 15:3:55] Get home stats for UID 2
+[2014-5-26 15:3:57] Match request lookup made by UID 2
+[2014-5-26 15:4:0] Search was made by UID 2 for asf                                               
+[2014-5-26 15:4:5] Logged out UID 2
+[2014-5-26 15:4:5] Terminating client server in state main
+[2014-5-26 15:4:22] User connected with IP 130.238.92.156 on port 55588
+[2014-5-26 15:4:23] Logged in UID 2
+[2014-5-26 15:4:23] Spawned new client_serv for UID 2
+[2014-5-26 15:4:23] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:4:23] Socket transfer for UID 2
+[2014-5-26 15:4:23] Get home stats for UID 2
+[2014-5-26 15:4:24] Match request lookup made by UID 2
+[2014-5-26 15:4:28] Search was made by UID 2 for m                                                 
+[2014-5-26 15:4:58] UID 2 disconnected unexpectedly
+[2014-5-26 15:4:58] Logged out UID 2
+[2014-5-26 15:4:58] Terminating client server in state main
+[2014-5-26 15:5:12] User connected with IP 130.238.92.156 on port 55632
+[2014-5-26 15:5:12] Login failed because already logged in
+[2014-5-26 15:5:12] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:5:24] UID 1 disconnected unexpectedly
+[2014-5-26 15:5:25] Logged out UID 1
+[2014-5-26 15:5:25] Terminating client server in state main
+[2014-5-26 15:5:28] User connected with IP 130.238.92.156 on port 55633
+[2014-5-26 15:5:29] Logged in UID 1
+[2014-5-26 15:5:29] Spawned new client_serv for UID 1
+[2014-5-26 15:5:29] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:5:29] Socket transfer for UID 1
+[2014-5-26 15:5:29] Get home stats for UID 1
+[2014-5-26 15:5:32] Match request lookup made by UID 1
+[2014-5-26 15:5:38] Search was made by UID 1 for m                                                 
+[2014-5-26 15:10:44] UID 1 disconnected unexpectedly
+[2014-5-26 15:10:44] Logged out UID 1
+[2014-5-26 15:10:44] Terminating client server in state main
+[2014-5-26 15:10:47] User connected with IP 130.238.92.156 on port 55686
+[2014-5-26 15:10:47] Logged in UID 1
+[2014-5-26 15:10:47] Spawned new client_serv for UID 1
+[2014-5-26 15:10:47] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:10:47] Socket transfer for UID 1
+[2014-5-26 15:10:48] Get home stats for UID 1
+[2014-5-26 15:10:49] Match request lookup made by UID 1
+[2014-5-26 15:19:55] UID 1 disconnected unexpectedly
+[2014-5-26 15:19:55] Logged out UID 1
+[2014-5-26 15:19:55] Terminating client server in state main
+[2014-5-26 15:22:26] User connected with IP 130.238.92.156 on port 55856
+[2014-5-26 15:22:27] Logged in UID 1
+[2014-5-26 15:22:27] Spawned new client_serv for UID 1
+[2014-5-26 15:22:27] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:22:27] Socket transfer for UID 1
+[2014-5-26 15:22:27] Get home stats for UID 1
+[2014-5-26 15:23:8] UID 1 disconnected unexpectedly
+[2014-5-26 15:23:8] Logged out UID 1
+[2014-5-26 15:23:8] Terminating client server in state main
+[2014-5-26 15:23:10] User connected with IP 130.238.92.156 on port 55860
+[2014-5-26 15:23:11] Logged in UID 1
+[2014-5-26 15:23:11] Spawned new client_serv for UID 1
+[2014-5-26 15:23:11] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:23:11] Socket transfer for UID 1
+[2014-5-26 15:23:11] Get home stats for UID 1
+[2014-5-26 15:23:14] Match request lookup made by UID 1
+[2014-5-26 15:28:2] UID 1 disconnected unexpectedly
+[2014-5-26 15:28:2] Logged out UID 1
+[2014-5-26 15:28:2] Terminating client server in state main
+[2014-5-26 15:28:6] User connected with IP 130.238.92.156 on port 55891
+[2014-5-26 15:28:6] Logged in UID 1
+[2014-5-26 15:28:6] Spawned new client_serv for UID 1
+[2014-5-26 15:28:6] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:28:6] Socket transfer for UID 1
+[2014-5-26 15:28:6] Get home stats for UID 1
+[2014-5-26 15:28:11] Match request lookup made by UID 1
+[2014-5-26 15:28:18] Search was made by UID 1 for m                                                 
+[2014-5-26 15:28:46] UID 1 disconnected unexpectedly
+[2014-5-26 15:28:46] Logged out UID 1
+[2014-5-26 15:28:46] Terminating client server in state main
+[2014-5-26 15:28:50] User connected with IP 130.238.92.156 on port 55895
+[2014-5-26 15:28:50] Logged in UID 1
+[2014-5-26 15:28:50] Spawned new client_serv for UID 1
+[2014-5-26 15:28:50] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:28:50] Socket transfer for UID 1
+[2014-5-26 15:28:51] Get home stats for UID 1
+[2014-5-26 15:29:5] UID 1 disconnected unexpectedly
+[2014-5-26 15:29:5] Logged out UID 1
+[2014-5-26 15:29:5] Terminating client server in state main
+[2014-5-26 15:29:20] User connected with IP 130.238.92.156 on port 55899
+[2014-5-26 15:29:21] Logged in UID 1
+[2014-5-26 15:29:21] Spawned new client_serv for UID 1
+[2014-5-26 15:29:21] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:29:21] Socket transfer for UID 1
+[2014-5-26 15:29:21] Get home stats for UID 1
+[2014-5-26 15:35:22] UID 1 disconnected unexpectedly
+[2014-5-26 15:35:22] Logged out UID 1
+[2014-5-26 15:35:22] Terminating client server in state main
+[2014-5-26 15:35:24] User connected with IP 130.238.92.156 on port 56047
+[2014-5-26 15:35:24] Logged in UID 1
+[2014-5-26 15:35:24] Spawned new client_serv for UID 1
+[2014-5-26 15:35:24] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:35:25] Socket transfer for UID 1
+[2014-5-26 15:35:25] Get home stats for UID 1
+[2014-5-26 15:35:27] Match request lookup made by UID 1
+[2014-5-26 15:35:35] Match request lookup made by UID 1
+[2014-5-26 15:35:39] Match request lookup made by UID 1
+[2014-5-26 15:35:42] Match request lookup made by UID 1
+[2014-5-26 15:35:43] Match request lookup made by UID 1
+[2014-5-26 15:35:45] Match request lookup made by UID 1
+[2014-5-26 15:35:53] Match request lookup made by UID 1
+[2014-5-26 15:35:53] Match started with RID 227
+[2014-5-26 15:36:2] Match stopped for MID 205
+[2014-5-26 15:36:3] Match request lookup made by UID 1
+[2014-5-26 15:38:9] Match request lookup made by UID 1
+[2014-5-26 15:38:12] Match request lookup made by UID 1
+[2014-5-26 15:38:15] Match request lookup made by UID 1
+[2014-5-26 15:38:18] Match request lookup made by UID 1
+[2014-5-26 15:38:20] Match request lookup made by UID 1
+[2014-5-26 15:38:21] Match request lookup made by UID 1
+[2014-5-26 15:38:23] Match request lookup made by UID 1
+[2014-5-26 15:38:25] Match request lookup made by UID 1
+[2014-5-26 15:40:14] Match request lookup made by UID 1
+[2014-5-26 15:40:20] Match request lookup made by UID 1
+[2014-5-26 15:41:9] Match request lookup made by UID 1
+[2014-5-26 15:41:14] Match request lookup made by UID 1
+[2014-5-26 15:41:30] Match request lookup made by UID 1
+[2014-5-26 15:41:31] Match request lookup made by UID 1
+[2014-5-26 15:46:25] Match request lookup made by UID 1
+[2014-5-26 15:46:30] Match request lookup made by UID 1
+[2014-5-26 15:47:5] User connected with IP 212.25.155.206 on port 36554
+[2014-5-26 15:47:55] Login failed because already logged in
+[2014-5-26 15:47:55] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:48:47] UID 1 disconnected unexpectedly
+[2014-5-26 15:48:47] Logged out UID 1
+[2014-5-26 15:48:47] Terminating client server in state main
+[2014-5-26 15:48:50] User connected with IP 130.238.92.156 on port 56149
+[2014-5-26 15:48:51] Logged in UID 1
+[2014-5-26 15:48:51] Spawned new client_serv for UID 1
+[2014-5-26 15:48:51] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:48:51] Socket transfer for UID 1
+[2014-5-26 15:48:51] Search was made by UID 1 for m                                                 
+[2014-5-26 15:50:40] User connected with IP 212.25.155.206 on port 33175
+[2014-5-26 15:50:47] Login failed because already logged in
+[2014-5-26 15:50:47] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:51:9] UID 1 disconnected unexpectedly
+[2014-5-26 15:51:9] Logged out UID 1
+[2014-5-26 15:51:9] Terminating client server in state main
+[2014-5-26 15:51:54] User connected with IP 130.238.92.156 on port 56152
+[2014-5-26 15:51:55] Logged in UID 1
+[2014-5-26 15:51:55] Spawned new client_serv for UID 1
+[2014-5-26 15:51:55] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:51:55] Socket transfer for UID 1
+[2014-5-26 15:51:55] Search was made by UID 1 for m                                                 
+[2014-5-26 15:53:54] UID 1 disconnected unexpectedly
+[2014-5-26 15:53:54] Logged out UID 1
+[2014-5-26 15:53:55] Terminating client server in state main
+[2014-5-26 15:53:59] User connected with IP 130.238.92.156 on port 56155
+[2014-5-26 15:53:59] Logged in UID 1
+[2014-5-26 15:53:59] Spawned new client_serv for UID 1
+[2014-5-26 15:53:59] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:53:59] Socket transfer for UID 1
+[2014-5-26 15:53:59] Search was made by UID 1 for m                                                 
+[2014-5-26 15:54:32] UID 1 disconnected unexpectedly
+[2014-5-26 15:54:32] Logged out UID 1
+[2014-5-26 15:54:32] Terminating client server in state main
+[2014-5-26 15:54:37] User connected with IP 130.238.92.156 on port 56158
+[2014-5-26 15:54:37] Logged in UID 1
+[2014-5-26 15:54:37] Spawned new client_serv for UID 1
+[2014-5-26 15:54:37] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:54:37] Socket transfer for UID 1
+[2014-5-26 15:54:37] Search was made by UID 1 for m                                                 
+[2014-5-26 15:55:41] UID 1 disconnected unexpectedly
+[2014-5-26 15:55:41] Logged out UID 1
+[2014-5-26 15:55:41] Terminating client server in state main
+[2014-5-26 15:55:44] User connected with IP 130.238.92.156 on port 56177
+[2014-5-26 15:55:45] Logged in UID 1
+[2014-5-26 15:55:45] Spawned new client_serv for UID 1
+[2014-5-26 15:55:45] Terminating listener: Reason: normal, State: login
+[2014-5-26 15:55:45] Socket transfer for UID 1
+[2014-5-26 15:55:45] Search was made by UID 1 for m                                                 
+[2014-5-26 15:57:31] Logged out UID 1
+[2014-5-26 15:57:31] Terminating client server in state main
+[2014-5-26 16:1:51] User connected with IP 130.238.92.156 on port 56311
+[2014-5-26 16:1:52] Logged in UID 1
+[2014-5-26 16:1:52] Spawned new client_serv for UID 1
+[2014-5-26 16:1:52] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:1:52] Socket transfer for UID 1
+[2014-5-26 16:1:52] Search was made by UID 1 for m                                                 
+[2014-5-26 16:2:1] UID 1 disconnected unexpectedly
+[2014-5-26 16:2:1] Logged out UID 1
+[2014-5-26 16:2:1] Terminating client server in state main
+[2014-5-26 16:2:5] User connected with IP 130.238.92.156 on port 56314
+[2014-5-26 16:2:5] Logged in UID 1
+[2014-5-26 16:2:6] Spawned new client_serv for UID 1
+[2014-5-26 16:2:6] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:2:6] Socket transfer for UID 1
+[2014-5-26 16:2:6] Search was made by UID 1 for m                                                 
+[2014-5-26 16:2:38] UID 1 disconnected unexpectedly
+[2014-5-26 16:2:38] Logged out UID 1
+[2014-5-26 16:2:38] Terminating client server in state main
+[2014-5-26 16:2:40] User connected with IP 130.238.92.156 on port 56319
+[2014-5-26 16:2:41] Logged in UID 1
+[2014-5-26 16:2:41] Spawned new client_serv for UID 1
+[2014-5-26 16:2:41] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:2:41] Socket transfer for UID 1
+[2014-5-26 16:2:41] Get home stats for UID 1
+[2014-5-26 16:2:42] Match request lookup made by UID 1
+[2014-5-26 16:2:49] Search was made by UID 1 for m                                                 
+[2014-5-26 16:3:1] UID 1 disconnected unexpectedly
+[2014-5-26 16:3:3] User connected with IP 130.238.92.156 on port 56322
+[2014-5-26 16:3:3] Logged out UID 1
+[2014-5-26 16:3:3] Terminating client server in state main
+[2014-5-26 16:3:6] Logged in UID 1
+[2014-5-26 16:3:6] Spawned new client_serv for UID 1
+[2014-5-26 16:3:6] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:3:6] Socket transfer for UID 1
+[2014-5-26 16:3:7] Get home stats for UID 1
+[2014-5-26 16:3:8] Match request lookup made by UID 1
+[2014-5-26 16:3:12] Search was made by UID 1 for m                                                 
+[2014-5-26 16:4:18] UID 1 disconnected unexpectedly
+[2014-5-26 16:4:18] Logged out UID 1
+[2014-5-26 16:4:18] Terminating client server in state main
+[2014-5-26 16:4:21] User connected with IP 130.238.92.156 on port 56327
+[2014-5-26 16:4:21] Logged in UID 1
+[2014-5-26 16:4:21] Spawned new client_serv for UID 1
+[2014-5-26 16:4:21] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:4:21] Socket transfer for UID 1
+[2014-5-26 16:4:21] Get home stats for UID 1
+[2014-5-26 16:4:22] Match request lookup made by UID 1
+[2014-5-26 16:4:26] Search was made by UID 1 for m                                                 
+[2014-5-26 16:5:48] UID 1 disconnected unexpectedly
+[2014-5-26 16:5:48] Logged out UID 1
+[2014-5-26 16:5:49] Terminating client server in state main
+[2014-5-26 16:6:15] User connected with IP 130.238.92.156 on port 56334
+[2014-5-26 16:6:16] Logged in UID 1
+[2014-5-26 16:6:16] Spawned new client_serv for UID 1
+[2014-5-26 16:6:16] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:6:16] Socket transfer for UID 1
+[2014-5-26 16:6:16] Get home stats for UID 1
+[2014-5-26 16:6:18] Match request lookup made by UID 1
+[2014-5-26 16:6:24] Search was made by UID 1 for m                                                 
+[2014-5-26 16:7:16] UID 1 disconnected unexpectedly
+[2014-5-26 16:7:16] Logged out UID 1
+[2014-5-26 16:7:16] Terminating client server in state main
+[2014-5-26 16:7:19] User connected with IP 130.238.92.156 on port 56339
+[2014-5-26 16:7:19] Logged in UID 1
+[2014-5-26 16:7:19] Spawned new client_serv for UID 1
+[2014-5-26 16:7:19] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:7:19] Socket transfer for UID 1
+[2014-5-26 16:7:19] Get home stats for UID 1
+[2014-5-26 16:7:20] Match request lookup made by UID 1
+[2014-5-26 16:7:30] Search was made by UID 1 for m                                                 
+[2014-5-26 16:9:17] UID 1 disconnected unexpectedly
+[2014-5-26 16:9:17] Logged out UID 1
+[2014-5-26 16:9:17] Terminating client server in state main
+[2014-5-26 16:9:20] User connected with IP 130.238.92.156 on port 56351
+[2014-5-26 16:9:20] Logged in UID 1
+[2014-5-26 16:9:20] Spawned new client_serv for UID 1
+[2014-5-26 16:9:20] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:9:20] Socket transfer for UID 1
+[2014-5-26 16:9:20] Get home stats for UID 1
+[2014-5-26 16:9:22] Match request lookup made by UID 1
+[2014-5-26 16:9:25] Search was made by UID 1 for m                                                 
+[2014-5-26 16:9:51] Search was made by UID 1 for m                                                 
+[2014-5-26 16:9:58] Search was made by UID 1 for m                                                 
+[2014-5-26 16:11:23] UID 1 disconnected unexpectedly
+[2014-5-26 16:11:23] Logged out UID 1
+[2014-5-26 16:11:23] Terminating client server in state main
+[2014-5-26 16:11:35] User connected with IP 130.238.92.156 on port 56359
+[2014-5-26 16:11:36] Logged in UID 1
+[2014-5-26 16:11:36] Spawned new client_serv for UID 1
+[2014-5-26 16:11:36] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:11:36] Socket transfer for UID 1
+[2014-5-26 16:11:36] Get home stats for UID 1
+[2014-5-26 16:11:38] Match request lookup made by UID 1
+[2014-5-26 16:11:42] Search was made by UID 1 for m                                                 
+[2014-5-26 16:12:46] UID 1 disconnected unexpectedly
+[2014-5-26 16:12:46] Logged out UID 1
+[2014-5-26 16:12:46] Terminating client server in state main
+[2014-5-26 16:12:49] User connected with IP 130.238.92.156 on port 56364
+[2014-5-26 16:12:49] Logged in UID 1
+[2014-5-26 16:12:49] Spawned new client_serv for UID 1
+[2014-5-26 16:12:49] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:12:49] Socket transfer for UID 1
+[2014-5-26 16:12:49] Get home stats for UID 1
+[2014-5-26 16:12:50] Match request lookup made by UID 1
+[2014-5-26 16:12:55] Search was made by UID 1 for m                                                 
+[2014-5-26 16:13:41] UID 1 disconnected unexpectedly
+[2014-5-26 16:13:41] Logged out UID 1
+[2014-5-26 16:13:42] Terminating client server in state main
+[2014-5-26 16:13:44] User connected with IP 130.238.92.156 on port 56371
+[2014-5-26 16:13:44] Logged in UID 1
+[2014-5-26 16:13:44] Spawned new client_serv for UID 1
+[2014-5-26 16:13:44] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:13:44] Socket transfer for UID 1
+[2014-5-26 16:13:44] Get home stats for UID 1
+[2014-5-26 16:13:46] Match request lookup made by UID 1
+[2014-5-26 16:13:51] Search was made by UID 1 for m                                                 
+[2014-5-26 16:21:44] UID 1 disconnected unexpectedly
+[2014-5-26 16:21:44] Logged out UID 1
+[2014-5-26 16:21:44] Terminating client server in state main
+[2014-5-26 16:26:48] User connected with IP 130.238.92.156 on port 56410
+[2014-5-26 16:26:49] Logged in UID 1
+[2014-5-26 16:26:49] Spawned new client_serv for UID 1
+[2014-5-26 16:26:49] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:26:49] Socket transfer for UID 1
+[2014-5-26 16:26:49] Get home stats for UID 1
+[2014-5-26 16:26:51] Match request lookup made by UID 1
+[2014-5-26 16:26:55] Search was made by UID 1 for m                                                 
+[2014-5-26 16:27:18] Search was made by UID 1 for m                                                 
+[2014-5-26 16:28:29] Search was made by UID 1 for m                                                 
+[2014-5-26 16:30:32] UID 1 disconnected unexpectedly
+[2014-5-26 16:30:32] Logged out UID 1
+[2014-5-26 16:30:32] Terminating client server in state main
+[2014-5-26 16:30:34] User connected with IP 130.238.92.156 on port 56452
+[2014-5-26 16:30:35] Logged in UID 1
+[2014-5-26 16:30:35] Spawned new client_serv for UID 1
+[2014-5-26 16:30:35] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:30:35] Socket transfer for UID 1
+[2014-5-26 16:30:35] Get home stats for UID 1
+[2014-5-26 16:30:37] Match request lookup made by UID 1
+[2014-5-26 16:30:39] Search was made by UID 1 for m                                                 
+[2014-5-26 16:30:54] UID 1 disconnected unexpectedly
+[2014-5-26 16:30:54] Logged out UID 1
+[2014-5-26 16:30:54] Terminating client server in state main
+[2014-5-26 16:30:58] User connected with IP 130.238.92.156 on port 56455
+[2014-5-26 16:30:58] Logged in UID 1
+[2014-5-26 16:30:58] Spawned new client_serv for UID 1
+[2014-5-26 16:30:58] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:30:58] Socket transfer for UID 1
+[2014-5-26 16:30:58] Get home stats for UID 1
+[2014-5-26 16:31:0] Match request lookup made by UID 1
+[2014-5-26 16:31:2] Search was made by UID 1 for m                                                 
+[2014-5-26 16:31:10] Search was made by UID 1 for m                                                 
+[2014-5-26 16:31:48] UID 1 disconnected unexpectedly
+[2014-5-26 16:31:48] Logged out UID 1
+[2014-5-26 16:31:48] Terminating client server in state main
+[2014-5-26 16:31:50] User connected with IP 130.238.92.156 on port 56460
+[2014-5-26 16:31:51] Logged in UID 1
+[2014-5-26 16:31:51] Spawned new client_serv for UID 1
+[2014-5-26 16:31:51] Terminating listener: Reason: normal, State: login
+[2014-5-26 16:31:51] Socket transfer for UID 1
+[2014-5-26 16:31:51] Get home stats for UID 1
+[2014-5-26 16:31:52] Match request lookup made by UID 1
+[2014-5-26 16:31:58] Match request lookup made by UID 1
+[2014-5-26 16:32:0] Match request lookup made by UID 1
+[2014-5-26 16:32:17] Search was made by UID 1 for m                                                 
+[2014-5-26 16:34:25] UID 1 disconnected unexpectedly
+[2014-5-26 16:34:25] Logged out UID 1
+[2014-5-26 16:34:25] Terminating client server in state main
+[2014-5-26 17:9:29] User connected with IP 127.0.0.1 on port 54636
+[2014-5-26 17:10:8] Logged in UID 1
+[2014-5-26 17:10:9] Login failed because already logged in
+[2014-5-26 17:10:9] Terminating listener: Reason: normal, State: login
+[2014-5-26 17:10:48] User connected with IP 127.0.0.1 on port 47449
+[2014-5-26 17:10:52] Logged in UID 1
+[2014-5-26 17:10:53] Login failed because already logged in
+[2014-5-26 17:10:53] Terminating listener: Reason: normal, State: login
+[2014-5-26 17:11:36] User connected with IP 127.0.0.1 on port 60460
+[2014-5-26 17:11:36] User disconnected unexpectedly.
+[2014-5-26 17:11:36] Terminating listener: Reason: normal, State: login
+[2014-5-26 17:11:46] User connected with IP 127.0.0.1 on port 42529
+[2014-5-26 17:11:52] Logged in UID 1
+[2014-5-26 17:11:52] Login failed because already logged in
+[2014-5-26 17:11:52] Terminating listener: Reason: normal, State: login
