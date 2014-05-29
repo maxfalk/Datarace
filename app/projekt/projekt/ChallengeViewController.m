@@ -43,9 +43,12 @@ typedef struct __attribute__ ((packed)) {
     _updateDistanceSlider.maximumTrackTintColor = [UIColor colorWithRed:0.13 green:0.66 blue:0.82 alpha:1];
     _updateDistanceSlider.thumbTintColor = [UIColor colorWithRed:0.4 green:0.6 blue:0.72 alpha:1];
     _updateDistanceSlider.maximumValue = 5;
+    _updateDistanceSlider.minimumValue = 1;
+
     
     _distanceSlider.maximumTrackTintColor = [UIColor colorWithRed:0.13 green:0.66 blue:0.82 alpha:1];
     _distanceSlider.thumbTintColor = [UIColor colorWithRed:0.4 green:0.6 blue:0.72 alpha:1];
+    _distanceSlider.minimumValue = 1;
     
 }
 
