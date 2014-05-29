@@ -1,4 +1,0 @@
-{packages,[]}.
-{modules,[account,client_funs,client_serv,client_serv_sup,database,datarace,
-          gps,listener,listener_sup,master_sup,matchlogic,packconv,server,tcp,
-          usercom]}.

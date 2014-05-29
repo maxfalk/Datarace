@@ -1,4 +1,4 @@
-%% @doc This module holds functions for converting an incoming and 
+%% @doc This module holds functions for converting incoming and 
 %% outgoing network packets
 
 -module(packconv).
@@ -14,7 +14,7 @@
 %%====================================================================
 
 
-%% @doc Convert a received binary message to a .
+%% @doc Convert a received binary message to a tuple.
 -spec convert_pack(Type, Data) -> Result when
       Type :: binary(),
       Data :: binary(),
@@ -175,15 +175,30 @@ search_results_pack(Data) ->
     binary_join(?SEARCH_RESULTS, Packets).
 
 
+%% @doc Make a binary packet out of history results.
+-spec get_history_pack(History) -> Result when
+      History :: [match_stats_table()],  			      
+      Result :: binary().
+
 get_history_pack(History) ->
     PackList = [ match_stats(X) || X <- History ],
     binary_join(?GET_HISTORY_REPLY, PackList).
 
 
+%% @doc Make a binary packet out of match end results. 
+-spec get_match_end_pack(MatchStats) -> Result when
+      MatchStats :: [match_stats_table()],
+      Result :: binary().
+
 get_match_end_pack(MatchStats) ->
     PackList = [ match_stats(X) || X <- MatchStats ],
     binary_join(?MATCH_STOP_REPLY, PackList).
 
+
+%% @doc Make a binary packet out of a match_stats_table,
+-spec match_stats(MatchStatsTable) -> Result when
+      MatchStatsTable :: match_stats_table(),
+      Result :: binary().
 
 match_stats({match_stats_table, UserId, Time, Winner, Distance, AverageSpeed, State}) -> 
     <<UserId:32/little-integer, % 4 bytes
