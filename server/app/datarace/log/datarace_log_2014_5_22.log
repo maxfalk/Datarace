@@ -393,3 +393,18 @@
 [2014-5-22 15:19:27] Received GPS data from UID 2: Long -1.22024301176609455410e+02, Lat 3.73246111033301133375e+01
 [2014-5-22 15:19:59] Logged out UID 2
 [2014-5-22 15:19:59] Terminating client server in state match
+[2014-5-22 15:55:25] User connected with IP 127.0.0.1 on port 57097
+[2014-5-22 15:56:38] User disconnected unexpectedly.
+[2014-5-22 15:56:38] Terminating listener: Reason: normal, State: login
+[2014-5-22 15:56:57] User connected with IP 127.0.0.1 on port 58667
+[2014-5-22 15:57:0] Register user: palle
+[2014-5-22 15:57:0] User palle registered
+[2014-5-22 15:57:0] Terminating listener: Reason: normal, State: login
+[2014-5-22 16:21:44] User connected with IP 127.0.0.1 on port 35410
+[2014-5-22 16:22:3] Register user: palle
+[2014-5-22 16:22:4] User palle already registered
+[2014-5-22 16:22:4] Terminating listener: Reason: normal, State: login
+[2014-5-22 16:22:33] User connected with IP 127.0.0.1 on port 54303
+[2014-5-22 16:22:40] Register user: olle
+[2014-5-22 16:22:40] User olle registered
+[2014-5-22 16:22:40] Terminating listener: Reason: normal, State: login

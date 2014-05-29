@@ -13,5 +13,6 @@
 
 @interface RaceViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate>
 @property int reqID;
+@property (nonatomic) NSInteger distance;
 
 @end

@@ -234,6 +234,7 @@
         NSIndexPath *indexPath = sender;
         RaceViewController *class = (RaceViewController *) [segue destinationViewController];
         class.reqID = (int)[[_requestIDs objectAtIndex:indexPath.row] integerValue];
+        class.distance = (int)[[_distances objectAtIndex:indexPath.row] integerValue]*1000;
     } else if ([segue.identifier isEqualToString:@"search"]) {
         NSLog(@"Search ready to segue");
     }

@@ -10,6 +10,6 @@
     {registered, [emysql_conn_mgr, emysql_sup]},
     {applications, [kernel, stdlib, crypto]},
     {env, [
-      {default_timeout, 5000},
+      {default_timeout, 10000}, % def 5000
       {conn_test_period, 28000}]}
 ]}.

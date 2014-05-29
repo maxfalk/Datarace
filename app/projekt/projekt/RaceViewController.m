@@ -25,7 +25,6 @@
 @property (nonatomic) double totalCompetitorDistance;
 @property (weak, nonatomic) IBOutlet UILabel *toGoalLabel;
 @property (weak, nonatomic) IBOutlet UILabel *betweenPlayersLabel;
-@property (nonatomic) NSInteger distance;
 @property (weak, nonatomic) IBOutlet UILabel *differenceLabel;
 @property int check;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *quitButton;
@@ -34,6 +33,7 @@
 @property (weak, nonatomic) NSTimer *stopWatch;
 @property int currentTimeInSeconds;
 @property (weak, nonatomic) IBOutlet UILabel *averageSpeedLabel;
+@property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 
 
 @end
@@ -103,7 +103,7 @@
         }];
     }];
     
-    _distance = 5000;
+    _distanceLabel.text = [NSString stringWithFormat:@"%ld km", (long)_distance/1000];
     _yourSlider.minimumValue = 0;
     _yourSlider.maximumValue = _distance;
     
@@ -140,6 +140,8 @@
     if ((_currentTimeInSeconds % 500) == 0) {
         float avrg = ((_totalDistance*1000)/(_currentTimeInSeconds*3.6));
         _averageSpeedLabel.text = [NSString stringWithFormat: @"%.0f km/h",avrg];
+        [self getCompetitorsDistance];
+        
     }
 }
 
@@ -166,7 +168,6 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
-     [self getCompetitorsDistance];
     float spanX = fabs(_mapView.userLocation.coordinate.longitude - (_firstPosition.coordinate.longitude))*1.6;
     float spanY = fabs(_mapView.userLocation.coordinate.latitude - (_firstPosition.coordinate.latitude))*2.5;
     
@@ -276,6 +277,18 @@
         double prevTotalDistance = _totalDistance;
         
         _totalDistance = (R * c * 1000) + prevTotalDistance;
+        NSLog(@"_totalDistance: %f", _totalDistance);
+        
+        if (_totalDistance > _distance) {
+            _check = 1;
+            self.mapView.showsUserLocation = NO;
+            [self.locationManager stopUpdatingLocation];
+            [NetworkConnectionClass sendUpdatedCoordinates:self.mapView.userLocation.coordinate.latitude longitude:self.mapView.userLocation.coordinate.longitude];
+            [NetworkConnectionClass quitRace];
+            [self performSegueWithIdentifier:@"finish" sender:self];
+            
+        }
+        
         _yourSlider.value = _totalDistance;
         _toGoalLabel.text = [NSString stringWithFormat:@"%0.1f", (_distance - _totalDistance)/1000];
         _betweenPlayersLabel.text = [NSString stringWithFormat:@"%ld", (long)_distance];
@@ -312,17 +325,20 @@
         [_stopWatch invalidate];
         [NetworkConnectionClass quitRace];
         
-    }    
+    }
 }
 
 -(void)getCompetitorsDistance {
-    competitorsDistance *result = [NetworkConnectionClass requestCompetitorsDistance];
-
-    if ((result->type[0] == 4) && (result->type[1] == 5)) {
-        _totalCompetitorDistance = result->distance*1000;
-    NSLog(@"competitors distance: %f", _competitorSlider.value);
-        _competitorSlider.value = _totalCompetitorDistance;
-
+    
+    if (_check != 1) {
+        competitorsDistance *result = [NetworkConnectionClass requestCompetitorsDistance];
+        
+        if ((result->type[0] == 4) && (result->type[1] == 5)) {
+            _totalCompetitorDistance = result->distance*1000;
+            //NSLog(@"competitors distance: %f", _competitorSlider.value);
+            _competitorSlider.value = _totalCompetitorDistance;
+            
+        }
     }
 }
 

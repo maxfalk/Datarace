@@ -1142,7 +1142,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ra9-4o-BGx">
-                                <rect key="frame" x="22" y="390" width="276" height="71"/>
+                                <rect key="frame" x="22" y="390" width="252" height="71"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="39"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1170,6 +1170,14 @@
                                 <rect key="frame" x="225" y="361" width="42" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5 km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rnl-oG-ahb">
+                                <rect key="frame" x="261" y="78" width="46" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -1202,6 +1210,7 @@
                         <outlet property="competitorName" destination="qgI-kK-2XE" id="NLj-1H-3Dt"/>
                         <outlet property="competitorSlider" destination="8Gr-DU-C0l" id="Q4M-nt-KP1"/>
                         <outlet property="differenceLabel" destination="tlK-4h-Jjg" id="cLv-wd-ckP"/>
+                        <outlet property="distanceLabel" destination="Rnl-oG-ahb" id="dS2-Ib-Ldq"/>
                         <outlet property="mapView" destination="wF4-CY-hkM" id="bGp-oj-quX"/>
                         <outlet property="quitButton" destination="5R0-HB-SGY" id="Y4r-AY-Kpe"/>
                         <outlet property="timeLabel" destination="Ra9-4o-BGx" id="Tho-ps-ibp"/>

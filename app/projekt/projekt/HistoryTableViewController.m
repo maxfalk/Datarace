@@ -27,6 +27,7 @@
 {
     [super viewDidLoad];
     [self addFooter];
+     self.tableView.backgroundColor = [UIColor colorWithRed:0.61 green:0.73 blue:0.81 alpha:1];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
