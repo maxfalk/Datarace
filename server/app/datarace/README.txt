@@ -1,6 +1,6 @@
 ==== COURSE ==== 
 
-Process Oriented Programming (1DT049) Spring 2012
+Operating Systems and Multicore Programming (1DT089) Spring 2014
 
 Department of Information Technology 
 Uppsala university
@@ -8,8 +8,7 @@ Uppsala university
 
 ==== GROUP ==== 
 
-17 (change this to your group number).
-
+17
 
 ==== PROJECT NAME ==== 
 
