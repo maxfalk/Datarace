@@ -130,11 +130,11 @@ logout(UserId) when is_integer(UserId) ->
     set_loggedout(UserId),
     ok;
 logout(UserName) when is_list(UserName) ->
-    UserData = database:get_row(get_user_data(UserName),1),
+    UserData = get_user_data(UserName),
     case UserData of
 	{error, no_item}->
 	    ok;
-	_ ->
+	_Data ->
 	    set_loggedout(UserData#login_table.id),
 	    ok
     end.
