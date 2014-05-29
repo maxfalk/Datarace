@@ -816,6 +816,9 @@
                             </state>
                         </button>
                     </navigationItem>
+                    <connections>
+                        <outlet property="mapView" destination="CA3-iH-i2T" id="eqP-0i-6eQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rr0-Re-6xk" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="qlO-fr-Mhl" userLabel="Exit" sceneMemberID="exit"/>

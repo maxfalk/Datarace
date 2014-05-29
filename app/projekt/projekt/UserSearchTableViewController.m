@@ -40,6 +40,12 @@
     [self addFooter];
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    if ([_users count] == 0) {
+        UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nouserfound"]];
+        self.tableView.backgroundView = tempImageView;
+    }
+}
 
 
 - (void)didReceiveMemoryWarning {
