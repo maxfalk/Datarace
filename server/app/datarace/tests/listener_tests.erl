@@ -52,9 +52,7 @@ listener_connect({Port, Listeners, _Users}) ->
     SocketList = connect_n_times(Port, NewListeners),
     ChildrenDuring = count_children(listener_sup),
     disconnect_all(SocketList),
-    timer:sleep(100),
     ChildrenAfter = count_children(listener_sup),
-    timer:sleep(100),
     [?_assertEqual([{specs, 1}, 
 		   {active, Listeners}, 
 		   {supervisors, 0}, 
@@ -167,6 +165,7 @@ gen_users(N) ->
 
 
 count_children(Supervisor) ->
+    timer:sleep(100),
     supervisor:count_children(Supervisor).
 
 
