@@ -441,8 +441,8 @@ static NSOutputStream *outputStream;
     matchStatsHead *head = malloc(sizeof(matchStatsHead));
     
     [self readStream: (uint8_t *)head maxLength:6];
-    
-    int numberofpackages = (head->length-2)/sizeof(matchStats);
+    head->length = ntohl(head->length)-2;
+    int numberofpackages = (head->length)/sizeof(matchStats);
     matchStats *stats = malloc(numberofpackages*sizeof(matchStats));
     for (int i = 0; i < numberofpackages; i++) {
         [self readStream:(uint8_t *)(stats+i) maxLength:sizeof(matchStats)];
@@ -451,7 +451,7 @@ static NSOutputStream *outputStream;
     return head;
 }
 
-+(void)sendGetHistory{
++(void)sendGetHistory{ 
 
     requestStats packet;
     packet.length = CFSwapInt32HostToBig(6);
