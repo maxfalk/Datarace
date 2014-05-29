@@ -16,7 +16,10 @@
 	 get_home_stats/1,
 	 request_accept/2,
 	 start_match/2,
+	 gps_match/3,
+	 pos_match/1,
 	 stop_match/1,
+	 logout/1,
 	 close/1]).
 
 -include("../include/types.hrl").
@@ -116,9 +119,17 @@ search_string(Socket, SearchString) ->
     gen_tcp:send(Socket, SearchPacket).
 
 
+%% @doc Accept a match request from another user.
+-spec request_accept(Socket, RequestId) -> Result when
+      Socket :: socket(),
+      RequestId :: integer(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
+
 request_accept(Socket, RequestId) ->
     gen_tcp:send(Socket, <<?REQUEST_ACCEPT/binary,
 			   RequestId:32/little-integer>>).
+
 
 %% @doc Start a match.
 -spec start_match(Socket, RequestId) -> Result when
@@ -132,22 +143,57 @@ start_match(Socket, RequestId) ->
 			   RequestId:32/little-integer>>).
 
 
+%% @doc Stop a running match. Note that a match MUST be started.
+-spec stop_match(Socket) -> Result when
+      Socket :: socket(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
+
 stop_match(Socket) ->
     gen_tcp:send(Socket, ?MATCH_STOP).
 
+
+
+%% @doc Send GPS data to the server during a match. 
+%% Note that a match MUST be started.
+-spec gps_match(Socket, Latitude, Longitude) -> Result when
+      Socket :: socket(),
+      Latitude :: float(),
+      Longitude :: float(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
 
 gps_match(Socket, Latitude, Longitude) ->
     gen_tcp:send(Socket, <<?MATCH_GPS/binary, 
 			   Latitude/little-float,
 			   Longitude/little-float>>).
 
+%% @doc Get current (soft real time) position from opponent during a 
+%% match. Note that a match MUST be started.
+-spec pos_match(Socket) -> Result when
+      Socket :: socket(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
+
 pos_match(Socket) ->
     gen_tcp:send(Socket, ?MATCH_COMP_POS).
 
 
+%% @doc Get match hisory. Contains statistics and stuff.
+-spec get_history(Socket) -> Result when
+      Socket :: socket(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
+
 get_history(Socket) ->
     gen_tcp:send(Socket, ?GET_HISTORY).
 
+
+%% @doc Log out and disconnect.
+-spec logout(Socket) -> Result when
+      Socket :: socket(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
 
 logout(Socket) ->
     gen_tcp:send(Socket, ?LOGIN_LOGOUT).
@@ -207,4 +253,3 @@ request_pack(ChallengeId, Distance) ->
 %%====================================================================
 %% Functions for unpacking
 %%====================================================================
-

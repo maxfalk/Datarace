@@ -1,0 +1,22 @@
+[2014-5-25 19:55:52] Database error while executing a query: Cannot add or update a child row: a foreign key constraint fails (`databasev2`.`tRequestedUsers`, CONSTRAINT `tRequestedUsersUserIdForeignKey` FOREIGN KEY (`userId`) REFERENCES `tUsers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+[2014-5-25 19:56:26] Database error while executing a query: Cannot add or update a child row: a foreign key constraint fails (`databasev2`.`tRequestedUsers`, CONSTRAINT `tRequestedUsersUserIdForeignKey` FOREIGN KEY (`userId`) REFERENCES `tUsers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+[2014-5-25 21:35:38] Database error while executing a query: Cannot delete or update a parent row: a foreign key constraint fails (`databasev2`.`tRequestedUsers`, CONSTRAINT `tRequestedUsersUserIdForeignKey` FOREIGN KEY (`userId`) REFERENCES `tUsers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+[2014-5-25 21:35:38] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:35:39] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:35:39] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:35:39] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:35:39] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:35:39] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:35:39] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:35:39] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:35:39] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:48] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:49] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:50] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:51] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:52] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:53] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:54] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:55] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:56] Database error while executing a query: Table 'tmp_ids' already exists
+[2014-5-25 21:36:57] Database error while executing a query: Table 'tmp_ids' already exists

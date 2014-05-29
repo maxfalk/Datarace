@@ -168,9 +168,7 @@ handle_info({tcp_error, _, _Reason}, _State, Socket) ->
       Socket :: socket().
 
 terminate(Reason, State, _Socket) ->
-    log_serv:log("Terminating listener:" ++
-		     " Reason: " ++ atom_to_list(Reason) ++ 
-		     ", State: " ++ atom_to_list(State)).
+    log_serv:log("Terminating listener in state " ++  atom_to_list(State)).
     
 
 
