@@ -5,7 +5,7 @@
 %% !! NOT FINISHED !!
 -module(account).
 
--export([get_user_lastlogin/1,login/2,logout/1,register/3,delete/1]).
+-export([get_user/1,get_user_lastlogin/1,login/2,logout/1,register/3,delete/1]).
 
 -include("../include/database.hrl").
 

@@ -37,8 +37,10 @@ stop()->
 %%
 -spec log(Msg :: string()) -> ok.
 
-log(Msg)->
-    gen_server:cast(?MODULE, Msg).
+log(Msg) when is_list(Msg)->
+    gen_server:cast(?MODULE, Msg);
+log(Msg) ->
+    gen_server:cast(?MODULE, "Can't log the sent message").
     
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
