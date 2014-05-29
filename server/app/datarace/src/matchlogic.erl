@@ -1,7 +1,7 @@
 -module(matchlogic).
 -export([winner/2,comparedistance/2]).
 %=====================================%
-%%announces the winner of the race    %
+%%@doc Announces the winner of the race%
 %=====================================%
 -spec winner(T1,T2) -> tie | t1winner | t2winner when
       T1 :: integer(),
@@ -15,7 +15,7 @@ winner(T1,T2) ->
        
     
 %========================================================%
-%%compares the average speed from the other competitor
+%%@doc compares the average speed from the other competitor
 %% and tells if your race needs to speed up.%
 %========================================================%
 -spec comparedistance(T1,T2) -> Result when

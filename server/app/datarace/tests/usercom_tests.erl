@@ -33,7 +33,8 @@ match_test_()->
       {setup, fun start_match/0, fun stop_match/1, 
        fun (SetupData)->
 		[match(SetupData),
-		 set_winner(SetupData)]
+		 set_winner(SetupData),
+		match_stop(SetupData)]
        end}}.
 
 
@@ -45,13 +46,13 @@ gps_test_()->
       end}}.
 
 
-%stats_test_()->
-%    {"Test stats functions",
-%     {setup, fun start_stats/0, fun stop_stats/1, 
-%      fun (SetupData)->
-%	      [stats_home(SetupData),
-%	       get_num_pending_requests(SetupData)]
-%      end}}.
+stats_test_()->
+    {"Test stats functions",
+     {setup, fun start_stats/0, fun stop_stats/1, 
+      fun (SetupData)->
+	      [stats_home(SetupData),
+	       get_num_pending_requests(SetupData)]
+      end}}.
     
 
 
@@ -114,7 +115,8 @@ stop_gps({_, U1, U2})->
 
 start_stats()->
     {U1, U2} = create_users(),
-    usercom:request(U1, U2, 23),
+    usercom:request(U1, U2, 0),
+    timer:sleep(100),
     {R, R1} = usercom:request_lookup(U1),
     Result = hd(R),
     Result2 = usercom:match(Result#request_table.id),
@@ -124,6 +126,7 @@ start_stats()->
     usercom:gps_save(U1, Result2#match_table.id, 2345678.4567890, 5678.5678),
     timer:sleep(100),
     usercom:gps_save(U1, Result2#match_table.id, 2345678.4567890, 5678.5678),
+    timer:sleep(100),
     {U1, U2, <<"test_usercom1">>}.
 
 
@@ -149,29 +152,28 @@ request_lookup({U1, U2}) ->
      ?_assertEqual(Result#request_table.state, 0),
      ?_assertEqual(Result#request_table.distance, 23)].
 
-request_accept({U1, _U2})->
-    {R, R1} = usercom:request_lookup(U1),
-    Result = hd(R),   
+request_accept({_U1, U2})->
+    {R, R1} = usercom:request_lookup(U2),
+    Result = hd(R1),   
     usercom:request_accept(Result#request_table.id),
-    timer:sleep(200),
-    {R2, R3} = usercom:request_lookup(U1),
-    Result_after = hd(R2),
-    [?_assertEqual(Result_after#request_table.state, 1)].
+    timer:sleep(100),
+    {R2, R3} = usercom:request_lookup(U2),
+    Result1 = hd(R3),   
+    [?_assertEqual(Result1#request_table.state, 1)].
 
-request_cancel({U1, _U2})->
-    {R, R1} = usercom:request_lookup(U1),
-    Result = hd(R),  
+request_cancel({_U1, U2})->
+    {R, R1} = usercom:request_lookup(U2),
+    Result = hd(R1),  
     usercom:request_cancel(Result#request_table.id),
-    timer:sleep(200),
-    {R2, R3} = usercom:request_lookup(U1),
-    Result_after = hd(R2),  
-    [?_assertEqual(Result_after#request_table.state, 2)].
+    timer:sleep(1000),
+    {R2, R3} = usercom:request_lookup(U2),
+    [?_assertEqual(length(R3), 0)].
     
 %%Test match    
 
 match({UserRequestId, U1, U2})->
     Result = usercom:match(UserRequestId),
-    [?_assertEqual(Result#match_table.userId, U1),
+    [?_assertEqual(Result#match_table.userId, U2),
     ?_assertEqual(Result#match_table.requestId, UserRequestId)].
 
     
@@ -181,7 +183,17 @@ set_winner({RequestId, U1, U2})->
     timer:sleep(100),
     Result1 = usercom:match(RequestId),
     ?_assertEqual(Result1#match_table.winner, U1).
-    
+
+
+match_stop({UserRequestId, U1, U2})->
+    Result = usercom:match(UserRequestId),
+    usercom:match_stop(U1, Result#match_table.id, UserRequestId),
+    timer:sleep(100),
+    Result1 = usercom:match(UserRequestId),
+    [?_assertEqual(Result1#match_table.id, Result#match_table.id)].
+
+
+
 %%Test gps
 gps_save({MatchId, U1, _U2})->
     usercom:gps_save(U1, MatchId, 2345678.4567890, 5678.5678),
@@ -195,13 +207,14 @@ gps_save({MatchId, U1, _U2})->
 
 stats_home({UserId, _U2, UserName})->
     database:db_query("CALL insert_user_stats()"),
+    timer:sleep(100),
     Result = usercom:get_home_stats(UserId),
     Result1 = usercom:get_home_stats(-1),
     [?_assertEqual(Result#user_stats_table.userName, UserName),
-     ?_assertEqual(Result#user_stats_table.averageDistance, 23),
-     ?_assert(Result#user_stats_table.averageSpeed > 0),
+     ?_assertEqual(Result#user_stats_table.averageDistance, 0),
+     ?_assertEqual(Result#user_stats_table.averageSpeed, 0),
      ?_assertEqual(Result#user_stats_table.wins, 1),
-     ?_assertEqual(Result#user_stats_table.matches, 1),
+     ?_assertEqual(Result#user_stats_table.matches, 0),
      ?_assertEqual(Result#user_stats_table.requests, 1),
      ?_assertEqual(Result1#user_stats_table.userName, <<"">>),
      ?_assertEqual(Result1#user_stats_table.averageDistance, 0),
@@ -211,9 +224,14 @@ stats_home({UserId, _U2, UserName})->
      ?_assertEqual(Result1#user_stats_table.requests, 0)].
 
 
-get_num_pending_requests({UserId, _U2, UserName})->
+get_num_pending_requests({_U1, UserId, UserName})->
     [?_assertEqual(usercom:get_num_pending_requests(UserId),1),
     ?_assertEqual(usercom:get_num_pending_requests(-1),0)].
+
+
+get_history({_U1, UserId, UserName})->
+    Result = usercom:get_history(UserId),
+    [false].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -237,5 +255,7 @@ create_users()->
     {U1, U2}.
  
 delete_users({U1, U2})->
+    account:delete("test_usercom1"),
+    account:delete("test_usercom2"),    
     account:delete(U1),
     account:delete(U2).

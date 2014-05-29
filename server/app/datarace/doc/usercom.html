@@ -18,26 +18,27 @@
 <h2><a name="description">Description</a></h2>Author: Max Falk Nilsson
  This module holds functions for
  making requests and saving challange data.
- !!!!!! Not finished !!!!!!!!
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#get_history-1">get_history/1</a></td><td>Get match statistics, match_stats_table.</td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#get_history-1">get_history/1</a></td><td>Get match statisticsfor a user.</td></tr>
 <tr><td valign="top"><a href="#get_home_stats-1">get_home_stats/1</a></td><td>Get the statistics that will be displayed in the home screen,
  for a specific user.</td></tr>
-<tr><td valign="top"><a href="#get_match_end_stats-1">get_match_end_stats/1</a></td><td>Get match statistics, match_stats_table.</td></tr>
-<tr><td valign="top"><a href="#get_num_pending_requests-1">get_num_pending_requests/1</a></td><td>get number of pending requests for a user.</td></tr>
-<tr><td valign="top"><a href="#get_winner-1">get_winner/1</a></td><td>get match winner.</td></tr>
+<tr><td valign="top"><a href="#get_match_end_stats-1">get_match_end_stats/1</a></td><td>Get match statistics, for a specific match.</td></tr>
+<tr><td valign="top"><a href="#get_num_pending_requests-1">get_num_pending_requests/1</a></td><td>Get number of pending requests for a user.</td></tr>
+<tr><td valign="top"><a href="#get_winner-1">get_winner/1</a></td><td>Get the userid of the winner of a match.</td></tr>
 <tr><td valign="top"><a href="#gps_get-2">gps_get/2</a></td><td>Get gps coordinates for a user in a specific match.</td></tr>
-<tr><td valign="top"><a href="#gps_save-4">gps_save/4</a></td><td>Save gps information to the db.</td></tr>
-<tr><td valign="top"><a href="#match-1">match/1</a></td><td>Create a new match for the given request id if there isn't already a match
+<tr><td valign="top"><a href="#gps_save-4">gps_save/4</a></td><td>Save gps information to the db, longitude and latitude,
+ for a user in a specific match.</td></tr>
+<tr><td valign="top"><a href="#match-1">match/1</a></td><td>Create a new match for the given requestid if there isn't already a match
   made for the request id.</td></tr>
-<tr><td valign="top"><a href="#match_stop-3">match_stop/3</a></td><td>Stop the match and take actions to set the match as done.</td></tr>
+<tr><td valign="top"><a href="#match_stop-3">match_stop/3</a></td><td>Stop the match and take actions to set the match as done, point out a winner if both
+  user as completed the race.</td></tr>
 <tr><td valign="top"><a href="#request-3">request/3</a></td><td>Make a new request to a user.</td></tr>
-<tr><td valign="top"><a href="#request_accept-1">request_accept/1</a></td><td>Accept a request with a given request id.</td></tr>
+<tr><td valign="top"><a href="#request_accept-1">request_accept/1</a></td><td>Accept a request with a given requestid.</td></tr>
 <tr><td valign="top"><a href="#request_cancel-1">request_cancel/1</a></td><td>Cancel a request.</td></tr>
 <tr><td valign="top"><a href="#request_lookup-1">request_lookup/1</a></td><td>Lookup a users made requests and requests made against the user.</td></tr>
-<tr><td valign="top"><a href="#set_match_done-1">set_match_done/1</a></td><td>Set a flag that the match is completed.</td></tr>
-<tr><td valign="top"><a href="#set_match_participant_done-2">set_match_participant_done/2</a></td><td>Set flag in the db that the user is finished running her turn.</td></tr>
-<tr><td valign="top"><a href="#set_winner-2">set_winner/2</a></td><td>set match winner.</td></tr>
+<tr><td valign="top"><a href="#set_match_done-1">set_match_done/1</a></td><td>Set a flag that the match is completed, in the database.</td></tr>
+<tr><td valign="top"><a href="#set_match_participant_done-2">set_match_participant_done/2</a></td><td>Set flag in the db that the user is finished running her turn in a match.</td></tr>
+<tr><td valign="top"><a href="#set_winner-2">set_winner/2</a></td><td>Set a user as the winner of a match.</td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
@@ -46,35 +47,33 @@
 <div class="spec">
 <p><tt>get_history(UserId) -&gt; [<a href="#type-match_stats_table">match_stats_table()</a>, ...]</tt>
 <ul class="definitions"><li><tt>UserId = integer()</tt></li></ul></p>
-</div><p>Get match statistics, match_stats_table</p>
+</div><p>Get match statisticsfor a user. Statistis for each match, include if it was a win
+  the distance, averageSpeed.</p>
 
 <h3 class="function"><a name="get_home_stats-1">get_home_stats/1</a></h3>
 <div class="spec">
 <p><tt>get_home_stats(UserId) -&gt; <a href="#type-user_stats_table">user_stats_table()</a></tt>
 <ul class="definitions"><li><tt>UserId = integer()</tt></li></ul></p>
 </div><p>Get the statistics that will be displayed in the home screen,
- for a specific user
- </p>
+ for a specific user.</p>
 
 <h3 class="function"><a name="get_match_end_stats-1">get_match_end_stats/1</a></h3>
 <div class="spec">
 <p><tt>get_match_end_stats(MatchId) -&gt; [<a href="#type-match_stats_table">match_stats_table()</a>, ...]</tt>
 <ul class="definitions"><li><tt>MatchId = integer()</tt></li></ul></p>
-</div><p>Get match statistics, match_stats_table</p>
+</div><p>Get match statistics, for a specific match.</p>
 
 <h3 class="function"><a name="get_num_pending_requests-1">get_num_pending_requests/1</a></h3>
 <div class="spec">
 <p><tt>get_num_pending_requests(UserId) -&gt; integer()</tt>
 <ul class="definitions"><li><tt>UserId = integer()</tt></li></ul></p>
-</div><p><p>get number of pending requests for a user.</p>
- 
- </p>
+</div><p>Get number of pending requests for a user.</p>
 
 <h3 class="function"><a name="get_winner-1">get_winner/1</a></h3>
 <div class="spec">
 <p><tt>get_winner(MatchId) -&gt; integer()</tt>
 <ul class="definitions"><li><tt>MatchId = integer()</tt></li></ul></p>
-</div><p>get match winner</p>
+</div><p>Get the userid of the winner of a match.</p>
 
 <h3 class="function"><a name="gps_get-2">gps_get/2</a></h3>
 <div class="spec">
@@ -86,32 +85,35 @@
 <div class="spec">
 <p><tt>gps_save(User_id, Match_id, Longidtude, Latitude) -&gt; ok</tt>
 <ul class="definitions"><li><tt>User_id = integer()</tt></li><li><tt>Match_id = integer()</tt></li><li><tt>Longidtude = integer()</tt></li><li><tt>Latitude = integer()</tt></li></ul></p>
-</div><p>Save gps information to the db.</p>
+</div><p>Save gps information to the db, longitude and latitude,
+ for a user in a specific match.</p>
 
 <h3 class="function"><a name="match-1">match/1</a></h3>
 <div class="spec">
 <p><tt>match(UserRequestId) -&gt; <a href="#type-match_table">match_table()</a></tt>
 <ul class="definitions"><li><tt>UserRequestId = integer()</tt></li></ul></p>
-</div><p>Create a new match for the given request id if there isn't already a match
+</div><p>Create a new match for the given requestid if there isn't already a match
   made for the request id. If the match is already created that match will be returned.</p>
 
 <h3 class="function"><a name="match_stop-3">match_stop/3</a></h3>
 <div class="spec">
 <p><tt>match_stop(UserId, MatchId, UserRequestId) -&gt; ok</tt>
 <ul class="definitions"><li><tt>UserId = integer()</tt></li><li><tt>MatchId = integer()</tt></li><li><tt>UserRequestId = integer()</tt></li></ul></p>
-</div><p>Stop the match and take actions to set the match as done.</p>
+</div><p>Stop the match and take actions to set the match as done, point out a winner if both
+  user as completed the race. save information about the race.</p>
 
 <h3 class="function"><a name="request-3">request/3</a></h3>
 <div class="spec">
 <p><tt>request(UserId, ChUserId, Distance) -&gt; ok</tt>
 <ul class="definitions"><li><tt>UserId = integer()</tt></li><li><tt>ChUserId = integer()</tt></li><li><tt>Distance = integer()</tt></li></ul></p>
-</div><p>Make a new request to a user</p>
+</div><p>Make a new request to a user. Sending a request from you to
+  ChUserID with the challenge distance of Distance.</p>
 
 <h3 class="function"><a name="request_accept-1">request_accept/1</a></h3>
 <div class="spec">
 <p><tt>request_accept(UserRequestId) -&gt; ok</tt>
 <ul class="definitions"><li><tt>UserRequestId = integer()</tt></li></ul></p>
-</div><p>Accept a request with a given request id.</p>
+</div><p>Accept a request with a given requestid.</p>
 
 <h3 class="function"><a name="request_cancel-1">request_cancel/1</a></h3>
 <div class="spec">
@@ -131,22 +133,22 @@
 <div class="spec">
 <p><tt>set_match_done(MatchId) -&gt; ok</tt>
 <ul class="definitions"><li><tt>MatchId = integer()</tt></li></ul></p>
-</div><p>Set a flag that the match is completed</p>
+</div><p>Set a flag that the match is completed, in the database.</p>
 
 <h3 class="function"><a name="set_match_participant_done-2">set_match_participant_done/2</a></h3>
 <div class="spec">
 <p><tt>set_match_participant_done(UserRequestId, MatchId) -&gt; ok</tt>
 <ul class="definitions"><li><tt>UserRequestId = integer()</tt></li><li><tt>MatchId = integer()</tt></li></ul></p>
-</div><p>Set flag in the db that the user is finished running her turn.</p>
+</div><p>Set flag in the db that the user is finished running her turn in a match.</p>
 
 <h3 class="function"><a name="set_winner-2">set_winner/2</a></h3>
 <div class="spec">
 <p><tt>set_winner(MatchId, WinnerId) -&gt; ok</tt>
 <ul class="definitions"><li><tt>MatchId = integer()</tt></li><li><tt>WinnerId = integer()</tt></li></ul></p>
-</div><p>set match winner</p>
+</div><p>Set a user as the winner of a match.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, May 28 2014, 14:55:21.</i></p>
+<p><i>Generated by EDoc, May 29 2014, 14:32:42.</i></p>
 </body>
 </html>

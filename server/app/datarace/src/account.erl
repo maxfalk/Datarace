@@ -1,12 +1,10 @@
-%%@doc Author: Max Falk Nilsson
+%%@doc
 %% This module contains functions for interacting with 
 %% the databases' accounting operations. Sush as logging in to
 %% the system, loggin out and registering a new user.
-%% !! NOT FINISHED !!
+%%
 -module(account).
-
--export([get_user/1,get_user_lastlogin/1,login/2,logout/1,register/3,delete/1]).
-
+-export([get_user/1, login/2, logout/1, register/3, delete/1]).
 -include("../include/database.hrl").
 
 
@@ -52,7 +50,7 @@ login_helper(Password, Login_rec)->
     end.
     
     
-%%@doc Get necessary data about the user from the database
+%%@doc Get userId, salt and password data about the user from the database.
 -spec get_user_data(UserName) -> [login_table(), ...] when
       UserName :: string().
 
@@ -64,7 +62,7 @@ get_user_data(UserName)->
 
     
 
-%%@doc Checks if two passwords match the input password with salt un hashed and
+%%@doc Checks if two passwords match the input password with salt unhashed and
 %%the stored password hashed.
 -spec check_password(PasswordInput :: string(),PasswordStored :: string()) -> ok | false.
 
@@ -78,7 +76,7 @@ check_password(PasswordInput,PasswordStored) ->
     end.
 
 
-%%@doc Mark user as loggedin in the database
+%%@doc Set the time for the users login in the database.
 -spec set_loggedin(UserId) -> ok when
       UserId :: integer().
 
@@ -88,7 +86,7 @@ set_loggedin(UserId)->
 		   [UserId]),
     ok.
 
-%%@doc Check if user is already loggedin.
+%%@doc Check if a user is already loggedin, to the system.
 -spec check_user_already_login(UserId) -> boolean() when
       UserId :: integer().
 
@@ -139,7 +137,7 @@ logout(UserName) when is_list(UserName) ->
 	    ok
     end.
 
-%@doc Mark user as logged out in the database.
+%@doc Mark user as logged out in the database. Set the time of the logout in the db.
 -spec set_loggedout(UserId) -> ok when
       UserId :: integer().
 
@@ -147,7 +145,7 @@ set_loggedout(UserId)->
     Loginlog_rec = get_user_lastlogin(UserId),
     set_logout_time(Loginlog_rec#loginlog_table.id).
 
-%%@doc Get the last time the user logged in.
+%%@doc Get the last time the user logged in, from the database.
 -spec get_user_lastlogin(UserId) ->loginlog_table() | {error, no_item} when
       UserId :: integer().
     
@@ -174,7 +172,8 @@ set_logout_time(LoginlogId)->
 %%           REGISTER               %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%@doc Register a new user in the database, checks that the user doesn't already exist.
+%%@doc Register a new user in the database, checks that the user doesn't already exist,
+%% if the user already exsist. Return a error if that is the case. 
 -spec register(UserName, Password, Email) -> ok | {error, user_already_exist} when
       UserName :: string(),
       Password :: string(),
@@ -190,7 +189,7 @@ register(UserName, Password, Email)->
     end.
 
 
-%%@doc Register user in the database.
+%%@doc Register user in the database with username, password, email and salt.
 -spec register_user(UserName,Password,Email,Salt) -> ok when
       UserName :: string(),
       Password :: string(),
@@ -234,10 +233,10 @@ get_user(UserName)->
 %%           DELETE                 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%@doc Delete a user
--spec delete(Userid)-> ok when 
-      Userid :: integer().
-
+%%@doc Delete a user from the database, delete all records of the user.
+-spec delete(Userid | UserName)-> ok when 
+      Userid :: integer(),
+      UserName :: string().
 
 delete(UserName) when is_list(UserName) ->
     Data = get_user(UserName),
@@ -257,7 +256,7 @@ delete(Userid)->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%@doc Hash a given password.
+%%@doc Hash a given password with SHA.
 -spec crypt(Password) -> string() when
       Password :: string().
 

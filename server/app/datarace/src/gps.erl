@@ -1,11 +1,12 @@
 -module(gps).
 -export([distance/4, speed/2, averagespeed/2, averagedistance/2, statistics_compare/3]).
 -export([calc_pointdistance/3,calc_totaldistance/2, total_time/2]).
--compile(export_all).
+
 -include_lib("../include/database.hrl").
+-type date() :: {integer(), integer(), integer()}.
 
 %%@doc===============================================%
-%% calculates the distance between two points   %
+%% Calculates the distance between two points   %
 %===============================================%
 -spec distance(Long1, Lat1, Long2, Lat2) -> float() when
       Long1 :: float(),
@@ -47,6 +48,7 @@ speed(Time, Distance) ->
 
 averagespeed(Totaldistance, Totaltime) ->
     Totaldistance/Totaltime. 
+
 %%@doc============================================%    
 %% calculates the average distance            %
 %============================================%
@@ -66,6 +68,11 @@ averagedistance(Totaltime, Totalspeed) ->
 calc_totaldistance(User_id1, Match_id) ->
     Gps1 = usercom:gps_get(User_id1, Match_id), 
     calc_totaldistancehelp(Gps1, 0).
+
+%%@doc calculate the total distance for the user in a specific match.
+-spec calc_totaldistancehelp(Gps_list, Distance) -> float() when
+      Distance :: integer(),
+      Gps_list :: gps_table().
     
 calc_totaldistancehelp([], Distance) ->
     Distance;
@@ -76,7 +83,7 @@ calc_totaldistancehelp([First,Sec | Tl], Distance) ->
 			     Sec#gps_table.longitude, Sec#gps_table.latitude),
     calc_totaldistancehelp([Sec|Tl], Sum_distance + Distance).
 
-%%@doc total gps time
+%%@doc Calculate the total time spent running, from the intervals of gps signals.
 total_time(UserId, MatchId)->
     total_timehelper(usercom:gps_get(UserId, MatchId), 0).
 
@@ -88,10 +95,10 @@ total_timehelper([First, Sec | T], Time)->
   total_timehelper([Sec |T], Time + calc_timediff(First#gps_table.time, Sec#gps_table.time)).
 
 
-%%@doc calculate the difference in time of two date times.
+%%@doc Calculate the difference in time of two date times. Return it in seconds.
 -spec calc_timediff(T1,T2) -> integer() when
-      T1 :: any(),
-      T2 :: any().
+      T1 :: {datetime, date()} | date(),
+      T2 :: {datetime, date()} | date().
 
 calc_timediff({datetime, T1},{datetime, T2}) ->
     calc_timediff(T1,T2);
@@ -107,17 +114,27 @@ calc_timediff(T1,T2) ->
 	    0
     end.
     
-%%@doc Calculates the distance at a given time point
+%%@doc Calculates the distance for a user in a match at a given time point.
 -spec calc_pointdistance(UserId, MatchId, StartTime)-> float() when
       UserId :: integer(),
       MatchId :: integer(),
-      StartTime :: any().
+      StartTime :: {datetime, date()} | date().
 
 calc_pointdistance(UserId, MatchId, StartTime)->
     Gps = usercom:gps_get(UserId, MatchId),
     Time = calc_timediff(calendar:local_time(), StartTime),
     calc_pointdistancehelp(Gps, Time, 0, 0, UserId).
 
+
+
+%%@doc Calculates the distance for a user in a match at a given time point. Help function
+%% to calc_pointdistance.
+-spec calc_pointdistancehelp(Gps_list, Maxtime, Distance, Time, UserId)-> float() when
+      Gps_list :: [gps_table(), ...],
+      Maxtime :: integer(),
+      Distance :: float(),
+      Time :: integer(),
+      UserId :: integer().
 
 calc_pointdistancehelp([], Maxtime, Distance, Time, UserId) ->
     Distance + calc_avgdistance_from_avgspeed(UserId,Maxtime- Time);
@@ -134,8 +151,8 @@ calc_pointdistancehelp([First,Sec | Tl], Maxtime, Distance, Time, UserId) ->
 	    Distance
     end.
 
-%%@doc calculate distance for a given time using average speed of a user,
-%% time is in seconds.
+%%@doc Calculates distance for a given time using average speed of a user,
+%% time is in seconds. If the user doesn't have a average yet use 10 km/h.
 -spec calc_avgdistance_from_avgspeed(UserId, Time)-> float() when
       UserId :: integer(),
       Time :: integer().
@@ -155,7 +172,7 @@ calc_avgdistance_from_avgspeed(_,_) ->
     
 
 
-%%@doc Get averagespeed fomr the db
+%%@doc Get averagespeed for a user from the db.
 -spec get_averagespeed(UserId)-> float() when
       UserId :: integer().
 
