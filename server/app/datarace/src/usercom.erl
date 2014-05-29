@@ -356,9 +356,11 @@ get_match_details(MatchId)->
 -spec check_winner(MatchDetails)-> integer() when
       MatchDetails :: [[{binary(), integer()}, ...], ...].
 
-check_winner([[{<<"userId">>, UserId}, _,{<<"time">>, Time}] | T] = List) when length(List) > 1->
+check_winner([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time},{<<"time">>, Time}] | T] = List) when length(List) > 1->
     check_winnerhelp(T, {UserId, Time});
-check_winner(List)->
+check_winner([[{<<"userId">>, _UserId}, {<<"state">>, 2},{<<"time">>, Time},{<<"time">>, Time}] | T] = List) when length(List) > 1->
+    check_winnerhelp(T, {-1, 0});
+check_winner(_List)->
     0.
 
 %%@doc Check winner help function does the actual calculation.
@@ -370,9 +372,13 @@ check_winner(List)->
 
 check_winnerhelp([], {WinnerId, _})->
     WinnerId;
+check_winnerhelp([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T], {WinnerId, _WinnerTime}) when WinnerId == -1 ->
+    check_winnerhelp(T,{UserId, Time});
 check_winnerhelp([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time < WinnerTime ->
     check_winnerhelp(T,{UserId, Time});
-check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 2},{<<"time">>, Time}] | T], {WinnerId, WinnerTime}) when Time == WinnerTime, WinnerId == 0 -> 
+check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time == WinnerTime -> 
+    check_winnerhelp(T, {-1, WinnerTime});
+check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 2},{<<"time">>, _Time}] | T], {WinnerId, WinnerTime}) when WinnerId == -1 -> 
     check_winnerhelp(T, {-1, WinnerTime});
 check_winnerhelp([_|T], Result) ->
     check_winnerhelp(T, Result).
