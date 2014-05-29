@@ -35,8 +35,7 @@
       Result :: {ok, pid()} | ignore | {error, Error}.
 
 start_link(UserId, Socket) ->
-    gen_fsm:start_link({local, list_to_atom(integer_to_list(UserId))}, 
-		       ?MODULE, {UserId, Socket}, []).
+    gen_fsm:start_link(?MODULE, {UserId, Socket}, []).
 
 
 %% @doc Sends an asynchronous message to the Client Serv with pid Pid
@@ -115,7 +114,10 @@ main(?REQUEST_LOOKUP, LoopData) ->
 main(?REQUEST_NUMBER, LoopData) ->
     log_serv:log("Number of request lookup made by UID " ++ 
 		     integer_to_list(LoopData#loop_data.user_id)),
-    usercom:get_num_pending_requests(LoopData#loop_data.user_id),
+    PendingRequests = usercom:get_num_pending_requests(LoopData#loop_data.user_id),
+    ok = gen_tcp:send(LoopData#loop_data.socket, 
+		      <<?REQUEST_NUMBER_REPLY/binary, 
+			PendingRequests:32/little-integer>>),
     {next_state, main, LoopData};
 
 main({?REQUEST_ACCEPT, <<RequestId:32/little-integer>>}, LoopData) ->

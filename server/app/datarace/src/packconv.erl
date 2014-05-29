@@ -200,14 +200,15 @@ get_match_end_pack(MatchStats) ->
       MatchStatsTable :: match_stats_table(),
       Result :: binary().
 
-match_stats({match_stats_table, UserId, Time, Winner, Distance, AverageSpeed, State}) -> 
+match_stats({match_stats_table, UserId, UserName, Time, Winner, Distance, AverageSpeed, State}) -> 
     <<UserId:32/little-integer, % 4 bytes
+      UserName/binary, 0:(8*(50-byte_size(UserName))), % 50 bytes
       Time:32/little-integer, % 4 bytes
       Winner:32/little-integer, % 4 bytes
       Distance:32/little-integer, % 4 bytes
       AverageSpeed/little-float, % 8 bytes
       State:32/little-integer % 4 bytes
-    >>. % 28 bytes total
+    >>. % 78 bytes total
     
 
 %% @doc Join a list of binaries into a single binary.

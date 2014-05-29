@@ -5,6 +5,9 @@
 
 -include("../include/types.hrl").
 
+-define(TIMEOUT_VALUE, 3000).
+-define(SLEEP_VALUE, 100).
+
 
 %%====================================================================
 %% Test description
@@ -102,7 +105,7 @@ client_serv_stop_match({_NoUsers, LoggedInUsers}) ->
 
 
 client_serv_logout({_NoUsers, LoggedInUsers}) ->
-    timer:sleep(100),
+    timer:sleep(?SLEEP_VALUE),
     [ logout(User) || User <- LoggedInUsers ],
     Children = count_children(client_serv_sup),
     [ ?_assertEqual([{specs, 0}, 
@@ -122,7 +125,7 @@ gen_users(N) ->
 
 
 count_children(Supervisor) ->
-    timer:sleep(100),
+    timer:sleep(?SLEEP_VALUE),
     supervisor:count_children(Supervisor).
 
 
@@ -138,20 +141,20 @@ login_user(Port, Username) ->
 		{tcp, _, _} -> 
 		    {tcp_closed, Username, UID}
 	    after
-		2000 ->
+		?TIMEOUT_VALUE ->
 		    timeout
 	    end;
 	_ -> 
 	    {tcp_error, Username, UID}
     after
-	2000 ->
+	?TIMEOUT_VALUE ->
 	    timeout
     end.
 
   
 make_requests(LoggedInUsers) ->
     lists:zipwith(fun({Socket,_,_}, {_,_,UID}) ->
-			  timer:sleep(100),
+			  timer:sleep(?SLEEP_VALUE),
 			  client_funs:request(Socket, UID, 1),
 			  UID
 		  end,
@@ -163,12 +166,12 @@ make_request_lookup({Socket, _,_}) ->
     Made = receive
 	       {tcp, _, Packet1} -> Packet1
 	   after
-	       2000 -> <<0>>
+	       ?TIMEOUT_VALUE -> <<0>>
 	   end,
     Chal = receive
 	       {tcp, _, Packet2} -> Packet2
 	   after
-	       2000 -> <<0>>
+	       ?TIMEOUT_VALUE -> <<0>>
 	   end,
     [?_assertEqual(92, byte_size(Made)), ?_assertEqual(92, byte_size(Chal))].
 
@@ -178,7 +181,7 @@ get_home_stats({Socket, _,_}) ->
     HomeStats = receive 
 		    {tcp, _, Packet} -> Packet
 		after
-		    2000 -> <<0>>
+		    ?TIMEOUT_VALUE -> <<0>>
 		end,
     ?_assertEqual(80, byte_size(HomeStats)).
 
@@ -188,7 +191,7 @@ search_string(_NoUsers, {Socket, _,_}) ->
     SearchResults = receive
 			{tcp, _, Packet} -> Packet
 		    after
-			2000 -> <<0>>
+			?TIMEOUT_VALUE -> <<0>>
 		    end,
     ?_assertEqual(2+54*5, byte_size(SearchResults)).
 
@@ -201,7 +204,7 @@ start_match({Socket, _, UID}) ->
 	{tcp, _, Packet} -> 
 	    ?_assertEqual(?MATCH_CONFIRM, Packet)
     after
-	2000 -> 
+	?TIMEOUT_VALUE -> 
 	    ?_assertEqual(true, timeout)
     end.
 
@@ -216,7 +219,7 @@ pos_match({Socket, _,_}) ->
 	{tcp, _, Packet} ->
 	    ?_assertEqual(10, byte_size(Packet))
     after
-	2000 -> 
+	?TIMEOUT_VALUE -> 
 	    ?_assertEqual(true, timeout)
     end.
 
@@ -227,7 +230,7 @@ get_history({Socket, _,_}) ->
 	{tcp, _, Packet} ->
 	    ?_assertEqual(?GET_HISTORY_REPLY, Packet)
     after
-	2000 ->
+	?TIMEOUT_VALUE ->
 	    ?_assertEqual(true, timeout)
     end.
 
@@ -236,9 +239,9 @@ stop_match({Socket, _,_}) ->
     client_funs:stop_match(Socket),
     receive
 	{tcp, _, Packet} ->
-	    ?_assertEqual(30, byte_size(Packet))
+	    ?_assertEqual(80, byte_size(Packet))
     after
-	2000 ->
+	?TIMEOUT_VALUE ->
 	    ?_assertEqual(true, timeout)
     end.
 
