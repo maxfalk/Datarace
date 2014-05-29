@@ -61,6 +61,21 @@ typedef struct __attribute__ ((packed)) {
     double distance;
 } competitorsDistance;
 
+typedef struct __attribute__ ((packed)) {
+    uint32_t userId;
+    uint32_t time;
+    uint32_t winnerId;
+    uint32_t distance;
+    double averageSpeed;
+    uint32_t state;
+} matchStats;
+
+
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    matchStats *array;
+} matchStatsHead;
 
 
 @interface NetworkConnectionClass : NSObject <NSStreamDelegate>
@@ -112,7 +127,7 @@ typedef struct __attribute__ ((packed)) {
  @method getHomeStats
  
  */
-+(void *)getHomeStats;
++(homeStats *)getHomeStats;
 /**
  This method sends race requests to opponents
  @method sendRequest
@@ -125,7 +140,7 @@ typedef struct __attribute__ ((packed)) {
  @method getRequest
  
  */
-+(void *)getRequests:(int)type1 type2:(int)type2;
++(requestLookUpResult *)getRequests:(int)type1 type2:(int)type2;
 /**
  This method sends an accept to the server 
  @method acceptRequest
@@ -154,7 +169,7 @@ typedef struct __attribute__ ((packed)) {
  */
 
 
-+(void *)searchForUsers:(NSString *)username;
++(userArray *)searchForUsers:(NSString *)username;
 /**
  This method starts to send the data to the server when a race starts
  @method startRace 
@@ -184,7 +199,9 @@ typedef struct __attribute__ ((packed)) {
  @method requestCompetitorDistance
  */
 
-+(void *)requestCompetitorsDistance;
++(competitorsDistance *)requestCompetitorsDistance;
 
++(matchStatsHead *)getMatchStats;
 
++(void) sendGetHistory;
 @end
