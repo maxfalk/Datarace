@@ -60,13 +60,25 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (([_requests count] + [_myRequests count]) == 0) {
+        
+            self.tableView.separatorColor = [UIColor clearColor];
+            UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"norequestsfound"]];
+            self.tableView.backgroundView = tempImageView;
+        return 0;
+    } else {
+    
     if (section==0) {
         return [_requests count];
     } else if (section==1){
         return [_myRequests count];
-    } else
+    } else {
         return 0;
+    }
+    }
 }
+
+
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -97,6 +109,8 @@
     if (indexPath.section == 0) {
     cell.usernameLabel.text = [_requests objectAtIndex:indexPath.row];
     cell.distanceLabel.text = [NSString stringWithFormat:@"%@ km",[_distances objectAtIndex:indexPath.row]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     
     UIButton *declineButton = [[UIButton alloc] initWithFrame:CGRectMake(260, 18, 34, 34)];
     //[closeBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
@@ -113,8 +127,8 @@
     } else {
         cell.usernameLabel.text = [_myRequests objectAtIndex:indexPath.row];
       //  cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ km",[_myRequestsDistances objectAtIndex:indexPath.row]];
-
     }
+    
     return cell;
     
 }
@@ -125,7 +139,12 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
     int reqID = (int) [[_requestIDs objectAtIndex:indexPath.row] integerValue];
     
-    NSString *string = [NSString stringWithFormat:@"Declined challenge from %@", [_requests objectAtIndex:indexPath.row]];
+    
+    
+    int distance = (int)[[_distances objectAtIndex:indexPath.row] integerValue];
+    NSString *user = [NSString stringWithFormat:@"%@", [_requests objectAtIndex:indexPath.row]];
+    NSString *string = [NSString stringWithFormat:@"Declined the %d km challenge from %@", distance, user];
+    
     _notification.notificationLabelBackgroundColor = red;
     
     [self.notification displayNotificationWithMessage:string
@@ -148,8 +167,9 @@
     int reqID = (int)[[_requestIDs objectAtIndex:indexPath.row] integerValue];
     [NetworkConnectionClass acceptRequest:reqID];
     
-    
-    NSString *string = [NSString stringWithFormat:@"Accepted challenge from %@", [_requests objectAtIndex:indexPath.row]];
+    int distance = (int)[[_distances objectAtIndex:indexPath.row] integerValue];
+    NSString *user = [NSString stringWithFormat:@"%@", [_requests objectAtIndex:indexPath.row]];
+    NSString *string = [NSString stringWithFormat:@"Accepted the %d km challenge from %@", distance, user];
     
     _notification.notificationLabelBackgroundColor = green;
     

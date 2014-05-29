@@ -116,7 +116,7 @@
     _user.text = string;
  
     //requests
-    int requestAC = result->request;
+    int requestAC = (int)[NetworkConnectionClass getNumberOfPendingRequests];
     if (requestAC == 0) {
         _requestLabel.hidden=YES;
     } else {

@@ -63,6 +63,7 @@ typedef struct __attribute__ ((packed)) {
 
 typedef struct __attribute__ ((packed)) {
     uint32_t userId;
+    char username[50];
     uint32_t time;
     uint32_t winnerId;
     uint32_t distance;
@@ -76,6 +77,12 @@ typedef struct __attribute__ ((packed)) {
     char type[2];
     matchStats *array;
 } matchStatsHead;
+
+typedef struct __attribute__ ((packed)) {
+    uint32_t length;
+    char type[2];
+    int requests;
+} pendingRequests;
 
 
 @interface NetworkConnectionClass : NSObject <NSStreamDelegate>
@@ -204,4 +211,7 @@ typedef struct __attribute__ ((packed)) {
 +(matchStatsHead *)getMatchStats;
 
 +(void) sendGetHistory;
+
++(int)getNumberOfPendingRequests;
+
 @end

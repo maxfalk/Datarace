@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HistoryTableViewCell.h"
+#import "NetworkConnectionClass.h"
 
 @interface HistoryTableViewController : UITableViewController
 

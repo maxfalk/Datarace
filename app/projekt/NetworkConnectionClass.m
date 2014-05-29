@@ -212,7 +212,23 @@ static NSOutputStream *outputStream;
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(loginOutput)];
 }
 
++(int)getNumberOfPendingRequests {
+    
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    
+    requestLookUpMeta packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 2;
+    packet.type[1] = 6;
+    
+    [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(requestLookUpMeta)];
+    
+    pendingRequests result;
+    [inputStream read:(uint8_t *)&result maxLength:sizeof(pendingRequests)];
 
+    return result.requests;
+}
 
 +(homeStats *)getHomeStats {
     
@@ -442,19 +458,25 @@ static NSOutputStream *outputStream;
     
     [self readStream: (uint8_t *)head maxLength:6];
     head->length = ntohl(head->length)-2;
-    int numberofpackages = (head->length)/sizeof(matchStats);
-    matchStats *stats = malloc(numberofpackages*sizeof(matchStats));
-    for (int i = 0; i < numberofpackages; i++) {
+    int numberOfPackages = (head->length)/sizeof(matchStats);
+    matchStats *stats = malloc(numberOfPackages*sizeof(matchStats));
+    head->length = numberOfPackages;
+    
+    for (int i = 0; i < numberOfPackages; i++) {
         [self readStream:(uint8_t *)(stats+i) maxLength:sizeof(matchStats)];
-        
     }
+    
+    head->array = stats;
+    
     return head;
 }
 
-+(void)sendGetHistory{ 
-
++(void)sendGetHistory{
+    
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     requestStats packet;
-    packet.length = CFSwapInt32HostToBig(6);
+    packet.length = myInt32AsABigEndianNumber;
     packet.type[0] = 3;
     packet.type[1] = 2;
     [outputStream write:(uint8_t *)&packet maxLength:6];

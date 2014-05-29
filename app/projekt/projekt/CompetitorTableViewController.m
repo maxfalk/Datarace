@@ -144,8 +144,8 @@
         self.tableView.separatorColor = [UIColor clearColor];
         UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nochallengesfound"]];
         self.tableView.backgroundView = tempImageView;
-
         return 0;
+        
     } else
         return count;
         self.tableView.backgroundView.hidden = YES;

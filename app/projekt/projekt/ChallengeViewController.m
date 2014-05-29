@@ -32,8 +32,9 @@ typedef struct __attribute__ ((packed)) {
 }
 
 - (IBAction)sendChallengeRequest:(id)sender {
-    //requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
-    NSString *string = [NSString stringWithFormat:@"Challenged %@ for a %f race", _challengerUsername, _distanceSlider.value];
+   
+    NSInteger val = lround(_distanceSlider.value);
+    NSString *string = [NSString stringWithFormat:@"Challenged %@ for a %ld km race", _challengerUsername, (long)val];
     _notification.notificationLabelBackgroundColor = [UIColor colorWithRed:0.9 green:0.4 blue:0.37 alpha:1];
     
     [self.notification displayNotificationWithMessage:string
