@@ -138,13 +138,13 @@ login_user(Port, Username) ->
 		{tcp, _, _} -> 
 		    {tcp_closed, Username, UID}
 	    after
-		2000 ->
+		1000 ->
 		    timeout
 	    end;
 	_ -> 
 	    {tcp_error, Username, UID}
     after
-	2000 ->
+	1000 ->
 	    timeout
     end.
 
@@ -163,12 +163,12 @@ make_request_lookup({Socket, _,_}) ->
     Made = receive
 	       {tcp, _, Packet1} -> Packet1
 	   after
-	       2000 -> <<0>>
+	       1000 -> <<0>>
 	   end,
     Chal = receive
 	       {tcp, _, Packet2} -> Packet2
 	   after
-	       2000 -> <<0>>
+	       1000 -> <<0>>
 	   end,
     [?_assertEqual(92, byte_size(Made)), ?_assertEqual(92, byte_size(Chal))].
 
@@ -178,7 +178,7 @@ get_home_stats({Socket, _,_}) ->
     HomeStats = receive 
 		    {tcp, _, Packet} -> Packet
 		after
-		    2000 -> <<0>>
+		    1000 -> <<0>>
 		end,
     ?_assertEqual(80, byte_size(HomeStats)).
 
@@ -188,7 +188,7 @@ search_string(_NoUsers, {Socket, _,_}) ->
     SearchResults = receive
 			{tcp, _, Packet} -> Packet
 		    after
-			2000 -> <<0>>
+			1000 -> <<0>>
 		    end,
     ?_assertEqual(2+54*5, byte_size(SearchResults)).
 
@@ -201,7 +201,7 @@ start_match({Socket, _, UID}) ->
 	{tcp, _, Packet} -> 
 	    ?_assertEqual(?MATCH_CONFIRM, Packet)
     after
-	2000 -> 
+	5000 -> 
 	    ?_assertEqual(true, timeout)
     end.
 
@@ -216,7 +216,7 @@ pos_match({Socket, _,_}) ->
 	{tcp, _, Packet} ->
 	    ?_assertEqual(10, byte_size(Packet))
     after
-	2000 -> 
+	1000 -> 
 	    ?_assertEqual(true, timeout)
     end.
 
@@ -227,7 +227,7 @@ get_history({Socket, _,_}) ->
 	{tcp, _, Packet} ->
 	    ?_assertEqual(?GET_HISTORY_REPLY, Packet)
     after
-	2000 ->
+	1000 ->
 	    ?_assertEqual(true, timeout)
     end.
 
