@@ -372,8 +372,8 @@ check_winnerhelp([], {WinnerId, _})->
     WinnerId;
 check_winnerhelp([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time < WinnerTime ->
     check_winnerhelp(T,{UserId, Time});
-check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time == WinnerTime -> 
-    check_winnerhelp(T, {-1, Time});
+check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 2},{<<"time">>, Time}] | T], {WinnerId, WinnerTime}) when Time == WinnerTime, WinnerId == 0 -> 
+    check_winnerhelp(T, {-1, WinnerTime});
 check_winnerhelp([_|T], Result) ->
     check_winnerhelp(T, Result).
 
@@ -547,9 +547,7 @@ get_num_pending_requests(UserId)->
                                       tRequestedUsers t1 
                                     WHERE
                                       t1.userId = ? and
-                                      t1.state = 0
-                                   GROUP BY 
-                                      t1.id",
+                                      t1.state = 0",
 				   [UserId]),
     pad_num_pending_requests(database:get_row(R, 1)).
 
