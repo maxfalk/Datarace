@@ -16,7 +16,7 @@
 -record(gps_table,{longitude, latitude, time}).
 -record(user_search_table,{id, userName}).
 
--record(match_stats_table,{userId, time, winner, distance, averageSpeed, state}).
+-record(match_stats_table,{userId, userName, time, winner, distance, averageSpeed, state}).
 
 -type match_stats_table() ::{integer(), integer(), integer(), integer(), float(), integer()}.
 -type login_table() :: {integer(), string(), string()}.

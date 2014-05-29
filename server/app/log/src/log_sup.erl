@@ -1,8 +1,4 @@
 %%@doc Supervisor for the logserver
-%%
-%%
-%%
-%%
 -module(log_sup).
 
 -behaviour(supervisor).
@@ -11,8 +7,6 @@
 -export([init/1]).
 
 %%@doc Start supervisor, in verbose mode.
-%%
-%%
 -spec start_link()-> {ok, pid()}
 			     | ignore
 			     | {error, atom()}.

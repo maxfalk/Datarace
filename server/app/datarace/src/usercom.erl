@@ -1,24 +1,23 @@
 %%@doc Author: Max Falk Nilsson
 %%This module holds functions for 
 %%making requests and saving challange data.
-%%!!!!!! Not finished !!!!!!!!
 
 -module(usercom).
 
 -export([request/3,request_lookup/1,request_accept/1,request_cancel/1]).
--export([match/1, set_winner/2,set_match_participant_done/2, set_match_done/1]).
--export([gps_save/4, gps_get/2, match_stop/3, get_winner/1]).
+-export([match/1,set_winner/2,match_stop/3]).
+-export([gps_save/4, gps_get/2]).
 -export([get_home_stats/1,get_num_pending_requests/1]).
 -export([get_history/1, get_match_end_stats/1]).
 
--compile(export_all).
 -include("../include/database.hrl").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%         REQUEST            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%@doc Make a new request to a user
+%%@doc Make a new request to a user. Sending a request from you to
+%% ChUserID with the challenge distance of Distance.
 -spec request(UserId, ChUserId, Distance) -> ok when
       UserId :: integer(),
       ChUserId :: integer(),
@@ -34,7 +33,7 @@ request(UserId, ChUserId, Distance)->
     request(UserId,[ChUserId], Distance).
 
 
-%%@doc make main reuqest.
+%%@doc Create the main request in the database.
 -spec make_request(UserId, Distance)-> ok when
       UserId :: integer(),
       Distance :: integer().
@@ -46,7 +45,7 @@ make_request(UserId, Distance)->
 		  [UserId, Distance]).
     
 
-%%@doc get last request made by the user
+%%@doc Get last request made by the user, from the database.
 -spec get_user_last_request(UserId)-> {ok, integer()} | {error, undef} when
       UserId :: integer().
 
@@ -65,7 +64,8 @@ get_user_last_request(UserId)->
     
     
 
-%%@doc add users to requests
+%%@doc Add a user to the main request, this will connect the user to
+%% the the main request.
 -spec add_user_to_request(UserId, RequestId, State)-> ok when
       UserId :: integer(),
       RequestId :: integer(),
@@ -90,7 +90,7 @@ request_lookup(UserId)->
     {request_lookup_made(UserId), request_lookup_challenged(UserId)}.
 
 %%@doc Lookup users requests made by userId. Including requests that are 
-%% active, inactive and pending.
+%% active and pending.
 -spec request_lookup_made(UserId) -> [request_table(), ...] when
       UserId :: integer().
 
@@ -115,8 +115,8 @@ request_lookup_made(UserId) ->
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
 
-%%@doc Lookup requests that have been made against Userid. Including active, inactive
-%% and pending.
+%%@doc Lookup requests that have been made against Userid. Including active and pending 
+%% requests.
 -spec request_lookup_challenged(UserId)-> [request_table(), ...] when
       UserId :: integer().
 
@@ -140,7 +140,7 @@ request_lookup_challenged(UserId)->
     
 
 
-%%@doc Accept a request with a given request id.
+%%@doc Accept a request with a given requestid.
 -spec request_accept(UserRequestId)-> ok when
       UserRequestId :: integer().
 
@@ -181,7 +181,7 @@ get_request_info(UserRequestId)->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%@doc Create a new match for the given request id if there isn't already a match
+%%@doc Create a new match for the given requestid if there isn't already a match
 %% made for the request id. If the match is already created that match will be returned.
 -spec match(UserRequestId)-> match_table() when
       UserRequestId :: integer().
@@ -195,14 +195,13 @@ match(UserRequestId)->
 	    NewMatch = get_match(Data#request_info_table.requestId, UserRequestId),
 	    add_user_to_match(UserRequestId, NewMatch#match_table.id),
 	    get_match(Data#request_info_table.requestId, UserRequestId);
-
 	_ ->
 	    add_user_to_match(UserRequestId, Matchdata#match_table.id),
 	    Matchdata
     end.
 
 
-%%doc Create a new match
+%%doc Create a new match.
 -spec create_match(RequestId)-> ok when
       RequestId :: integer().
 
@@ -212,7 +211,7 @@ create_match(RequestId)->
                    VALUES(0, ?, now(), 0)">>,
 		   [RequestId]).
     
-%%@doc Get match from request id
+%%@doc Get match information from requestid.
 -spec get_match(RequestId, UserRequestId)-> match_table() when
       RequestId :: integer(),
       UserRequestId :: integer().
@@ -233,7 +232,7 @@ get_match(RequestId, UserRequestId)->
    
     
 
-%%@doc add user to match
+%%@doc Add a user to a created match.
 -spec add_user_to_match(UserRequestId, MatchId)-> ok when
       UserRequestId :: integer(),
       MatchId :: integer().
@@ -251,7 +250,7 @@ add_user_to_match(UserRequestId, MatchId)->
     end.
 
 
-%%@doc Check if user already is present in the match
+%%@doc Check if a user already is present in the match.
 -spec check_user_match(UserRequestId, MatchId)-> boolean() when
       UserRequestId :: integer(),
       MatchId :: integer().
@@ -266,7 +265,8 @@ check_user_match(UserRequestId, MatchId)->
 
 
 
-%%@doc Stop the match and take actions to set the match as done.
+%%@doc Stop the match and take actions to set the match as done, point out a winner if both
+%% user as completed the race. save information about the race.
 -spec match_stop(UserId, MatchId, UserRequestId)-> ok when
       UserId :: integer(),
       MatchId :: integer(),
@@ -279,6 +279,12 @@ match_stop(UserId, MatchId, UserRequestId)->
     match_stophelper(MatchId, MatchDetails).
 
 
+%%@doc Helper function to match stop, Does the calculation if a user is the winner or not.
+-spec match_stophelper(MatchId, MatchDetails)-> ok when
+      MatchId :: integer(),
+      MatchDetails :: [[{binary(), integer()}, ...], ...].
+						   
+
 match_stophelper(MatchId, MatchDetails) when length(MatchDetails) > 1 ->        	
     case check_winner(MatchDetails) of
 	WinnerId when WinnerId > 0 ->
@@ -290,7 +296,7 @@ match_stophelper(_MatchId, _MatchDetails)  ->
     ok.
 
 
-%%@doc Make mathc stop actions for each user
+%%@doc Make match stop actions for each user.
 -spec user_match_stop(UserId, MatchId, UserRequestId)-> ok when
       UserId :: integer(),
       MatchId :: integer(),
@@ -311,7 +317,7 @@ user_match_stop(UserId, MatchId, UserRequestId)->
     end.
 
 
-%%@doc get the distance of the request
+%%@doc Get the distance of a request.
 -spec get_distance(UserRequestId)-> integer() when
       UserRequestId :: integer().
 
@@ -327,7 +333,9 @@ get_distance(UserRequestId)->
     [[{<<"distance">>, Distance}]] = database:as_list(Sql_result),
     Distance.
 
-%%@doc check if match is done
+%%@doc Get details about a match.
+-spec get_match_details(MatchId)-> [[{binary(), integer()}, ...], ...] when
+      MatchId :: integer().
 
 get_match_details(MatchId)->
     Sql_result = database:db_query(select_match_is_done,
@@ -348,12 +356,14 @@ get_match_details(MatchId)->
 -spec check_winner(MatchDetails)-> integer() when
       MatchDetails :: [[{binary(), integer()}, ...], ...].
 
-check_winner([[{<<"userId">>, UserId}, _,{<<"time">>, Time}] | T] = List) when length(List) > 1->
+check_winner([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time},{<<"time">>, Time}] | T] = List) when length(List) > 1->
     check_winnerhelp(T, {UserId, Time});
-check_winner(List)->
+check_winner([[{<<"userId">>, _UserId}, {<<"state">>, 2},{<<"time">>, Time},{<<"time">>, Time}] | T] = List) when length(List) > 1->
+    check_winnerhelp(T, {-1, 0});
+check_winner(_List)->
     0.
 
-%%@doc check winner help function
+%%@doc Check winner help function does the actual calculation.
 -spec check_winnerhelp(DetailsList, Result)-> {WinnerId, WinnerTime} when
       DetailsList :: [[{binary(), integer()}, ...], ...],
       Result :: {WinnerId, WinnerTime},
@@ -362,16 +372,20 @@ check_winner(List)->
 
 check_winnerhelp([], {WinnerId, _})->
     WinnerId;
+check_winnerhelp([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T], {WinnerId, _WinnerTime}) when WinnerId == -1 ->
+    check_winnerhelp(T,{UserId, Time});
 check_winnerhelp([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time < WinnerTime ->
     check_winnerhelp(T,{UserId, Time});
 check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time == WinnerTime -> 
-    check_winnerhelp(T, {-1, Time});
+    check_winnerhelp(T, {-1, WinnerTime});
+check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 2},{<<"time">>, _Time}] | T], {WinnerId, WinnerTime}) when WinnerId == -1 -> 
+    check_winnerhelp(T, {-1, WinnerTime});
 check_winnerhelp([_|T], Result) ->
     check_winnerhelp(T, Result).
 
     
     
-%%@doc set match participant time
+%%@doc Set match participant time. Set the time it took for the user to complete the race.
 -spec set_match_time(UserId, MatchId, UserRequestId)-> ok when
       UserId :: integer(),
       MatchId :: integer(),
@@ -385,7 +399,7 @@ set_match_time(UserId, MatchId, UserRequestId)->
 		     [Total_time, MatchId, UserRequestId]).
     
 
-%%@doc set match winner
+%%@doc Set a user as the winner of a match.
 -spec set_winner(MatchId, WinnerId)-> ok when
       MatchId :: integer(),
       WinnerId :: integer().
@@ -396,7 +410,7 @@ set_winner(MatchId, WinnerId)->
 		      [WinnerId, MatchId]),
     ok.
     
-%%@doc get match winner
+%%@doc Get the userid of the winner of a match.
 -spec get_winner(MatchId)-> integer() when
       MatchId :: integer().
 
@@ -408,7 +422,7 @@ get_winner(MatchId)->
     Id.
     
 
-%%@doc Set flag in the db that the user is finished running her turn.
+%%@doc Set flag in the db that the user is finished running her turn in a match.
 -spec set_match_participant_done(UserRequestId, MatchId)-> ok when
       UserRequestId :: integer(),
       MatchId :: integer().
@@ -420,7 +434,8 @@ set_match_participant_done(UserRequestId, MatchId)->
 			   [UserRequestId, MatchId]).
 
 
-%%@doc Set flag in the db that the user is finished running her turn.
+%%@doc Set flag in the db that the user is finished running her turn, and didn't complete
+%% the total distance.
 -spec set_match_participant_forfeit(UserRequestId, MatchId)-> ok when
       UserRequestId :: integer(),
       MatchId :: integer().
@@ -432,7 +447,7 @@ set_match_participant_forfeit(UserRequestId, MatchId)->
 			   [UserRequestId, MatchId]).
 
 
-%%@doc Set a flag that the match is completed
+%%@doc Set a flag that the match is completed, in the database.
 -spec set_match_done(MatchId)-> ok when
       MatchId :: integer().
 
@@ -448,7 +463,8 @@ set_match_done(MatchId)->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%@doc Save gps information to the db.
+%%@doc Save gps information to the db, longitude and latitude, 
+%%for a user in a specific match.
 -spec gps_save(User_id, Match_id, Longidtude, Latitude) -> ok when
       User_id :: integer(), 
       Match_id :: integer(), 
@@ -497,8 +513,7 @@ gps_get(User_id,Match_id)->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%@doc Get the statistics that will be displayed in the home screen,
-%%for a specific user
-%%
+%%for a specific user.
 -spec get_home_stats(UserId)-> user_stats_table() when
       UserId :: integer().
 
@@ -515,7 +530,7 @@ get_home_stats(UserId)->
       database:get_row(database:result_to_record(Sql_result, user_stats_table),1)).
    
 
-%%@doc pad home_stats if it's empty with zero data.
+%%@doc Pad home_stats if it's empty with zero data.
 -spec pad_home_stats(Value)-> user_stats_table() when
       Value :: user_stats_table() | {error, no_item}.
 
@@ -527,9 +542,7 @@ pad_home_stats(R) ->
 
 
 
-%%@doc get number of pending requests for a user.
-%%
-%%
+%%@doc Get number of pending requests for a user.
 -spec get_num_pending_requests(UserId)-> integer() when
       UserId :: integer().
 
@@ -540,15 +553,12 @@ get_num_pending_requests(UserId)->
                                       tRequestedUsers t1 
                                     WHERE
                                       t1.userId = ? and
-                                      t1.state = 0
-                                   GROUP BY 
-                                      t1.id",
+                                      t1.state = 0",
 				   [UserId]),
     pad_num_pending_requests(database:get_row(R, 1)).
 
 
-%%@doc pad request to always return a number
-%%
+%%@doc Pad get_num_pending_requests to always return a number.
 -spec pad_num_pending_requests(R)-> integer() when
       R :: {error, no_item} | [integer()].
 
@@ -558,7 +568,8 @@ pad_num_pending_requests(R) -> hd(R).
 
 
 
-%%@doc Get match statistics, match_stats_table
+%%@doc Get match statisticsfor a user. Statistis for each match, include if it was a win
+%% the distance, averageSpeed.
 -spec get_history(UserId) -> [match_stats_table(), ...] when
       UserId :: integer().
 
@@ -569,7 +580,7 @@ get_history(UserId)->
     database:result_to_record(Sql_result, match_stats_table).
 
 
-%%@doc Get match statistics, match_stats_table
+%%@doc Get match statistics, for a specific match.
 -spec get_match_end_stats(MatchId)-> [match_stats_table(), ...] when
       MatchId :: integer().
 

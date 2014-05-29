@@ -1,7 +1,4 @@
 %%@doc Application for search server
-%%
-%%
-%%
 
 -module(search).
 -export([start/2, stop/1]).
