@@ -1,8 +1,5 @@
 %%@doc This module holds the server core for 
 %%the user search server.
-%%
-%% 
-%%
 %%Author: Max Falk
 
 -module(search_serv).
@@ -20,7 +17,6 @@
 %%%%%%%%%%%%%%%%%%%%
 
 %%@doc Start a new process for the search_serv gen_server.
-%%
 -spec start_link()-> Result when
       Result :: {ok,Pid} | ignore | {error,Error},
       Pid :: pid(),
@@ -30,7 +26,6 @@ start_link()->
     gen_server:start_link(?MODULE, [], []).
     
 %%@doc Stop the gen_server.
-%%
 -spec stop(Pid) -> ok when
       Pid :: pid().
 
@@ -38,7 +33,7 @@ stop(Pid)->
     gen_server:cast(Pid, stop).
 
 %%@doc Search for a user like the one with the sent username
-%% ordering by the best match first.
+%% ordering by the best match first, filter att the user with id MyId.
 -spec search(Pid, Username, MyId)-> [user_search_table(), ...] when
       Pid :: pid(),
       MyId :: integer(),
@@ -109,7 +104,6 @@ remove_duplicates(List1, List2)->
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 %%@doc Init the server
-%%
 -spec init(Options) -> {ok, term()} when
       Options :: list().
 
@@ -118,7 +112,6 @@ init(_Options)->
 
 
 %%@doc Terminate the server
-%%
 -spec terminate(Reason, State)-> tbi when
       Reason :: term(),
       State :: term().
@@ -130,9 +123,7 @@ terminate(_Reason, _State)->
 
 
 %%@doc Handle search calls, search first the internal state for matches to the saerch then 
-%% search the database for more matches. Remove duplicates and send them inte to stages.
-%% Sends first the internal matches if there is any, then send 
-%% the ones found in the database.
+%% search the database for more matches. Remove duplicates and send them.
 -spec handle_call(UserName, From, State)-> {noreply, NewState} when
       UserName :: string(),
       From :: {pid(), term()},
@@ -147,8 +138,7 @@ handle_call({UserName, MyId}, _From, State)->
 
 
 
-%%@doc handle cast
-%%
+%%@doc Handle cast to stop the server.
 -spec handle_cast(stop, State) -> {stop, Reason, NewState} when
       State :: list(),
       Reason :: term(),

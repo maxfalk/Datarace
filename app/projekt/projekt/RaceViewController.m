@@ -17,7 +17,6 @@
 @property (nonatomic) CLLocationCoordinate2D previousPosition;
 @property (nonatomic, retain) MKPolyline *routeLine; //your line
 @property (nonatomic, retain) MKPolylineView *routeLineView; //overlay view
-@property (nonatomic, retain) NSMutableArray* points;
 @property (weak, nonatomic) IBOutlet UISlider *yourSlider;
 @property (weak, nonatomic) IBOutlet UISlider *competitorSlider;
 @property (weak, nonatomic) IBOutlet UILabel *competitorName;
@@ -67,7 +66,7 @@
     NSOperationQueue *myQueue = [[NSOperationQueue alloc] init];
     [myQueue addOperationWithBlock:^{
         
-        
+        self.points = [[NSMutableArray alloc] init];
         self.mapView.delegate = self;
         //self.mapView.userInteractionEnabled=NO;
         self.mapView.showsUserLocation=YES;
@@ -189,10 +188,11 @@
     
     CLLocation *prev = [[CLLocation alloc] initWithLatitude:_previousPosition.latitude longitude:_previousPosition.longitude];
     [self calculateDistance];
-    
     [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
-    [self.points addObject:self.mapView.userLocation];
-    
+    CLLocation *location = [self.mapView.userLocation location];
+    if (location != nil) {
+        [self.points addObject:location];
+    }
     if (_firstPosition != nil) {
         [self drawRoute:@[self.mapView.userLocation, prev]];
     }
@@ -201,7 +201,6 @@
     
     _previousPosition.longitude = self.mapView.userLocation.location.coordinate.longitude;
     _previousPosition.latitude = self.mapView.userLocation.location.coordinate.latitude;
-    
     
     
 }
@@ -277,7 +276,6 @@
         double prevTotalDistance = _totalDistance;
         
         _totalDistance = (R * c * 1000) + prevTotalDistance;
-        NSLog(@"_totalDistance: %f", _totalDistance);
         
         if (_totalDistance > _distance) {
             _check = 1;
@@ -339,6 +337,18 @@
             _competitorSlider.value = _totalCompetitorDistance;
             
         }
+    }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([segue.identifier isEqualToString:@"finish"]) {
+        
+       FinishlineViewController *class = (FinishlineViewController *) [segue destinationViewController];
+        class.coordinates = [[NSMutableArray alloc] initWithArray:self.points];
+        class.distance = (int) _distance;
+        
+       // }
     }
 }
 

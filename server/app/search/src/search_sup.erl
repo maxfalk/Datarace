@@ -32,7 +32,6 @@ start_link()->
 
 
 %% @doc Start a new child process dynamically. 
-
 -spec start_search_serv() -> Result when
       Result :: {ok, pid()}
 	      | {error, Error},
@@ -43,7 +42,6 @@ start_search_serv() ->
 
 
 %% @doc Returns information concerning the number of active processes.
-
 -spec count_children() -> PropListOfCounts when
       PropListOfCounts :: [Count],
       Count :: {specs, integer()}

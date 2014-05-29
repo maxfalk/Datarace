@@ -2,7 +2,7 @@
 GROUP_NUMBER := 17
 ####################
 
-
+NODE_NAME := datarace
 PROP_ERL := erl -env ERL_LIBS ../../
 ERLC := erlc
 ERLC_FLAGS := -W -I include
@@ -21,7 +21,7 @@ space:= $(empty) $(empty)
 EDOC_SRC := $(filter-out %_test.erl, $(ERL_FILES))
 EDOC_SRC_LIST := [$(subst $(space),$(comma),$(patsubst src/%.erl,'src/%.erl', $(EDOC_SRC)))]
 
-REQUIRED_DIR_NAME := pop_2012_project_group_$(GROUP_NUMBER)
+REQUIRED_DIR_NAME := OSM_2014_project_group_$(GROUP_NUMBER)
 
 PROJECT_DIR := $(notdir $(shell pwd))
 
@@ -43,13 +43,13 @@ ebin/%.beam: tests/%.erl
 
 
 start: all
-	(cd ebin && $(PROP_ERL) -eval 'server:start()')
+	(cd ebin && $(PROP_ERL) -eval 'server:start(true)')
 
 test: all
-	(cd ebin && $(PROP_ERL) -noinput -eval 'eunit:test({dir, "."}, [verbose]), init:stop()')
+	(cd ebin && $(PROP_ERL) -noinput -eval 'server:start(false), timer:sleep(500), eunit:test({dir, "."}, [verbose]), init:stop(), server:stop()')
 
 doc: $(BEAM_FILES)
-	erl -noshell -eval "edoc:files($(EDOC_SRC_LIST), [{dir, 'doc/html'}])" -s init stop
+	erl -noshell -eval "edoc:application($(notdir $(shell pwd)) , '.', [])" -s init stop
 
 clean:
 	rm -fr .#* *.dump

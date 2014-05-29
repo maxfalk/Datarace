@@ -48,6 +48,7 @@ start: all
 test: all
 	(cd ebin && $(PROP_ERL) -noinput -eval 'server:start(false), timer:sleep(500), eunit:test({dir, "."}, [verbose]), server:stop(), init:stop()')
 
+
 doc: $(BEAM_FILES)
 	erl -noshell -eval "edoc:application($(notdir $(shell pwd)) , '.', [])" -s init stop
 
@@ -55,7 +56,7 @@ clean:
 	rm -fr .#* *.dump
 	rm -fr ebin/*.beam
 	rm -fr *.erl~
-	(cd doc/html && find . -name "*" -a ! -name overview.edoc -exec rm -rf {} \;)
+	(cd doc && find . -name "*" -a ! -name overview.edoc -exec rm -rf {} \;)
 
 remove_finderinfo:
 	-xattr -d "com.apple.FinderInfo" src/*.erl include/*.hrl doc/* doc/html/*

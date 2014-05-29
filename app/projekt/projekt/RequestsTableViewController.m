@@ -46,7 +46,7 @@
     @autoreleasepool {
         [self performSelectorInBackground:@selector(getRequests) withObject:nil];
     }
-    
+     _notification = [CWStatusBarNotification new];
     
     [self addFooter];
     
@@ -121,26 +121,44 @@
 
 -(void)declineButtonPressed:(id)sender
 {
-    NSLog(@"declined!");
+    UIColor *red = [UIColor colorWithRed:0.91 green:0.04 blue:0.09 alpha:1];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
     int reqID = (int) [[_requestIDs objectAtIndex:indexPath.row] integerValue];
+    
+    NSString *string = [NSString stringWithFormat:@"Declined challenge from %@", [_requests objectAtIndex:indexPath.row]];
+    _notification.notificationLabelBackgroundColor = red;
+    
+    [self.notification displayNotificationWithMessage:string
+                                          forDuration:2.0f];
+
     
     [NetworkConnectionClass cancelRequest:reqID];
     
     [_requests removeObjectAtIndex:indexPath.row];
     [_requestIDs removeObjectAtIndex:indexPath.row];
     [_distances removeObjectAtIndex:indexPath.row];
-    NSLog(@"Declined with req id: %d", reqID);
     
     [self.tableView reloadData];
 }
 
 -(void)acceptButtonPressed:(id)sender
 {
+    UIColor *green = [UIColor colorWithRed:0.41 green:0.72 blue:0.53 alpha:1];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[sender tag] inSection:0];
     int reqID = (int)[[_requestIDs objectAtIndex:indexPath.row] integerValue];
     [NetworkConnectionClass acceptRequest:reqID];
-    NSLog(@"Accepted with req id: %d", reqID);
+    
+    
+    NSString *string = [NSString stringWithFormat:@"Accepted challenge from %@", [_requests objectAtIndex:indexPath.row]];
+    
+    _notification.notificationLabelBackgroundColor = green;
+    
+    [self.notification displayNotificationWithMessage:string
+                                          forDuration:2.0f];
+    
+    [_requests removeObjectAtIndex:indexPath.row];
+    [_requestIDs removeObjectAtIndex:indexPath.row];
+    [_distances removeObjectAtIndex:indexPath.row];
    
     
     [self.tableView reloadData];

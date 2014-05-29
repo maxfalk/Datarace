@@ -11,7 +11,7 @@
 %%====================================================================
 
 client_serv_test_()-> 
-    {"Test client_serv functionality: lots...", 
+    {"Test client_serv functionality: initialization, request, request lookup, search, get home stats, get history, start match, run match, stop match, log out", 
       {setup, 
        fun start/0, 
        fun stop/1, 
@@ -20,12 +20,12 @@ client_serv_test_()->
 		client_serv_request(SetupData), 
 		client_serv_request_lookup(SetupData), 
 		client_serv_search_string(SetupData), 
-		client_serv_get_home_stats(SetupData), 
+		client_serv_get_home_stats(SetupData),
+		client_serv_get_history(SetupData),
 		client_serv_start_match(SetupData), 
-		%client_serv_run_match(SetupData)
-		client_serv_stop_match(SetupData)
-		%client_serv_logout(SetupData)
-	       ] 
+		client_serv_run_match(SetupData),
+		client_serv_stop_match(SetupData),
+		client_serv_logout(SetupData)] 
        end}}. 
 
 
@@ -53,13 +53,16 @@ stop({_NoUsers, LoggedInUsers}) ->
 %%====================================================================
 
 client_serv_init({NoUsers, LoggedInUsers}) ->
-    [[[?_assert(not is_atom(Socket)), ?_assert(is_integer(UID))] || 
-	 {Socket,_,UID} <- LoggedInUsers ],
-     [ ?_assertEqual([{specs, NoUsers}, 
-		      {active, NoUsers}, 
-		      {supervisors, 0}, 
-		      {workers, NoUsers}], 
-		     count_children(client_serv_sup)) ]].
+    Asserts = [[?_assert(not is_atom(Socket)), 
+		?_assert(is_integer(UID))] || 
+		  {Socket,_,UID} <- LoggedInUsers ],
+    Children = count_children(client_serv_sup),
+    [Asserts, 
+     ?_assertEqual([{specs, NoUsers}, 
+		    {active, NoUsers}, 
+		    {supervisors, 0}, 
+		    {workers, NoUsers}], 
+		   Children) ].
 
 
 client_serv_request({_NoUsers, LoggedInUsers}) ->
@@ -75,6 +78,10 @@ client_serv_request_lookup({_NoUsers, LoggedInUsers}) ->
 
 client_serv_get_home_stats({_NoUsers, LoggedInUsers}) ->
     [ get_home_stats(User) || User <- LoggedInUsers ].
+
+
+client_serv_get_history({_NoUsers, LoggedInUsers}) ->
+    [ get_history(User) || User <- LoggedInUsers ].
 
 
 client_serv_search_string({NoUsers, LoggedInUsers}) ->
@@ -95,9 +102,8 @@ client_serv_stop_match({_NoUsers, LoggedInUsers}) ->
 
 
 client_serv_logout({_NoUsers, LoggedInUsers}) ->
-    timer:sleep(1000),
+    timer:sleep(100),
     [ logout(User) || User <- LoggedInUsers ],
-    timer:sleep(1000),
     Children = count_children(client_serv_sup),
     [ ?_assertEqual([{specs, 0}, 
 		     {active, 0}, 
@@ -116,6 +122,7 @@ gen_users(N) ->
 
 
 count_children(Supervisor) ->
+    timer:sleep(100),
     supervisor:count_children(Supervisor).
 
 
@@ -131,13 +138,13 @@ login_user(Port, Username) ->
 		{tcp, _, _} -> 
 		    {tcp_closed, Username, UID}
 	    after
-		1000 ->
+		2000 ->
 		    timeout
 	    end;
 	_ -> 
 	    {tcp_error, Username, UID}
     after
-	1000 ->
+	2000 ->
 	    timeout
     end.
 
@@ -156,12 +163,12 @@ make_request_lookup({Socket, _,_}) ->
     Made = receive
 	       {tcp, _, Packet1} -> Packet1
 	   after
-	       1000 -> <<0>>
+	       2000 -> <<0>>
 	   end,
     Chal = receive
 	       {tcp, _, Packet2} -> Packet2
 	   after
-	       1000 -> <<0>>
+	       2000 -> <<0>>
 	   end,
     [?_assertEqual(92, byte_size(Made)), ?_assertEqual(92, byte_size(Chal))].
 
@@ -171,7 +178,7 @@ get_home_stats({Socket, _,_}) ->
     HomeStats = receive 
 		    {tcp, _, Packet} -> Packet
 		after
-		    1000 -> <<0>>
+		    2000 -> <<0>>
 		end,
     ?_assertEqual(80, byte_size(HomeStats)).
 
@@ -181,7 +188,7 @@ search_string(_NoUsers, {Socket, _,_}) ->
     SearchResults = receive
 			{tcp, _, Packet} -> Packet
 		    after
-			1000 -> <<0>>
+			2000 -> <<0>>
 		    end,
     ?_assertEqual(2+54*5, byte_size(SearchResults)).
 
@@ -194,7 +201,7 @@ start_match({Socket, _, UID}) ->
 	{tcp, _, Packet} -> 
 	    ?_assertEqual(?MATCH_CONFIRM, Packet)
     after
-	5000 -> 
+	2000 -> 
 	    ?_assertEqual(true, timeout)
     end.
 
@@ -207,11 +214,20 @@ pos_match({Socket, _,_}) ->
     client_funs:pos_match(Socket),
     receive
 	{tcp, _, Packet} ->
-	    ?_assertEqual(<<?MATCH_COMP_REPLY/binary, 
-			    0.0/little-float>>, 
-			  Packet)
+	    ?_assertEqual(10, byte_size(Packet))
     after
-	1000 -> 
+	2000 -> 
+	    ?_assertEqual(true, timeout)
+    end.
+
+
+get_history({Socket, _,_}) ->
+    client_funs:get_history(Socket),
+    receive
+	{tcp, _, Packet} ->
+	    ?_assertEqual(?GET_HISTORY_REPLY, Packet)
+    after
+	2000 ->
 	    ?_assertEqual(true, timeout)
     end.
 
@@ -222,7 +238,7 @@ stop_match({Socket, _,_}) ->
 	{tcp, _, Packet} ->
 	    ?_assertEqual(30, byte_size(Packet))
     after
-	1000 ->
+	2000 ->
 	    ?_assertEqual(true, timeout)
     end.
 

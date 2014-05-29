@@ -52,9 +52,7 @@ listener_connect({Port, Listeners, _Users}) ->
     SocketList = connect_n_times(Port, NewListeners),
     ChildrenDuring = count_children(listener_sup),
     disconnect_all(SocketList),
-    timer:sleep(100),
     ChildrenAfter = count_children(listener_sup),
-    timer:sleep(100),
     [?_assertEqual([{specs, 1}, 
 		   {active, Listeners}, 
 		   {supervisors, 0}, 
@@ -167,6 +165,7 @@ gen_users(N) ->
 
 
 count_children(Supervisor) ->
+    timer:sleep(100),
     supervisor:count_children(Supervisor).
 
 
@@ -197,13 +196,13 @@ register_users(Port, [User|Users], Acc, ExpectedResult) ->
 	Packet -> 
 	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]
     after
-	1000 ->
+	2000 ->
 	    NewAcc = [?_assertEqual(ExpectedResult, timeout) | Acc]
     end,
     receive
 	_ -> ok
     after
-	1000 -> ok
+	2000 -> ok
     end,
     register_users(Port, Users, NewAcc, ExpectedResult).
 
@@ -222,13 +221,13 @@ login_users(Port, [User|Users], Acc, ExpectedResult) ->
 		{tcp, _, Packet} ->
 		    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]
 	    after
-		1000 ->
+		2000 ->
 		    NewAcc = [?_assertEqual(ExpectedResult, timeout_closed) | Acc]
 	    end;
 	Packet -> 
 	    NewAcc = [?_assertEqual(ExpectedResult, Packet) | Acc]	
     after
-	1000 ->
+	2000 ->
 	    NewAcc = [?_assertEqual(ExpectedResult, timeout) | Acc]
     end,
     login_users(Port, Users, NewAcc, ExpectedResult).

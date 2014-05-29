@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D9F6B601917ABA300937D62 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */; };
+		C71CDE4E19376C88007A7AE7 /* CWStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = C71CDE4D19376C88007A7AE7 /* CWStatusBarNotification.m */; };
 		C7315B3F19347D3B0029BB98 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7315B3E19347D3B0029BB98 /* Images.xcassets */; };
 		C7315B4219349CFE0029BB98 /* HistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7315B4119349CFE0029BB98 /* HistoryTableViewCell.m */; };
 		C7315B451934A1B20029BB98 /* HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7315B441934A1B20029BB98 /* HistoryTableViewController.m */; };
@@ -53,6 +54,8 @@
 
 /* Begin PBXFileReference section */
 		5D9F6B5F1917ABA300937D62 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C71CDE4C19376C88007A7AE7 /* CWStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CWStatusBarNotification.h; path = "../../../../../Downloads/CWStatusBarNotification-master/CWStatusBarNotification/CWStatusBarNotification.h"; sourceTree = "<group>"; };
+		C71CDE4D19376C88007A7AE7 /* CWStatusBarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CWStatusBarNotification.m; path = "../../../../../Downloads/CWStatusBarNotification-master/CWStatusBarNotification/CWStatusBarNotification.m"; sourceTree = "<group>"; };
 		C7315B3E19347D3B0029BB98 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C7315B4019349CFE0029BB98 /* HistoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTableViewCell.h; sourceTree = "<group>"; };
 		C7315B4119349CFE0029BB98 /* HistoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableViewCell.m; sourceTree = "<group>"; };
@@ -184,6 +187,8 @@
 		C79089FE192B3D1000E7053F /* Custom objects */ = {
 			isa = PBXGroup;
 			children = (
+				C71CDE4C19376C88007A7AE7 /* CWStatusBarNotification.h */,
+				C71CDE4D19376C88007A7AE7 /* CWStatusBarNotification.m */,
 				C7A7ED3918FFD89E00DE0740 /* CustomCell.h */,
 				C7A7ED3A18FFD89E00DE0740 /* CustomCell.m */,
 				C7315B4019349CFE0029BB98 /* HistoryTableViewCell.h */,
@@ -405,6 +410,7 @@
 				C7315B451934A1B20029BB98 /* HistoryTableViewController.m in Sources */,
 				C7A7ED3B18FFD89E00DE0740 /* CustomCell.m in Sources */,
 				C7315B4219349CFE0029BB98 /* HistoryTableViewCell.m in Sources */,
+				C71CDE4E19376C88007A7AE7 /* CWStatusBarNotification.m in Sources */,
 				C7B7C7F318FD17EC0096DB88 /* projektViewController.m in Sources */,
 				C7D0C2E9191B84AB00284B33 /* CountdownViewController.m in Sources */,
 				C7D0C2E6191B82B200284B33 /* RaceViewController.m in Sources */,

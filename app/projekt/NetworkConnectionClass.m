@@ -103,8 +103,6 @@ static NSOutputStream *outputStream;
     [inputStream open];
     [outputStream open];
     
-    //self.inputStream = inputStream;
-    //self.outputStream = outputStream;
     
 }
 +(void)readStream:(uint8_t *) buffer maxLength:(int)maxLength {
@@ -115,7 +113,6 @@ static NSOutputStream *outputStream;
     while((bytesRead += [inputStream read:(uint8_t *)&tmpBuffer[bytesRead] maxLength:maxLength]) < maxLength){
         
     }
-    //NSLog(@"Bytes read %d", bytesRead);
     memcpy(buffer, tmpBuffer, maxLength);
     
     
@@ -217,7 +214,7 @@ static NSOutputStream *outputStream;
 
 
 
-+(void *)getHomeStats {
++(homeStats *)getHomeStats {
     
     uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
@@ -249,14 +246,14 @@ static NSOutputStream *outputStream;
     [outputStream write:((const uint8_t *)&packet) maxLength:sizeof(packet)];
 }
 
-+(void *)getRequests:(int)type1 type2:(int)type2 {
++(requestLookUpResult *)getRequests:(int)type1 type2:(int)type2 {
     
     requestLookUpResult *result = malloc(sizeof(requestLookUpResult));
     memset(result, 0, sizeof(requestLookUpResult));
     
     
-    [inputStream read:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
-    [inputStream read:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
+    [self readStream:(uint8_t *)&result->requestLookUpMeta.length maxLength:sizeof(int)];
+    [self readStream:(uint8_t *)&result->requestLookUpMeta.type maxLength:2];
     
     if ((result->requestLookUpMeta.type[0] == type1) && (result->requestLookUpMeta.type[1] == type2)) {
         
@@ -318,7 +315,7 @@ static NSOutputStream *outputStream;
     
 }
 
-+(void *)searchForUsers:(NSString *)username {
++(userArray *)searchForUsers:(NSString *)username {
     
     //NSMutableArray *usersData = [[NSMutableArray alloc] init];
     
@@ -418,7 +415,7 @@ static NSOutputStream *outputStream;
     [outputStream write:(uint8_t *)&packet maxLength:sizeof(quitMatch)];
 }
 
-+(void *)requestCompetitorsDistance {
++(competitorsDistance *)requestCompetitorsDistance {
     uint32_t myInt32Value = 2;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     
@@ -433,11 +430,36 @@ static NSOutputStream *outputStream;
     competitorsDistance *result = malloc(sizeof(competitorsDistance));
     memset(result, 0, sizeof(competitorsDistance));
     
-    [inputStream read:(uint8_t *)result maxLength:sizeof(competitorsDistance)];
+    [inputStream read:(uint8_t* )result maxLength:sizeof(competitorsDistance)];
     
     
         return result;
 }
 
++(matchStatsHead *)getMatchStats {
+    
+    matchStatsHead *head = malloc(sizeof(matchStatsHead));
+    
+    [self readStream: (uint8_t *)head maxLength:6];
+    head->length = ntohl(head->length)-2;
+    int numberofpackages = (head->length)/sizeof(matchStats);
+    matchStats *stats = malloc(numberofpackages*sizeof(matchStats));
+    for (int i = 0; i < numberofpackages; i++) {
+        [self readStream:(uint8_t *)(stats+i) maxLength:sizeof(matchStats)];
+        
+    }
+    return head;
+}
+
++(void)sendGetHistory{ 
+
+    requestStats packet;
+    packet.length = CFSwapInt32HostToBig(6);
+    packet.type[0] = 3;
+    packet.type[1] = 2;
+    [outputStream write:(uint8_t *)&packet maxLength:6];
+    
+
+}
 
 @end
