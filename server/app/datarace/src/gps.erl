@@ -85,7 +85,7 @@ total_timehelper([], Time)->
 total_timehelper([_First], Time)->
     Time;
 total_timehelper([First, Sec | T], Time)->
-    total_timehelper(T, Time + calc_timediff(First#gps_table.time, Sec#gps_table.time)).
+  total_timehelper([Sec |T], Time + calc_timediff(First#gps_table.time, Sec#gps_table.time)).
 
 
 %%@doc calculate the difference in time of two date times.
@@ -140,14 +140,18 @@ calc_pointdistancehelp([First,Sec | Tl], Maxtime, Distance, Time, UserId) ->
       UserId :: integer(),
       Time :: integer().
 
-calc_avgdistance_from_avgspeed(UserId, Time)->
+
+calc_avgdistance_from_avgspeed(UserId, Time) when Time > 0->
     AvgSpeed = get_averagespeed(UserId),
     case AvgSpeed of
 	0 ->
-	    averagedistance(10, (Time/36000));
+	    averagedistance(10, (Time/3600));
 	_ ->
-	    averagedistance(AvgSpeed, (Time/36000))
-    end.
+	    averagedistance(AvgSpeed, (Time/3600))
+    end;
+calc_avgdistance_from_avgspeed(_,_) ->
+    0.0.
+
     
 
 

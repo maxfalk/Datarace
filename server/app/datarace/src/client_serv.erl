@@ -1,6 +1,6 @@
 
 %%====================================================================
-%% Client_serv
+%% client_serv
 %%====================================================================
 
 
@@ -35,7 +35,8 @@
       Result :: {ok, pid()} | ignore | {error, Error}.
 
 start_link(UserId, Socket) ->
-    gen_fsm:start_link(?MODULE, {UserId, Socket}, []).
+    gen_fsm:start_link({local, list_to_atom(integer_to_list(UserId))}, 
+		       ?MODULE, {UserId, Socket}, []).
 
 
 %% @doc Sends an asynchronous message to the Client Serv with pid Pid
@@ -111,6 +112,12 @@ main(?REQUEST_LOOKUP, LoopData) ->
     ok = gen_tcp:send(LoopData#loop_data.socket, ChalPack),
     {next_state, main, LoopData};
 
+main(?REQUEST_NUMBER, LoopData) ->
+    log_serv:log("Number of request lookup made by UID " ++ 
+		     integer_to_list(LoopData#loop_data.user_id)),
+    usercom:get_num_pending_requests(LoopData#loop_data.user_id),
+    {next_state, main, LoopData};
+
 main({?REQUEST_ACCEPT, <<RequestId:32/little-integer>>}, LoopData) ->
     log_serv:log("Request accept made by UID " ++ 
 		     integer_to_list(LoopData#loop_data.user_id) ++ 
@@ -121,7 +128,7 @@ main({?REQUEST_ACCEPT, <<RequestId:32/little-integer>>}, LoopData) ->
 main({?REQUEST_CANCEL, <<RequestId:32/little-integer>>}, LoopData) ->
     log_serv:log("Request cancellation made by UID " ++ 
 		     integer_to_list(LoopData#loop_data.user_id) ++
-		     " for RID " ++ integer_to_list(RequestId)),
+		     " for RID " ++ integer_to_list(RequestId)), 
     usercom:request_cancel(RequestId),
     {next_state, main, LoopData};
 
@@ -141,16 +148,27 @@ main({?MATCH_START, <<RequestId:32/little-integer>>}, LoopData) ->
     {next_state, match, NewLoopData};
 
 main({?SEARCH_STRING, Packet}, LoopData) ->
+    log_serv:log("Search was made by UID " ++ 
+		     integer_to_list(LoopData#loop_data.user_id) ++
+		     " for '" ++ [X || X <- binary_to_list(Packet), X =/= 0] ++ "'"),
     case search_sup:start_search_serv() of
 	{ok, Pid} ->
 	    SearchString = packconv:convert_pack(?SEARCH_STRING, Packet),
-	    SearchResult = search_serv:search(Pid, SearchString),
+	    SearchResult = search_serv:search(Pid, SearchString, LoopData#loop_data.user_id),
 	    ResultPacket = packconv:pack(?SEARCH_RESULTS, SearchResult),
 	    ok = gen_tcp:send(LoopData#loop_data.socket, ResultPacket),
 	    search_serv:stop(Pid);
 	_Error ->
 	    ok = gen_tcp:send(LoopData#loop_data.socket, ?SEARCH_SERVER_DOWN)
     end,
+    {next_state, main, LoopData};
+
+main(?GET_HISTORY, LoopData) ->
+    log_serv:log("Request for history by UID: " ++ 
+		     integer_to_list(LoopData#loop_data.user_id)),
+    History = usercom:get_history(LoopData#loop_data.user_id),
+    Packet = packconv:pack(?GET_HISTORY, History),
+    ok = gen_tcp:send(LoopData#loop_data.socket, Packet),
     {next_state, main, LoopData}.
 
 
@@ -169,8 +187,8 @@ main({?SEARCH_STRING, Packet}, LoopData) ->
 match({?MATCH_GPS, Packet}, LoopData) ->
     {Longitude, Latitude} = packconv:convert_pack(?MATCH_GPS, Packet),
     log_serv:log("Received GPS data from UID " ++ 
-		     integer_to_list(LoopData#loop_data.user_id) ++ ": Long " ++ 
-		     float_to_list(Longitude) ++ ", Lat " ++
+		     integer_to_list(LoopData#loop_data.user_id) ++ ": " ++ 
+		     float_to_list(Longitude) ++ ", " ++
 		     float_to_list(Latitude)),
     usercom:gps_save(LoopData#loop_data.user_id, 
 		     LoopData#loop_data.match_table#match_table.id, 
@@ -184,15 +202,23 @@ match(?MATCH_COMP_POS, LoopData) ->
 				      LoopData#loop_data.start_time),
     ok = gen_tcp:send(LoopData#loop_data.socket, 
 		      <<?MATCH_COMP_REPLY/binary, Distance/little-float>>),
-    log_serv:log("Distance data sent to " ++
+    log_serv:log("Distance " ++ float_to_list(Distance) ++ 
+		     " data sent to UID " ++
 		     integer_to_list(LoopData#loop_data.user_id) ++
-		     "for MID " ++ 
+		     " for MID " ++ 
 		     integer_to_list((LoopData#loop_data.match_table)#match_table.id)),
     {next_state, match, LoopData};
 
 match(?MATCH_STOP, LoopData) ->
-    log_serv:log("Match stopped for MID " ++ 
+    log_serv:log("Match stopped by UID " ++ 
+		     integer_to_list(LoopData#loop_data.user_id) ++ " for MID " ++ 
 		     integer_to_list((LoopData#loop_data.match_table)#match_table.id)),
+    usercom:match_stop(LoopData#loop_data.user_id, 
+		       (LoopData#loop_data.match_table)#match_table.id,
+		       (LoopData#loop_data.match_table)#match_table.requestId),
+    MatchStats = usercom:get_match_end_stats((LoopData#loop_data.match_table)#match_table.id),
+    Packet = packconv:pack(?MATCH_STOP, MatchStats),
+    ok = gen_tcp:send(LoopData#loop_data.socket, Packet),
     {next_state, main, LoopData}.
 
 
@@ -213,13 +239,16 @@ match(?MATCH_STOP, LoopData) ->
 handle_info({tcp, _, <<Type:2/binary>>}, State, LoopData) ->
     inet:setopts(LoopData#loop_data.socket, [{active, once}]),
     ?MODULE:State(Type, LoopData);
+
 handle_info({tcp, _, <<Type:2/binary, Packet/binary>>}, State, LoopData) ->
     inet:setopts(LoopData#loop_data.socket, [{active, once}]),
     ?MODULE:State({Type, Packet}, LoopData);
+
 handle_info({tcp_closed, _}, _State, LoopData) ->
     log_serv:log("UID " ++ integer_to_list(LoopData#loop_data.user_id) ++ 
 		     " disconnected unexpectedly"),    
     {stop, normal, LoopData};
+
 handle_info({tcp_error, _, _Reason}, _State, LoopData) ->
     {ok, {Address, Port}} = inet:peername(LoopData#loop_data.socket),
     log_serv:log("Tcp error for IP " ++ inet_parse:ntoa(Address) ++ 

@@ -39,7 +39,8 @@
 -define(REQUEST_CANCEL, <<2,3>>). %% Contains one int32: requestId
 -define(REQUEST_LOOKUP_REPLY_MADE, <<2,4>>). %% Contains: lots 
 -define(REQUEST_LOOKUP_REPLY_CHAL, <<2,5>>). %% Contains: lots 
-
+-define(REQUEST_NUMBER, <<2,6>>). %% Empty
+-define(REQUEST_NUMBER_REPLY, <<2,7>>). % Containts one int32: number
 
 %%====================================================================
 %% Get data
@@ -47,6 +48,8 @@
 
 -define(GET_HOME_STATS, <<3,0>>).
 -define(GET_HOME_STATS_REPLY, <<3,1>>).
+-define(GET_HISTORY, <<3,2>>).
+-define(GET_HISTORY_REPLY, <<3,3>>).
 
 
 %%====================================================================
@@ -57,6 +60,7 @@
 -define(MATCH_CONFIRM, <<4,1>>).
 -define(MATCH_GPS, <<4,2>>). %% Contains two floats: longitude, latitude 
 -define(MATCH_STOP, <<4,3>>).
+-define(MATCH_STOP_REPLY, <<4,6>>).
 -define(MATCH_COMP_POS, <<4,4>>).
 -define(MATCH_COMP_REPLY, <<4,5>>). %% Contains one float: distance
 

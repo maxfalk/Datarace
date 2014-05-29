@@ -11,6 +11,7 @@
 -export([get_home_stats/1,get_num_pending_requests/1]).
 -export([get_history/1, get_match_end_stats/1]).
 
+-compile(export_all).
 -include("../include/database.hrl").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -108,7 +109,8 @@ request_lookup_made(UserId) ->
                                        tUsers t4 on t3.userId = t4.id left join
                                        tMatchParticipant t5 on t5.requestedUserId = t1.id
                                       WHERE
-                                       t1.userId = ? and 
+                                       t1.userId = ? and
+                                       t3.state != 2 and
                                        t5.id is null">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
@@ -131,6 +133,7 @@ request_lookup_challenged(UserId)->
                                       tMatchParticipant t4 on t4.requestedUserId = t1.id
                                       WHERE 
                                        t1.userId = ? and
+                                       t1.state != 2 and
                                        t4.id is null;">>,
 				   [UserId]),
     database:result_to_record(Sql_result, request_table).
@@ -216,12 +219,15 @@ create_match(RequestId)->
 
 get_match(RequestId, UserRequestId)->
     Sql_result = database:db_query(match_select,
-		   <<"select t1.id, t3.userId, t1.winnerUserId as winner, t3.id as requestId
+		   <<"select t1.id, t4.userId, t1.winnerUserId as winner, t3.id as requestId
                       from
                        tMatch t1 inner join
-                       tRequestedUsers t3 on t1.requestId = t3.requestId                                           where
+                       tRequestedUsers t3 on t1.requestId = t3.requestId inner join
+                       tRequestedUsers t4 on t1.requestId = t4.requestId and t3.userId != t4.userId
+                      where
                        t1.requestId = ? and
-                       t3.id = ?">>,
+                       t3.id = ?
+                      LIMIT 1;">>,
 		     [RequestId, UserRequestId]),
     database:get_row(database:result_to_record(Sql_result, match_table),1).
    
@@ -274,7 +280,7 @@ match_stop(UserId, MatchId, UserRequestId)->
 
 
 match_stophelper(MatchId, MatchDetails) when length(MatchDetails) > 1 ->        	
-    case check_winner(MatchDetails, {0, 0}) of
+    case check_winner(MatchDetails) of
 	WinnerId when WinnerId > 0 ->
 	    set_winner(MatchId, WinnerId);
 	_ -> no_winner
@@ -295,9 +301,11 @@ user_match_stop(UserId, MatchId, UserRequestId)->
     Distance = get_distance(UserRequestId),
     if
 	RunedDistance >= Distance ->
+	    log_serv:log("UID: " ++ integer_to_list(UserId) ++ "MID: " ++ integer_to_list(MatchId) ++ "finished the race"),
 	    set_match_participant_done(UserRequestId, MatchId),
 	    set_match_time(UserId, MatchId, UserRequestId);
 	RunedDistance < Distance ->
+	    log_serv:log("UID: " ++ integer_to_list(UserId) ++ "MID: " ++ integer_to_list(MatchId) ++ "forefeited the race"),
 	    set_match_participant_forfeit(UserRequestId, MatchId),
 	    set_match_time(UserId, MatchId, UserRequestId)
     end.
@@ -325,28 +333,41 @@ get_match_details(MatchId)->
     Sql_result = database:db_query(select_match_is_done,
 				  <<"SELECT t3.userId, t2.state, t2.time 
                                      FROM tMatch t1 inner join
-                                        tMatchParticipant t2 on t1.id = t2.matchId inner join
+                                        tMatchParticipant t2 on t1.id = t2.matchId 
+                                                          and t2.state != 0 inner join
                                         tRequestedUsers t3 on t1.requestId = t3.requestId
+                                                              and t2.requestedUserId = t3.id
                                      WHERE
-                                       t1.id = ? and t2.state = 1">>,
+                                       t1.id = ?">>,
 				   [MatchId]),
     database:as_list(Sql_result).
 
+
+
 %%@doc Check which user won the match.
--spec check_winner(DetailsList, Result)-> {WinnerId, WinnerTime} when
+-spec check_winner(MatchDetails)-> integer() when
+      MatchDetails :: [[{binary(), integer()}, ...], ...].
+
+check_winner([[{<<"userId">>, UserId}, _,{<<"time">>, Time}] | T] = List) when length(List) > 1->
+    check_winnerhelp(T, {UserId, Time});
+check_winner(List)->
+    0.
+
+%%@doc check winner help function
+-spec check_winnerhelp(DetailsList, Result)-> {WinnerId, WinnerTime} when
       DetailsList :: [[{binary(), integer()}, ...], ...],
       Result :: {WinnerId, WinnerTime},
       WinnerId :: integer(),
       WinnerTime :: integer().
 
-check_winner([], {WinnerId, _})->
+check_winnerhelp([], {WinnerId, _})->
     WinnerId;
-check_winner([[{<<"userId">>, UserId}, _,{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when WinnerTime == 0, Time < WinnerTime ->
-    check_winner(T,{UserId, Time});
-check_winner([[{<<"userId">>, _UserId}, _,{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when WinnerTime == 0, Time == WinnerTime -> 
-    check_winner(T, {0, Time});
-check_winner([_|T], Result) ->
-    check_winner(T, Result).
+check_winnerhelp([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time < WinnerTime ->
+    check_winnerhelp(T,{UserId, Time});
+check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time == WinnerTime -> 
+    check_winnerhelp(T, {-1, Time});
+check_winnerhelp([_|T], Result) ->
+    check_winnerhelp(T, Result).
 
     
     
@@ -516,7 +537,7 @@ get_num_pending_requests(UserId)->
     {_, _, _, R, _} = database:db_query(get_user_pending_requests,
 				   "SELECT count(t1.id) as pendingRequests
                                     FROM
-                                      tRequest t1
+                                      tRequestedUsers t1 
                                     WHERE
                                       t1.userId = ? and
                                       t1.state = 0
