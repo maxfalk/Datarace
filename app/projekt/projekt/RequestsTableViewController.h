@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "RequestTableViewCell.h"
 #import "NetworkConnectionClass.h"
+#import "CWStatusBarNotification.h"
 
-@interface RequestsTableViewController : UITableViewController
+@interface RequestsTableViewController : UITableViewController <UIAlertViewDelegate>
+
+@property (strong, nonatomic) CWStatusBarNotification *notification;
 
 @end

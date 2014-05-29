@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "NetworkConnectionClass.h"
+#import "CWStatusBarNotification.h"
+
+
 @interface ChallengeViewController : UIViewController
 
 //@property (nonatomic) NSInputStream *inputStream;
@@ -20,5 +23,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *updateDistanceLabel;
 @property (weak, nonatomic) IBOutlet UISlider *updateDistanceSlider;
+
+@property (strong, nonatomic) CWStatusBarNotification *notification;
+
 
 @end

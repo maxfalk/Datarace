@@ -99,44 +99,6 @@
 }
 
 
-
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    
-    MKCoordinateRegion mapRegion;
-    CLLocation *firstObject = [_coordinates objectAtIndex:0];
-    CLLocation *lastObject = [_coordinates lastObject];
-    double firstLong =  firstObject.coordinate.longitude;
-    double lastLong = lastObject.coordinate.longitude;
-    double firstLat = firstObject.coordinate.latitude;
-    double lastLat = lastObject.coordinate.latitude;
-    
-    
-    float spanX = fabs(firstObject.coordinate.longitude - lastObject.coordinate.longitude)*2;
-    float spanY = fabs(firstObject.coordinate.latitude - lastObject.coordinate.latitude)*2.5;
-    
-    mapRegion.center.latitude =
-    (firstObject.coordinate.latitude + lastObject.coordinate.latitude)/2;
-    
-    mapRegion.center.longitude =
-    (firstObject.coordinate.longitude + lastObject.coordinate.longitude)/2;
-    
-    mapRegion.span.latitudeDelta = spanY;
-    mapRegion.span.longitudeDelta = spanX;
-    
-    [self.mapView setRegion:[self.mapView regionThatFits:mapRegion] animated:YES];
-    
-    if ([self.mapView respondsToSelector:@selector(camera)]) {
-        [self.mapView setShowsBuildings:YES];
-        MKMapCamera *newCamera = [[self.mapView camera] copy];
-        [newCamera setPitch:35.0];
-        [newCamera setHeading:0.0];
-        [newCamera setAltitude:2000*((spanX+spanY)/2)];
-        CLLocationCoordinate2D cent = CLLocationCoordinate2DMake(mapRegion.center.latitude, mapRegion.center.longitude);
-        [newCamera setCenterCoordinate:cent];
-        [self.mapView setCamera:newCamera animated:YES];
-    }
-}
-
 - (void)drawRoute:(NSMutableArray *)path
 {
     NSInteger numberOfSteps = [path count];

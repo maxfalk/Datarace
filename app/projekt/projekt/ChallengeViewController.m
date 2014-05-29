@@ -33,6 +33,11 @@ typedef struct __attribute__ ((packed)) {
 
 - (IBAction)sendChallengeRequest:(id)sender {
     //requestLookUpResult *lookUpResultMade = [NetworkConnectionClass getRequests:2 type2:4];
+    NSString *string = [NSString stringWithFormat:@"Challenged %@ for a %f race", _challengerUsername, _distanceSlider.value];
+    _notification.notificationLabelBackgroundColor = [UIColor colorWithRed:0.9 green:0.4 blue:0.37 alpha:1];
+    
+    [self.notification displayNotificationWithMessage:string
+                                          forDuration:2.0f];
 
     [NetworkConnectionClass makeRequest:_challengerID distance:_distanceSlider.value];
 }
@@ -49,6 +54,8 @@ typedef struct __attribute__ ((packed)) {
     _distanceSlider.maximumTrackTintColor = [UIColor colorWithRed:0.13 green:0.66 blue:0.82 alpha:1];
     _distanceSlider.thumbTintColor = [UIColor colorWithRed:0.4 green:0.6 blue:0.72 alpha:1];
     _distanceSlider.minimumValue = 1;
+    
+    _notification = [CWStatusBarNotification new];
     
 }
 
