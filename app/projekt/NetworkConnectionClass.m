@@ -484,4 +484,17 @@ static NSOutputStream *outputStream;
 
 }
 
++(void)sendGetResults{
+    
+    uint32_t myInt32Value = 2;
+    uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
+    requestStats packet;
+    packet.length = myInt32AsABigEndianNumber;
+    packet.type[0] = 4;
+    packet.type[1] = 3;
+    [outputStream write:(uint8_t *)&packet maxLength:6];
+    
+    
+}
+
 @end

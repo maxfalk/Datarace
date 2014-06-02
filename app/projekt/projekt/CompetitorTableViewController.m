@@ -97,6 +97,9 @@
         free(lookUpResultMade->requestLookUp);
         free(lookUpResultGot);
         free(lookUpResultMade);
+        numOfPackesGot = 0;
+        numOfPackesMade = 0;
+        
         
         
         dispatch_async( dispatch_get_main_queue(), ^{

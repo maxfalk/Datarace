@@ -126,6 +126,8 @@
     [cell addSubview:acceptButton];
     } else {
         cell.usernameLabel.text = [_myRequests objectAtIndex:indexPath.row];
+        cell.distanceLabel.text = [NSString stringWithFormat:@"%@ km",[_myRequestsDistances objectAtIndex:indexPath.row]];
+        self.tableView.separatorColor = [UIColor lightGrayColor];
       //  cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ km",[_myRequestsDistances objectAtIndex:indexPath.row]];
     }
     

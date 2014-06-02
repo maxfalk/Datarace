@@ -11,6 +11,12 @@
 @interface FinishlineViewController ()
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
 
+@property (weak, nonatomic) IBOutlet UILabel *avgSpeedLabel;
+@property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *resultImageView;
+@property (weak, nonatomic) IBOutlet UILabel *resultLabel;
+
 @end
 
 @implementation FinishlineViewController
@@ -45,7 +51,6 @@
     double firstLat = firstObject.coordinate.latitude;
     double lastLat = lastObject.coordinate.latitude;
     
-    
     float spanX = fabs(firstObject.coordinate.longitude - lastObject.coordinate.longitude)*2;
     float spanY = fabs(firstObject.coordinate.latitude - lastObject.coordinate.latitude)*2.5;
     
@@ -68,19 +73,20 @@
         CLLocationCoordinate2D cent = CLLocationCoordinate2DMake(mapRegion.center.latitude, mapRegion.center.longitude);
         [newCamera setCenterCoordinate:cent];
         
-
+        
         [self.mapView setCamera:newCamera animated:YES];
     }
     [self drawRoute:_coordinates];
-
+    
     [self.mapView setShowsBuildings:YES];
     /*
-    mapRegion.center.latitude = ([_coordinates objectAtIndex:0] - [_coordinates lastObject])/2;
-    mapRegion.center.longitude = self.mapView.userLocation.coordinate.longitude;
-    mapRegion.span.latitudeDelta = 0.02;
-    mapRegion.span.longitudeDelta = 0.02;
-    [self.mapView setRegion:mapRegion animated: YES];
-        */
+     mapRegion.center.latitude = ([_coordinates objectAtIndex:0] - [_coordinates lastObject])/2;
+     mapRegion.center.longitude = self.mapView.userLocation.coordinate.longitude;
+     mapRegion.span.latitudeDelta = 0.02;
+     mapRegion.span.longitudeDelta = 0.02;
+     [self.mapView setRegion:mapRegion animated: YES];
+     */
+    [self getHistory];
 }
 // Do any additional setup after loading the view.
 
@@ -123,6 +129,34 @@
     polylineView.alpha = 1;
     
     return polylineView;
+}
+
+-(void)getHistory {
+    matchStatsHead *result = [NetworkConnectionClass getMatchStats];
+    
+    if ((result->type[0] == 4) && (result->type[1] == 6)) {
+        int winnerId = (int)result->array[0].winnerId;
+        int userId = (int)result->array[0].userId;
+        int dist = (int)result->array[0].distance;
+        int ID = (int)result->array[0].userId;
+        int speed = (int)result->array[0].averageSpeed;
+        _avgSpeedLabel.text = [NSString stringWithFormat:@"%d km/h", speed];
+        _distanceLabel.text = [NSString stringWithFormat:@"%d km", _distance/1000];
+        
+        if (userId == winnerId) {
+            _resultImageView.image = [UIImage imageNamed:@"star"];
+            _resultLabel.text =@"You won!";
+            
+        } else if (winnerId == -1) {
+            _resultImageView.image = [UIImage imageNamed:@"tie"];
+            _resultLabel.text =@"It's a tie!";
+        } else if (winnerId == 0) {
+            _resultImageView.image = [UIImage imageNamed:@"tba"];
+        } else {
+            _resultImageView.image = [UIImage imageNamed:@"turd"];
+            _resultLabel.text =@"You lost!";
+        }
+    }
 }
 
 
