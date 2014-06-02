@@ -32,7 +32,7 @@ stop() ->
 	undefined -> 
 	    ok;
 	_ ->
-	    master_sup:stop_children()
+	    ok %master_sup:stop_children()
     end,
     application:stop(search),
     application:stop(datarace),

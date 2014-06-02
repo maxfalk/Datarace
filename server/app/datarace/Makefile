@@ -46,7 +46,7 @@ start: all
 	(cd ebin && $(PROP_ERL) -eval 'server:start(true)')
 
 test: all
-	(cd ebin && $(PROP_ERL) -noinput -eval 'server:start(false), timer:sleep(500), eunit:test({dir, "."}, [verbose]), server:stop(), init:stop()')
+	(cd ebin && $(PROP_ERL) -noinput -eval 'server:start(false), timer:sleep(500), eunit:test({dir, "."}, [verbose]), init:stop(), server:stop()')
 
 
 doc: $(BEAM_FILES)
