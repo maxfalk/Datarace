@@ -67,7 +67,7 @@ averagedistance(Totaltime, Totalspeed) ->
 
 calc_totaldistance(User_id1, Match_id) ->
     Gps1 = usercom:gps_get(User_id1, Match_id), 
-    calc_totaldistancehelp(Gps1, 0).
+    calc_totaldistancehelp(Gps1, 0)+0.02. %% add a error margin of 20 m
 
 %%@doc calculate the total distance for the user in a specific match.
 -spec calc_totaldistancehelp(Gps_list, Distance) -> float() when
