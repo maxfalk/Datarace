@@ -50,7 +50,7 @@ test: all
 
 
 doc: $(BEAM_FILES)
-	erl -noshell -eval "edoc:application($(notdir $(shell pwd)) , '.', [])" -s init stop
+	erl -noshell -eval "edoc:application($(notdir $(shell pwd)) , '.', [{dir, './doc/html/'}])" -s init stop
 
 clean:
 	rm -fr .#* *.dump

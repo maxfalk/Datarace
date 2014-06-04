@@ -5,9 +5,7 @@
 -include_lib("../include/database.hrl").
 -type date() :: {integer(), integer(), integer()}.
 
-%%@doc===============================================%
-%% Calculates the distance between two points   %
-%===============================================%
+%%@doc Calculates the distance between two points 
 -spec distance(Long1, Lat1, Long2, Lat2) -> float() when
       Long1 :: float(),
       Lat1 :: float(),
@@ -27,18 +25,14 @@ distance(Long1, Lat1, Long2, Lat2) ->
     Km.
 
 
-%%@doc==================================================%
-%%calculates the speed from given time and distance%
-%==================================================%
+%%@doc calculates the speed from given time and distance
 -spec speed(Time, Distance) -> float() when
       Time :: integer(),
       Distance :: integer().
 
 speed(Time, Distance) ->
     Distance/Time.  
-%%@doc=============================================%
-%%calculates the average speed                %   
-%=============================================%
+%@doccalculates the average speed 
 -spec averagespeed(Totaldistance, Totaltime) -> float() when
       Totaldistance :: float(),
       Totaltime :: float().
@@ -46,9 +40,7 @@ speed(Time, Distance) ->
 averagespeed(Totaldistance, Totaltime) ->
     Totaldistance/Totaltime. 
 
-%%@doc============================================%    
-%% calculates the average distance            %
-%============================================%
+%%@doc calculates the average distance           
 -spec averagedistance(Totaltime, Totalspeed) -> integer() when
       Totaltime :: integer(),
       Totalspeed :: integer().

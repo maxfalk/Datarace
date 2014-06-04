@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module client_serv</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module client_serv</h1>
+<ul class="index"><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+
+<p><b>Behaviours:</b> <a href="gen_fsm.html"><tt>gen_fsm</tt></a>.</p>
+
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-datetime">datetime()</a></h3>
+<p><tt>datetime() = {datetime, {{integer(), integer(), integer()}, {integer(), integer(), integer()}}}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-loop_data">loop_data()</a></h3>
+<p><tt>loop_data() = {integer(), <a href="#type-socket">socket()</a>, <a href="#type-datetime">datetime()</a>, <a href="#type-match_table">match_table()</a>}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-socket">socket()</a></h3>
+<p><tt>socket() = none()</tt></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#handle_info-3">handle_info/3</a></td><td>Receives TCP packets and forwards them to the function
+  representing the current state or stops if the message is
+  erroneous.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize the Client Serv.</td></tr>
+<tr><td valign="top"><a href="#main-2">main/2</a></td><td>Handles messages from a client during a session.</td></tr>
+<tr><td valign="top"><a href="#match-2">match/2</a></td><td>This state handles a match.</td></tr>
+<tr><td valign="top"><a href="#start_link-0">start_link/0</a></td><td>Starts a new Client Serv process.</td></tr>
+<tr><td valign="top"><a href="#terminate-3">terminate/3</a></td><td>The function is called upon termination and makes sure that
+  the Socket is closed.</td></tr>
+<tr><td valign="top"><a href="#verify-2">verify/2</a></td><td>Sends a LOGIN_TRUE message to the client when receiving a
+  control_transferred event, informing the client about a successful
+  login attempt.</td></tr>
+<tr><td valign="top"><a href="#verify_control_transfer-3">verify_control_transfer/3</a></td><td>Sends an asynchronous message to the Client Serv with pid Pid
+  telling it that it has the contol over a socket and may use it.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="handle_info-3">handle_info/3</a></h3>
+<div class="spec">
+<p><tt>handle_info(Event, State, LoopData) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Event = {tcp, Socket, Packet} | {tcp_closed, Socket} | {tcp_error, Socket, Reason}</tt></li><li><tt>State = term()</tt></li><li><tt>LoopData = <a href="#type-loop_data">loop_data()</a></tt></li><li><tt>Socket = <a href="#type-socket">socket()</a></tt></li><li><tt>Packet = binary()</tt></li><li><tt>Reason = term()</tt></li><li><tt>Result = none() | {stop, normal, LoopData}</tt></li></ul></p>
+</div><p>Receives TCP packets and forwards them to the function
+  representing the current state or stops if the message is
+  erroneous.</p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(Args) -&gt; {ok, verify, LoopData}</tt>
+<ul class="definitions"><li><tt>UserId = integer()</tt></li><li><tt>Socket = <a href="#type-socket">socket()</a></tt></li><li><tt>Args = {UserId, Socket}</tt></li><li><tt>LoopData = <a href="#type-loop_data">loop_data()</a></tt></li></ul></p>
+</div><p>Initialize the Client Serv.</p>
+
+<h3 class="function"><a name="main-2">main/2</a></h3>
+<div class="spec">
+<p><tt>main(Message, LoopData) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Type = binary()</tt></li><li><tt>Package = binary()</tt></li><li><tt>Message = {Type, Package} | Type</tt></li><li><tt>LoopData = <a href="#type-loop_data">loop_data()</a></tt></li><li><tt>Result = {stop, normal, LoopData}</tt></li></ul></p>
+</div><p>Handles messages from a client during a session.</p>
+
+<h3 class="function"><a name="match-2">match/2</a></h3>
+<div class="spec">
+<p><tt>match(Message, LoopData) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Type = binary()</tt></li><li><tt>Package = binary()</tt></li><li><tt>Message = {Type, Package} | Type</tt></li><li><tt>LoopData = <a href="#type-loop_data">loop_data()</a></tt></li><li><tt>Result = {stop, normal, LoopData} | {next_state, main, LoopData} | {next_state, match, LoopData}</tt></li></ul></p>
+</div><p>This state handles a match. It receives messages from the client
+  such as GPS data, requests for the competitors current position and
+  requests to stop the match.</p>
+
+<h3 class="function"><a name="start_link-0">start_link/0</a></h3>
+<div class="spec">
+<p><tt>start_link() -&gt; Result</tt>
+<ul class="definitions"><li><tt>Error = term()</tt></li><li><tt>Result = {ok, pid()} | ignore | {error, Error}</tt></li></ul></p>
+</div><p>Starts a new Client Serv process.</p>
+
+<h3 class="function"><a name="terminate-3">terminate/3</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason, State, LoopData) -&gt; none()</tt>
+<ul class="definitions"><li><tt>Reason = term()</tt></li><li><tt>State = atom()</tt></li><li><tt>LoopData = <a href="#type-loop_data">loop_data()</a></tt></li></ul></p>
+</div><p>The function is called upon termination and makes sure that
+  the Socket is closed.</p>
+
+<h3 class="function"><a name="verify-2">verify/2</a></h3>
+<div class="spec">
+<p><tt>verify(X1::{control_transferred, Socket, UserId}, LoopData) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Socket = <a href="#type-socket">socket()</a></tt></li><li><tt>UserId = integer()</tt></li><li><tt>LoopData = <a href="#type-loop_data">loop_data()</a></tt></li><li><tt>Result = {next_state, main, LoopData}</tt></li></ul></p>
+</div><p>Sends a LOGIN_TRUE message to the client when receiving a
+  control_transferred event, informing the client about a successful
+  login attempt.</p>
+
+<h3 class="function"><a name="verify_control_transfer-3">verify_control_transfer/3</a></h3>
+<div class="spec">
+<p><tt>verify_control_transfer(Pid, Socket, UserId) -&gt; ok</tt>
+<ul class="definitions"><li><tt>Pid = pid()</tt></li><li><tt>Socket = <a href="#type-socket">socket()</a></tt></li><li><tt>UserId = integer()</tt></li></ul></p>
+</div><p>Sends an asynchronous message to the Client Serv with pid Pid
+  telling it that it has the contol over a socket and may use it.
+  Only relevant just after initialization, when Client_serv is in its
+  verify state.</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Jun 4 2014, 14:54:15.</i></p>
+</body>
+</html>
