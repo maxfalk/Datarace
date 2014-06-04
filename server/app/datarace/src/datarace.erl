@@ -24,5 +24,10 @@ start(normal, [])->
       Type :: atom().
 
 stop(_)->
-    database:stop(),
+    Ref = erlang:monitor(process, whereis(master_sup)),
+    exit(whereis(master_sup), shutdown),
+    receive
+	{'DOWN', Ref, process, _Pid, Reason} ->
+	    database:stop()
+    end,
     ok.

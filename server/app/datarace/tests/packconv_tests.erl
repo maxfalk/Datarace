@@ -1,7 +1,5 @@
-%%Tests for the account module. 
-%%
-%%
-%%
+%% Tests for the packconv module.
+
 -module(packconv_tests).
 
 -include ("../include/types.hrl").

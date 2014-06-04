@@ -7,7 +7,7 @@
 -module(client_serv_sup).
 -behaviour(supervisor).
 
--export([start_link/0, start_client_serv/2, count_children/0]).
+-export([start_link/0, start_client_serv/0, count_children/0]).
 -export([init/1]).
 
 -type socket() :: none().
@@ -33,18 +33,13 @@ start_link() ->
 
 
 %% @doc Start a new client_serv dynamically. 
--spec start_client_serv(UserId, Socket) -> Result when
-      UserId :: integer(),
-      Socket :: socket(),
+-spec start_client_serv() -> Result when
       Result :: {ok, pid()}
 	      | {error, Error},
       Error :: term().
 
-start_client_serv(UserId, Socket) ->
-    ChildSpec = {UserId, 
-		 {client_serv, start_link, [UserId, Socket]}, 
-		 temporary, 1000, worker, [client_serv]},
-    supervisor:start_child(?MODULE, ChildSpec).
+start_client_serv() ->
+    supervisor:start_child(?MODULE, []).
 
 
 %% @doc Returns information concerning the number of active processes.
@@ -64,12 +59,18 @@ count_children() ->
 %%====================================================================
 
 
-%% @doc Initializes the Client_serv supervisor.
--spec init(Args) -> {ok, {SuperSpec, []}} when
+%% @doc Initializes the client_serv supervisor.
+-spec init(Args) -> {ok, {SuperSpec, [ChildSpec]}} when
       Args :: none(),
-      SuperSpec :: {simple_one_for_one, 60, 3600}.
+      SuperSpec :: {simple_one_for_one, 60, 3600},
+      ChildSpec :: {client_serv, 
+		    {client_serv, start_link, []}, 
+		    temporary, 5000, worker, [client_serv]}.
 
 init(_Args) ->
-    SuperSpec = {one_for_one, 60, 3600},
-    {ok, {SuperSpec, []}}.
+    SuperSpec = {simple_one_for_one, 60, 3600},
+    ChildSpec = {client_serv, 
+		 {client_serv, start_link, []}, 
+		 temporary, 5000, worker, [client_serv]},
+    {ok, {SuperSpec, [ChildSpec]}}.
 

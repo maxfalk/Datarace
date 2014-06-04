@@ -49,8 +49,6 @@ stop_children() ->
     end.
 
 
-
-
 %%====================================================================
 %% Callback functions
 %%====================================================================
@@ -64,10 +62,10 @@ init(_Args) ->
     SuperSpec = {rest_for_one, 60, 3600},
     ClientServSuperSpec = {client_serv_sup, 
 			   {client_serv_sup, start_link, []}, 
-			   transient, 10000, supervisor, [client_serv_sup]},
+			   transient, infinity, supervisor, [client_serv_sup]},
     ListenerSuperSpec = {listener_sup, 
 			 {listener_sup, start_link, [Port, Listeners]}, 
-			 transient, 10000, supervisor, [listener_sup]},
+			 transient, infinity, supervisor, [listener_sup]},
     {ok, {SuperSpec, [ClientServSuperSpec, ListenerSuperSpec]}}.
 
 
