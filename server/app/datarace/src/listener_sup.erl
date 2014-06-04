@@ -61,23 +61,27 @@ count_children() ->
 %%====================================================================
 
 
-%% @doc Initializes the Listener supervisor by opening the port Port
-%% and starts Listeners number of Listener processes. 
+%% @doc Initializes the listener supervisor by opening the port Port
+%% and starts Listeners number of listener processes. 
 -spec init({Port, Listeners}) -> {ok, {SuperSpec, [ChildSpec]}} when
       Port :: integer(),
       Listeners :: integer(),
       ListenSocket :: socket(),
-      SuperSpec :: {simple_one_for_one, 60, 3600},
+      SuperSpec :: {simple_one_for_one, 100, 500},
       ChildSpec :: {listener, 
 		    {listener, start_link, [ListenSocket]}, 
-		    temporary, 1000, worker, [listener]}.
+		    transient, 5000, worker, [listener]}.
 
 init({Port, Listeners}) ->
-    {ok, ListenSocket} = gen_tcp:listen(Port, [binary, inet, {active, once}, {packet, 4}]), 
-    SuperSpec = {simple_one_for_one, 60, 3600},
+    {ok, ListenSocket} = gen_tcp:listen(Port, [binary, 
+					       inet, 
+					       {reuseaddr, true}, 
+					       {active, once}, 
+					       {packet, 4}]), 
+    SuperSpec = {simple_one_for_one, 100, 500},
     ChildSpec = {listener, 
 		 {listener, start_link, [ListenSocket]}, 
-		 temporary, 1000, worker, [listener]},
+		 transient, 5000, worker, [listener]},
     spawn_link(?MODULE, start_listeners, [Listeners]),
     {ok, {SuperSpec, [ChildSpec]}}.
 

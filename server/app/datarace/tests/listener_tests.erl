@@ -90,8 +90,7 @@ listener_login_true({Port, Listeners, Users}) ->
 		    {supervisors, 0}, 
 		    {workers, Listeners}], 
 		   ListenerChildCount),
-     ?_assertEqual([{specs, 10
-		    }, 
+     ?_assertEqual([{specs, 1}, 
 		    {active, UserCount}, 
 		    {supervisors, 0}, 
 		    {workers, UserCount}], 
@@ -109,8 +108,7 @@ listener_login_false_logged_in({Port, Listeners, Users}) ->
 		    {supervisors, 0}, 
 		    {workers, Listeners}], 
 		   ListenerChildCount),
-     ?_assertEqual([{specs, 10
-		    }, 
+     ?_assertEqual([{specs, 1}, 
 		    {active, UserCount}, 
 		    {supervisors, 0}, 
 		    {workers, UserCount}], 
@@ -129,8 +127,7 @@ listener_login_false_password({Port, Listeners, Users}) ->
 		    {supervisors, 0}, 
 		    {workers, Listeners}], 
 		   ListenerChildCount),
-     ?_assertEqual([{specs, 10
-		    }, 
+     ?_assertEqual([{specs, 1}, 
 		    {active, UserCount}, 
 		    {supervisors, 0}, 
 		    {workers, UserCount}], 
@@ -149,8 +146,7 @@ listener_login_false_username({Port, Listeners, Users}) ->
 		    {supervisors, 0}, 
 		    {workers, Listeners}], 
 		   ListenerChildCount),
-     ?_assertEqual([{specs, 10
-		    }, 
+     ?_assertEqual([{specs, 1}, 
 		    {active, UserCount}, 
 		    {supervisors, 0}, 
 		    {workers, UserCount}], 

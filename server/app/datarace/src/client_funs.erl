@@ -11,6 +11,7 @@
 	 register/4,
 	 request/3,
 	 request_lookup/1,
+	 request_number/1,
 	 search_string/2,
 	 get_history/1,
 	 get_home_stats/1,
@@ -91,6 +92,16 @@ request(Socket, ChallengeId, Distance) ->
 
 request_lookup(Socket) ->
     gen_tcp:send(Socket, ?REQUEST_LOOKUP).
+
+
+%% @doc Gets the number of requests for a logged in user.
+-spec request_number(Socket) -> Result when
+      Socket :: socket(),
+      Result :: ok | {error, Reason},
+      Reason :: closed | term().
+
+request_number(Socket) ->
+    gen_tcp:send(Socket, ?REQUEST_NUMBER).
 
 
 %% @doc Gets stats for a logged in user.

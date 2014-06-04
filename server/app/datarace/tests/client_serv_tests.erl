@@ -21,7 +21,8 @@ client_serv_test_()->
        fun (SetupData) -> 
 	       [client_serv_init(SetupData), 
 		client_serv_request(SetupData), 
-		client_serv_request_lookup(SetupData), 
+		client_serv_request_lookup(SetupData),
+		client_serv_request_number(SetupData),
 		client_serv_search_string(SetupData), 
 		client_serv_get_home_stats(SetupData),
 		client_serv_get_history(SetupData),
@@ -61,7 +62,7 @@ client_serv_init({NoUsers, LoggedInUsers}) ->
 		  {Socket,_,UID} <- LoggedInUsers ],
     Children = count_children(client_serv_sup),
     [Asserts, 
-     ?_assertEqual([{specs, NoUsers}, 
+     ?_assertEqual([{specs, 1}, 
 		    {active, NoUsers}, 
 		    {supervisors, 0}, 
 		    {workers, NoUsers}], 
@@ -76,7 +77,11 @@ client_serv_request({_NoUsers, LoggedInUsers}) ->
 
 
 client_serv_request_lookup({_NoUsers, LoggedInUsers}) ->
-    [ make_request_lookup(User) || User <- LoggedInUsers].
+    [ request_lookup(User) || User <- LoggedInUsers ].
+
+
+client_serv_request_number({_NoUsers, LoggedInUsers}) ->
+    [ request_number(User) || User <- LoggedInUsers ].
 
 
 client_serv_get_home_stats({_NoUsers, LoggedInUsers}) ->
@@ -108,7 +113,7 @@ client_serv_logout({_NoUsers, LoggedInUsers}) ->
     timer:sleep(?SLEEP_VALUE),
     [ logout(User) || User <- LoggedInUsers ],
     Children = count_children(client_serv_sup),
-    [ ?_assertEqual([{specs, 0}, 
+    [ ?_assertEqual([{specs, 1}, 
 		     {active, 0}, 
 		     {supervisors, 0}, 
 		     {workers, 0}], 
@@ -161,7 +166,7 @@ make_requests(LoggedInUsers) ->
 		  LoggedInUsers, lists:reverse(LoggedInUsers)).
 
 
-make_request_lookup({Socket, _,_}) ->
+request_lookup({Socket, _,_}) ->
     client_funs:request_lookup(Socket),
     Made = receive
 	       {tcp, _, Packet1} -> Packet1
@@ -174,6 +179,16 @@ make_request_lookup({Socket, _,_}) ->
 	       ?TIMEOUT_VALUE -> <<0>>
 	   end,
     [?_assertEqual(92, byte_size(Made)), ?_assertEqual(92, byte_size(Chal))].
+
+
+request_number({Socket, _,_}) ->
+    client_funs:request_number(Socket),
+    NoRequests = receive
+		     {tcp, _, Packet} -> Packet
+		 after
+		     ?TIMEOUT_VALUE -> <<0>>
+		 end,
+    [?_assertEqual(6, byte_size(NoRequests))].
 
 
 get_home_stats({Socket, _,_}) ->
