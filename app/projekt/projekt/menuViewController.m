@@ -43,6 +43,10 @@
         
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+       [self updateHomeStats];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

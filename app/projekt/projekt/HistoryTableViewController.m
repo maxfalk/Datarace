@@ -43,6 +43,12 @@
     }
 }
 
+-(void)viewDidDisappear:(BOOL)animated {
+    _usernames = nil;
+    _winnerID = nil;;
+    _distance = nil;
+    _userID = nil;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

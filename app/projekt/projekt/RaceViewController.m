@@ -33,6 +33,8 @@
 @property int currentTimeInSeconds;
 @property (weak, nonatomic) IBOutlet UILabel *averageSpeedLabel;
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
+@property (strong, nonatomic) NSString *timeString;
+@property (strong,nonatomic) NSString *header;
 
 
 @end
@@ -63,6 +65,7 @@
         NSLog (@"not succesful");
     }
     
+    _header = @"Race finished!";
     NSOperationQueue *myQueue = [[NSOperationQueue alloc] init];
     [myQueue addOperationWithBlock:^{
         
@@ -157,8 +160,10 @@
     int hours = (totalMilliSeconds / 720000) % 60;
     
     if (hours == 0) {
+        _timeString = [NSString stringWithFormat:@"%02d:%02d:%02d", minutes, seconds, milliSeconds];
         return [NSString stringWithFormat:@"%02d:%02d:%02d", minutes, seconds, milliSeconds];
     } else {
+        _timeString = [NSString stringWithFormat:@"%02d:%02d:%02d", minutes, seconds, milliSeconds];
         return [NSString stringWithFormat:@"%02d:%02d:%02d:%02d",hours, minutes, seconds, milliSeconds];
     }
     
@@ -319,6 +324,7 @@
         _check = 1;
         self.mapView.showsUserLocation = NO;
         [self.locationManager stopUpdatingLocation];
+        _header = @"Race ended!";
         [self performSegueWithIdentifier:@"finish" sender:self];
         [_stopWatch invalidate];
         [NetworkConnectionClass quitRace];
@@ -333,7 +339,6 @@
         
         if ((result->type[0] == 4) && (result->type[1] == 5)) {
             _totalCompetitorDistance = result->distance*1000;
-            //NSLog(@"competitors distance: %f", _competitorSlider.value);
             _competitorSlider.value = _totalCompetitorDistance;
             
         }
@@ -343,13 +348,14 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"finish"]) {
-        
        FinishlineViewController *class = (FinishlineViewController *) [segue destinationViewController];
         class.coordinates = [[NSMutableArray alloc] initWithArray:self.points];
         class.distance = (int) _distance;
-        
-       // }
+        class.timeString = _timeString;
+        class.avgSpeed = _averageSpeedLabel.text;
+        class.header = _header;
     }
+
 }
 
 

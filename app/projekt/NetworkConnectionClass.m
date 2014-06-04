@@ -333,8 +333,6 @@ static NSOutputStream *outputStream;
 
 +(userArray *)searchForUsers:(NSString *)username {
     
-    //NSMutableArray *usersData = [[NSMutableArray alloc] init];
-    
     uint32_t myInt32Value = 52;
     uint32_t myInt32AsABigEndianNumber = CFSwapInt32HostToBig(myInt32Value);
     

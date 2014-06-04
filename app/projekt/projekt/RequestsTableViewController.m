@@ -67,7 +67,7 @@
             self.tableView.backgroundView = tempImageView;
         return 0;
     } else {
-    
+    self.tableView.backgroundView = nil;
     if (section==0) {
         return [_requests count];
     } else if (section==1){
@@ -227,26 +227,12 @@
                 [_requests addObject:usernameGot];
                 [_distances addObject:[NSNumber numberWithInt:distance]];
                 [_requestIDs addObject:[NSNumber numberWithInt:requestID]];
-                
             }
         }
     }
     
     
     [self.tableView reloadData];
-    /*
-     lookUpResultGot->requestLookUp = nil;
-     lookUpResultMade->requestLookUp = nil;
-     lookUpResultGot = nil;
-     lookUpResultMade = nil;
-     
-     free(lookUpResultGot->requestLookUp);
-     free(lookUpResultMade->requestLookUp);
-     free(lookUpResultGot);
-     free(lookUpResultMade);
-     */
-    
-    
     
 }
 

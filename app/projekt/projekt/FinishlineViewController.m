@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *resultImageView;
 @property (weak, nonatomic) IBOutlet UILabel *resultLabel;
+@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 
 @end
 
@@ -36,6 +37,16 @@
     //_coordinates = [[NSMutableArray alloc] init];
     [super viewDidLoad];
     [self.navigationItem setHidesBackButton:YES];
+    _timeLabel.text = _timeString;
+    if ([_avgSpeedLabel.text isEqual: @"Calculating..."]) {
+        _avgSpeedLabel.text = @"0 km/h";
+    } else {
+        _avgSpeedLabel.text = _avgSpeed;
+        
+        
+    }
+    
+    _headerLabel.text = _header;
     self.mapView.delegate = self;
     //self.mapView.userInteractionEnabled=NO;
     self.mapView.showsUserLocation=NO;
@@ -46,10 +57,14 @@
     MKCoordinateRegion mapRegion;
     CLLocation *firstObject = [_coordinates objectAtIndex:0];
     CLLocation *lastObject = [_coordinates lastObject];
-    double firstLong =  firstObject.coordinate.longitude;
-    double lastLong = lastObject.coordinate.longitude;
-    double firstLat = firstObject.coordinate.latitude;
-    double lastLat = lastObject.coordinate.latitude;
+    
+    MKPointAnnotation *first = [MKPointAnnotation alloc];
+    first.coordinate = firstObject.coordinate;
+    
+    MKPointAnnotation *last;
+    last.coordinate = lastObject.coordinate;
+    
+    NSLog(@"%f", last.coordinate.latitude);
     
     float spanX = fabs(firstObject.coordinate.longitude - lastObject.coordinate.longitude)*2;
     float spanY = fabs(firstObject.coordinate.latitude - lastObject.coordinate.latitude)*2.5;
@@ -65,27 +80,9 @@
     
     [self.mapView setRegion:[self.mapView regionThatFits:mapRegion] animated:YES];
     
-    if ([self.mapView respondsToSelector:@selector(camera)]) {
-        
-        MKMapCamera *newCamera = [[self.mapView camera] copy];
-        [newCamera setPitch:55.0];
-        [newCamera setAltitude:_distance/3];
-        CLLocationCoordinate2D cent = CLLocationCoordinate2DMake(mapRegion.center.latitude, mapRegion.center.longitude);
-        [newCamera setCenterCoordinate:cent];
-        
-        
-        [self.mapView setCamera:newCamera animated:YES];
-    }
     [self drawRoute:_coordinates];
     
     [self.mapView setShowsBuildings:YES];
-    /*
-     mapRegion.center.latitude = ([_coordinates objectAtIndex:0] - [_coordinates lastObject])/2;
-     mapRegion.center.longitude = self.mapView.userLocation.coordinate.longitude;
-     mapRegion.span.latitudeDelta = 0.02;
-     mapRegion.span.longitudeDelta = 0.02;
-     [self.mapView setRegion:mapRegion animated: YES];
-     */
     [self getHistory];
 }
 // Do any additional setup after loading the view.
@@ -124,7 +121,7 @@
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {
     MKPolylineView *polylineView = [[MKPolylineView alloc] initWithPolyline:overlay];
     polylineView.strokeColor = [UIColor redColor];
-    polylineView.lineWidth = 17.0;
+    polylineView.lineWidth = 10.0;
     polylineView.lineCap = kCGLineCapRound;
     polylineView.alpha = 1;
     
@@ -140,7 +137,7 @@
         int dist = (int)result->array[0].distance;
         int ID = (int)result->array[0].userId;
         int speed = (int)result->array[0].averageSpeed;
-        _avgSpeedLabel.text = [NSString stringWithFormat:@"%d km/h", speed];
+        //_avgSpeedLabel.text = [NSString stringWithFormat:@"%d km/h", speed];
         _distanceLabel.text = [NSString stringWithFormat:@"%d km", _distance/1000];
         
         if (userId == winnerId) {

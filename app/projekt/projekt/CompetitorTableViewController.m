@@ -150,9 +150,8 @@
         return 0;
         
     } else
+        self.tableView.backgroundView = nil;
         return count;
-        self.tableView.backgroundView.hidden = YES;
-
 }
 
 

@@ -54,22 +54,7 @@
     return self;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    CGRect contentRect = self.contentView.bounds;
-    CGFloat boundsX = contentRect.origin.x;
-    CGRect frame;
 
-    
-    //frame= CGRectMake(20,11,160,21);
-    //_distance.frame = frame;
-    
-    //frame= CGRectMake(boundsX+15 ,0, 205, 44);
-   //s _headerLabel.frame = frame;
-    
-    
-    
-}
 
 
 

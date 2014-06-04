@@ -15,5 +15,8 @@
 @property (nonatomic, strong) NSMutableArray *coordinates;
 @property (nonatomic, retain) NSArray* pts;
 @property int distance;
+@property (strong, nonatomic) NSString *timeString;
+@property (strong, nonatomic) NSString *avgSpeed;
+@property (strong, nonatomic) NSString *header;
 
 @end
