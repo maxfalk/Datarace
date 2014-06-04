@@ -1,0 +1,175 @@
+[2014-5-30 14:51:41] User connected with IP 127.0.0.1 on port 49187
+[2014-5-30 14:51:41] Logged in UID 6857
+[2014-5-30 14:51:41] Spawned new client_serv for UID 6857
+[2014-5-30 14:51:41] Terminating listener in state login
+[2014-5-30 14:51:41] Socket transfer for UID 6857
+[2014-5-30 14:51:41] User connected with IP 127.0.0.1 on port 35613
+[2014-5-30 14:51:41] Logged in UID 6858
+[2014-5-30 14:51:41] Spawned new client_serv for UID 6858
+[2014-5-30 14:51:41] Terminating listener in state login
+[2014-5-30 14:51:41] Socket transfer for UID 6858
+[2014-5-30 14:51:41] User connected with IP 127.0.0.1 on port 52197
+[2014-5-30 14:51:41] Logged in UID 6859
+[2014-5-30 14:51:41] Spawned new client_serv for UID 6859
+[2014-5-30 14:51:41] Terminating listener in state login
+[2014-5-30 14:51:41] Socket transfer for UID 6859
+[2014-5-30 14:51:41] User connected with IP 127.0.0.1 on port 54973
+[2014-5-30 14:51:41] Logged in UID 6860
+[2014-5-30 14:51:41] Spawned new client_serv for UID 6860
+[2014-5-30 14:51:41] Terminating listener in state login
+[2014-5-30 14:51:41] Socket transfer for UID 6860
+[2014-5-30 14:51:41] User connected with IP 127.0.0.1 on port 36998
+[2014-5-30 14:51:41] Logged in UID 6861
+[2014-5-30 14:51:41] Spawned new client_serv for UID 6861
+[2014-5-30 14:51:41] Terminating listener in state login
+[2014-5-30 14:51:41] Socket transfer for UID 6861
+[2014-5-30 14:51:41] User connected with IP 127.0.0.1 on port 49823
+[2014-5-30 14:51:41] Logged in UID 6862
+[2014-5-30 14:51:41] Spawned new client_serv for UID 6862
+[2014-5-30 14:51:41] Terminating listener in state login
+[2014-5-30 14:51:41] Socket transfer for UID 6862
+[2014-5-30 14:51:41] User connected with IP 127.0.0.1 on port 57801
+[2014-5-30 14:51:42] Logged in UID 6863
+[2014-5-30 14:51:42] Spawned new client_serv for UID 6863
+[2014-5-30 14:51:42] Terminating listener in state login
+[2014-5-30 14:51:42] Socket transfer for UID 6863
+[2014-5-30 14:51:42] User connected with IP 127.0.0.1 on port 51329
+[2014-5-30 14:51:42] Logged in UID 6864
+[2014-5-30 14:51:42] Spawned new client_serv for UID 6864
+[2014-5-30 14:51:42] Terminating listener in state login
+[2014-5-30 14:51:42] Socket transfer for UID 6864
+[2014-5-30 14:51:42] User connected with IP 127.0.0.1 on port 53369
+[2014-5-30 14:51:42] Logged in UID 6865
+[2014-5-30 14:51:42] Spawned new client_serv for UID 6865
+[2014-5-30 14:51:42] Terminating listener in state login
+[2014-5-30 14:51:42] Socket transfer for UID 6865
+[2014-5-30 14:51:42] User connected with IP 127.0.0.1 on port 48255
+[2014-5-30 14:51:42] Logged in UID 6866
+[2014-5-30 14:51:42] Spawned new client_serv for UID 6866
+[2014-5-30 14:51:42] Terminating listener in state login
+[2014-5-30 14:51:42] Socket transfer for UID 6866
+[2014-5-30 14:51:42] UID 6858 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6857 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6859 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6860 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6861 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6862 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6864 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6865 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6863 disconnected unexpectedly
+[2014-5-30 14:51:42] UID 6866 disconnected unexpectedly
+[2014-5-30 14:51:42] Logged out UID 6857
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6858
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6859
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6860
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6861
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6862
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6864
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6865
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6863
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 14:51:42] Logged out UID 6866
+[2014-5-30 14:51:42] Terminating client server in state main
+[2014-5-30 16:41:49] User connected with IP 127.0.0.1 on port 58166
+[2014-5-30 16:42:40] Login failed because wrong username
+[2014-5-30 16:42:40] Terminating listener in state login
+[2014-5-30 16:44:38] User connected with IP 127.0.0.1 on port 40502
+[2014-5-30 16:45:24] Register user: palle
+[2014-5-30 16:45:24] User palle registered
+[2014-5-30 16:45:24] Terminating listener in state login
+[2014-5-30 16:45:50] User connected with IP 127.0.0.1 on port 48096
+[2014-5-30 16:46:19] Logged in UID 7069
+[2014-5-30 16:46:19] Spawned new client_serv for UID 7069
+[2014-5-30 16:46:19] Terminating listener in state login
+[2014-5-30 16:46:19] Socket transfer for UID 7069
+[2014-5-30 16:48:43] UID 7069 disconnected unexpectedly
+[2014-5-30 16:48:43] Logged out UID 7069
+[2014-5-30 16:48:43] Terminating client server in state main
+[2014-5-30 16:50:8] User connected with IP 127.0.0.1 on port 36725
+[2014-5-30 16:50:8] Logged in UID 7072
+[2014-5-30 16:50:8] Spawned new client_serv for UID 7072
+[2014-5-30 16:50:8] Terminating listener in state login
+[2014-5-30 16:50:8] Socket transfer for UID 7072
+[2014-5-30 16:50:8] User connected with IP 127.0.0.1 on port 53643
+[2014-5-30 16:50:8] Logged in UID 7073
+[2014-5-30 16:50:8] Spawned new client_serv for UID 7073
+[2014-5-30 16:50:8] Terminating listener in state login
+[2014-5-30 16:50:8] Socket transfer for UID 7073
+[2014-5-30 16:50:8] User connected with IP 127.0.0.1 on port 48434
+[2014-5-30 16:50:8] Logged in UID 7074
+[2014-5-30 16:50:8] Spawned new client_serv for UID 7074
+[2014-5-30 16:50:8] Terminating listener in state login
+[2014-5-30 16:50:8] Socket transfer for UID 7074
+[2014-5-30 16:50:8] User connected with IP 127.0.0.1 on port 47233
+[2014-5-30 16:50:8] Logged in UID 7075
+[2014-5-30 16:50:8] Spawned new client_serv for UID 7075
+[2014-5-30 16:50:8] Terminating listener in state login
+[2014-5-30 16:50:8] Socket transfer for UID 7075
+[2014-5-30 16:50:8] User connected with IP 127.0.0.1 on port 43410
+[2014-5-30 16:50:8] Logged in UID 7076
+[2014-5-30 16:50:8] Spawned new client_serv for UID 7076
+[2014-5-30 16:50:8] Terminating listener in state login
+[2014-5-30 16:50:8] Socket transfer for UID 7076
+[2014-5-30 16:50:8] User connected with IP 127.0.0.1 on port 39241
+[2014-5-30 16:50:8] Logged in UID 7077
+[2014-5-30 16:50:8] Spawned new client_serv for UID 7077
+[2014-5-30 16:50:8] Terminating listener in state login
+[2014-5-30 16:50:8] Socket transfer for UID 7077
+[2014-5-30 16:50:8] User connected with IP 127.0.0.1 on port 35927
+[2014-5-30 16:50:9] Logged in UID 7078
+[2014-5-30 16:50:9] Spawned new client_serv for UID 7078
+[2014-5-30 16:50:9] Terminating listener in state login
+[2014-5-30 16:50:9] Socket transfer for UID 7078
+[2014-5-30 16:50:9] User connected with IP 127.0.0.1 on port 48792
+[2014-5-30 16:50:9] Logged in UID 7079
+[2014-5-30 16:50:9] Spawned new client_serv for UID 7079
+[2014-5-30 16:50:9] Terminating listener in state login
+[2014-5-30 16:50:9] Socket transfer for UID 7079
+[2014-5-30 16:50:9] User connected with IP 127.0.0.1 on port 34048
+[2014-5-30 16:50:9] Logged in UID 7080
+[2014-5-30 16:50:9] Spawned new client_serv for UID 7080
+[2014-5-30 16:50:9] Terminating listener in state login
+[2014-5-30 16:50:9] Socket transfer for UID 7080
+[2014-5-30 16:50:9] User connected with IP 127.0.0.1 on port 47609
+[2014-5-30 16:50:9] Logged in UID 7081
+[2014-5-30 16:50:9] Spawned new client_serv for UID 7081
+[2014-5-30 16:50:9] Terminating listener in state login
+[2014-5-30 16:50:9] Socket transfer for UID 7081
+[2014-5-30 16:50:9] UID 7072 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7073 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7074 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7075 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7076 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7077 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7078 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7079 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7080 disconnected unexpectedly
+[2014-5-30 16:50:9] UID 7081 disconnected unexpectedly
+[2014-5-30 16:50:9] Logged out UID 7077
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7078
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7079
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7072
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7080
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7073
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7081
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7074
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7075
+[2014-5-30 16:50:9] Terminating client server in state main
+[2014-5-30 16:50:9] Logged out UID 7076
+[2014-5-30 16:50:9] Terminating client server in state main

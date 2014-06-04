@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module database</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module database</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Author: Max Falk Nilsson  
+This module conatins functions to start and stop  
+the database connection.
+
+
+<h2><a name="description">Description</a></h2><p>Author: Max Falk Nilsson  
+This module conatins functions to start and stop  
+the database connection.</p>
+ 
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-db_result">db_result()</a></h3>
+<p><tt>db_result() = any()</tt></p>
+
+
+<h3 class="typedecl"><a name="type-db_start">db_start()</a></h3>
+<p><tt>db_start() = any()</tt></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#as_list-1">as_list/1</a></td><td>convert a Sql result to a list with lists of each row, and every item are a
+  tuple of column name and value.</td></tr>
+<tr><td valign="top"><a href="#async_db_query-1">async_db_query/1</a></td><td>query the database, with a simple string.</td></tr>
+<tr><td valign="top"><a href="#async_db_query-3">async_db_query/3</a></td><td>Query the database with a string, were "?" will be replaced
+  with the arguments in the list args in the same order as they are
+  placed in the string.</td></tr>
+<tr><td valign="top"><a href="#db_query-1">db_query/1</a></td><td>query the database, with a simple string.</td></tr>
+<tr><td valign="top"><a href="#db_query-3">db_query/3</a></td><td>Query the database with a string, were "?" will be replaced
+  with the arguments in the list args in the same order as they are
+  placed in the string.</td></tr>
+<tr><td valign="top"><a href="#get_row-2">get_row/2</a></td><td>Gets the nth row of data from a list.</td></tr>
+<tr><td valign="top"><a href="#init-0">init/0</a></td><td>Make a local connection to the database.</td></tr>
+<tr><td valign="top"><a href="#remote_connect-0">remote_connect/0</a></td><td>Remote connect to the database
+  NOT USED.</td></tr>
+<tr><td valign="top"><a href="#result_to_record-2">result_to_record/2</a></td><td>Get the given result in a record specifed in the Record variable,
+  as one of the following login_table, loginlog_table or register_table.</td></tr>
+<tr><td valign="top"><a href="#stop-0">stop/0</a></td><td>Disconnect from the database.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="as_list-1">as_list/1</a></h3>
+<div class="spec">
+<p><tt>as_list(SqlResult) -&gt; [[{atom(), any()}, ...], ...]</tt>
+<ul class="definitions"><li><tt>SqlResult = any()</tt></li></ul></p>
+</div><p>convert a Sql result to a list with lists of each row, and every item are a
+  tuple of column name and value.</p>
+
+<h3 class="function"><a name="async_db_query-1">async_db_query/1</a></h3>
+<div class="spec">
+<p><tt>async_db_query(Binary_string) -&gt; pid()</tt>
+<ul class="definitions"><li><tt>Binary_string = string()</tt></li></ul></p>
+</div><p>query the database, with a simple string.
+ Spawns a new process to make the db query. Should be used when you are not
+ intrested in the result. Errors will be logged and reported BUT WILL NOT
+ HAVE ANY EFFECT ON THE EXECUTION.</p>
+
+<h3 class="function"><a name="async_db_query-3">async_db_query/3</a></h3>
+<div class="spec">
+<p><tt>async_db_query(Name, Binary_string, Args) -&gt; pid()</tt>
+<ul class="definitions"><li><tt>Name = atom()</tt></li><li><tt>Binary_string = string()</tt></li><li><tt>Args = list()</tt></li></ul></p>
+</div><p>Query the database with a string, were "?" will be replaced
+  with the arguments in the list args in the same order as they are
+  placed in the string. Spawns a new process to make the db query.
+  Should be used when you are not interested in the result.
+  Errors will be logged and reported BUT WILL NOT
+  HAVE ANY EFFECT ON THE EXECUTION.</p>
+
+<h3 class="function"><a name="db_query-1">db_query/1</a></h3>
+<div class="spec">
+<p><tt>db_query(Binary_string) -&gt; <a href="#type-db_result">db_result()</a></tt>
+<ul class="definitions"><li><tt>Binary_string = string()</tt></li></ul></p>
+</div><p>query the database, with a simple string.</p>
+
+<h3 class="function"><a name="db_query-3">db_query/3</a></h3>
+<div class="spec">
+<p><tt>db_query(Name, Binary_string, Args) -&gt; <a href="#type-db_result">db_result()</a></tt>
+<ul class="definitions"><li><tt>Name = atom()</tt></li><li><tt>Binary_string = string()</tt></li><li><tt>Args = list()</tt></li></ul></p>
+</div><p>Query the database with a string, were "?" will be replaced
+  with the arguments in the list args in the same order as they are
+  placed in the string.</p>
+
+<h3 class="function"><a name="get_row-2">get_row/2</a></h3>
+<div class="spec">
+<p><tt>get_row(List, Num) -&gt; any() | {error, no_item}</tt>
+<ul class="definitions"><li><tt>List = list()</tt></li><li><tt>Num = integer()</tt></li></ul></p>
+</div><p>Gets the nth row of data from a list.</p>
+
+<h3 class="function"><a name="init-0">init/0</a></h3>
+<div class="spec">
+<p><tt>init() -&gt; <a href="#type-db_start">db_start()</a></tt><br></p>
+</div><p>Make a local connection to the database.</p>
+
+<h3 class="function"><a name="remote_connect-0">remote_connect/0</a></h3>
+<div class="spec">
+<p><tt>remote_connect() -&gt; <a href="#type-db_start">db_start()</a></tt><br></p>
+</div><p>Remote connect to the database
+  NOT USED.</p>
+
+<h3 class="function"><a name="result_to_record-2">result_to_record/2</a></h3>
+<div class="spec">
+<p><tt>result_to_record(Sql_result, Record) -&gt; <a href="#type-record">record()</a></tt>
+<ul class="definitions"><li><tt>Sql_result = <a href="#type-db_result">db_result()</a></tt></li><li><tt>Record = atom()</tt></li></ul></p>
+</div><p>Get the given result in a record specifed in the Record variable,
+  as one of the following login_table, loginlog_table or register_table.</p>
+
+<h3 class="function"><a name="stop-0">stop/0</a></h3>
+<div class="spec">
+<p><tt>stop() -&gt; ok</tt><br></p>
+</div><p>Disconnect from the database.</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Jun 4 2014, 12:06:53.</i></p>
+</body>
+</html>

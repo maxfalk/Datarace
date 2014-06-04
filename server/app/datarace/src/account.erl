@@ -56,7 +56,8 @@ login_helper(Password, Login_rec)->
 
 get_user_data(UserName)->
     Sql_result = database:db_query(login_user_info, 
-			     <<"SELECT id, salt, password from tUsers WHERE userName = ?">>,
+			     <<"SELECT id, salt, password from tUsers 
+                                WHERE userName = ? and state = 0">>,
 				   [UserName]),
     database:get_row(database:result_to_record(Sql_result, login_table), 1).
 
@@ -224,7 +225,7 @@ check_user_exists(UserName)->
 
 get_user(UserName)->
     Sql_result = database:db_query(register_select,
-				<<"SELECT id FROM tUsers WHERE userName = ?">>,
+				<<"SELECT id FROM tUsers WHERE userName = ? and state = 0">>,
 				[UserName]),
     database:result_to_record(Sql_result, register_table).
 

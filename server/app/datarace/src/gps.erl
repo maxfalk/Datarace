@@ -1,5 +1,5 @@
 -module(gps).
--export([distance/4, speed/2, averagespeed/2, averagedistance/2, statistics_compare/3]).
+-export([distance/4, speed/2, averagespeed/2, averagedistance/2]).
 -export([calc_pointdistance/3,calc_totaldistance/2, total_time/2]).
 
 -include_lib("../include/database.hrl").
@@ -17,14 +17,11 @@
 distance(Long1, Lat1, Long2, Lat2) ->
     DegToRad = fun(Deg) -> math:pi()*Deg/180 end,
     [RLong1, RLat1, RLong2, RLat2] = [DegToRad(Deg) || Deg <- [Long1, Lat1, Long2, Lat2]],
- 
     DLong = RLong2 - RLong1,
     DLat = RLat2 - RLat1,
- 
-    A = math:pow(math:sin(DLat/2), 2) + math:cos(RLat1) * math:cos(RLat2) * math:pow(math:sin(DLong/2), 2),
- 
+    A = math:pow(math:sin(DLat/2), 2) +
+	math:cos(RLat1) * math:cos(RLat2) * math:pow(math:sin(DLong/2), 2),
     C = 2 * math:asin(math:sqrt(A)),
- 
     %% radius of Earth is 6372.8 km
     Km = 6372.8 * C,
     Km.
@@ -169,8 +166,6 @@ calc_avgdistance_from_avgspeed(UserId, Time) when Time > 0->
 calc_avgdistance_from_avgspeed(_,_) ->
     0.0.
 
-    
-
 
 %%@doc Get averagespeed for a user from the db.
 -spec get_averagespeed(UserId)-> float() when
@@ -190,27 +185,6 @@ get_averagespeed(UserId)->
 	    0
     end.
     
-
-
-
-%%@doc==============================================%
-%% get the gps coordinates and speed from the other %
-%% competitor at a chosen time.                     %
-%===================================================%
--spec statistics_compare(User_id1, Match_id1, User_id2) -> Result when
-      User_id1 :: integer(),
-      Match_id1 :: integer(),
-      User_id2 :: integer(),
-      Result :: 
-	{t1_distance_zero | t2_distance_zero| evenrace | t2speedup| t1speedup , float()}.
-
-statistics_compare(User_id1, Match_id1, User_id2) ->
-    Distance_User1 = calc_totaldistance(User_id1, Match_id1),
-    Distance_User2 = calc_totaldistance(User_id2, Match_id1), 
-    matchlogic:comparedistance(Distance_User1, Distance_User2),
-    {matchlogic:comparedistance(Distance_User1, Distance_User2), Distance_User1 - Distance_User2}.
-
-
 
 
 	

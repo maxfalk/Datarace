@@ -22,11 +22,11 @@ to do the majority of the calculations.
 
 ==== GROUP MEMBERS ==== 
 
-YYMMDD-XXXX Firstname.Lastname.1234@student.uu.se
-YYMMDD-XXXX Firstname.Lastname.1234@student.uu.se
-YYMMDD-XXXX Firstname.Lastname.1234@student.uu.se
-YYMMDD-XXXX Firstname.Lastname.1234@student.uu.se
-
+Falk Nilsson, Max (910316-2518)
+Jaksic, Marina (910411-0920)
+Reeves, Max (860107-0033)
+Sandberg, Joel (870326-1456)
+Toghiani-Rizi, Babak (891109-6371)
 
 ==== MAY THE SOURCE BE WITH YOU ==== 
 
@@ -67,6 +67,4 @@ To run the tests for this application simple typ make test and all test will run
 
 ==== MORE INFORMATION (optional) ==== 
 
- * How to get more information about your project?
- * Who is the main contact person?
- * Do you have a project home page?
+Documentation about the project kan be found in the doc directory.

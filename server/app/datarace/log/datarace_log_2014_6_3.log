@@ -1,0 +1,214 @@
+[2014-6-3 12:28:42] UID: 8218MID: 1384finished the race
+[2014-6-3 12:54:19] User connected with IP 130.238.251.76 on port 55216
+[2014-6-3 12:54:19] Logged in UID 8218
+[2014-6-3 12:54:19] Spawned new client_serv for UID 8218
+[2014-6-3 12:54:19] Terminating listener in state login
+[2014-6-3 12:54:19] Socket transfer for UID 8218
+[2014-6-3 12:54:19] Get home stats for UID 8218
+[2014-6-3 12:54:19] Number of request lookup made by UID 8218
+[2014-6-3 12:54:20] Get home stats for UID 8218
+[2014-6-3 12:54:20] Number of request lookup made by UID 8218
+[2014-6-3 12:54:21] Match request lookup made by UID 8218
+[2014-6-3 12:54:23] Search was made by UID 8218 for 'test'
+[2014-6-3 12:58:4] UID 8218 disconnected unexpectedly
+[2014-6-3 12:58:4] Logged out UID 8218
+[2014-6-3 12:58:4] Terminating client server in state main
+[2014-6-3 13:52:16] User connected with IP 109.58.149.100 on port 54058
+[2014-6-3 13:52:17] Logged in UID 7069
+[2014-6-3 13:52:17] Spawned new client_serv for UID 7069
+[2014-6-3 13:52:17] Terminating listener in state login
+[2014-6-3 13:52:17] Socket transfer for UID 7069
+[2014-6-3 13:52:17] Get home stats for UID 7069
+[2014-6-3 13:52:17] Number of request lookup made by UID 7069
+[2014-6-3 13:52:18] Get home stats for UID 7069
+[2014-6-3 13:52:19] Number of request lookup made by UID 7069
+[2014-6-3 13:52:20] Match request lookup made by UID 7069
+[2014-6-3 13:52:21] Get home stats for UID 7069
+[2014-6-3 13:52:22] Number of request lookup made by UID 7069
+[2014-6-3 13:52:23] Match request lookup made by UID 7069
+[2014-6-3 13:52:27] Search was made by UID 7069 for 'test'
+[2014-6-3 13:52:43] Match request lookup made by UID 7069
+[2014-6-3 13:52:43] Get home stats for UID 7069
+[2014-6-3 13:53:16] UID 7069 disconnected unexpectedly
+[2014-6-3 13:53:16] Logged out UID 7069
+[2014-6-3 13:53:16] Terminating client server in state main
+[2014-6-3 14:3:33] User connected with IP 130.238.251.76 on port 55849
+[2014-6-3 14:3:33] Register user: kalle
+[2014-6-3 14:3:33] User kalle registered
+[2014-6-3 14:3:33] Terminating listener in state login
+[2014-6-3 14:3:45] User connected with IP 130.238.251.76 on port 55850
+[2014-6-3 14:3:45] Logged in UID 8219
+[2014-6-3 14:3:45] Spawned new client_serv for UID 8219
+[2014-6-3 14:3:45] Terminating listener in state login
+[2014-6-3 14:3:45] Socket transfer for UID 8219
+[2014-6-3 14:3:45] Get home stats for UID 8219
+[2014-6-3 14:3:45] Number of request lookup made by UID 8219
+[2014-6-3 14:3:45] Get home stats for UID 8219
+[2014-6-3 14:3:45] Number of request lookup made by UID 8219
+[2014-6-3 14:4:6] Match request lookup made by UID 8219
+[2014-6-3 14:4:13] Search was made by UID 8219 for 'testOne'
+[2014-6-3 14:4:24] Match request made by UID 8219 for 8217 distance 1
+[2014-6-3 14:4:28] Match request lookup made by UID 8219
+[2014-6-3 14:4:46] User connected with IP 109.58.149.100 on port 30577
+[2014-6-3 14:4:46] Logged in UID 8217
+[2014-6-3 14:4:46] Spawned new client_serv for UID 8217
+[2014-6-3 14:4:46] Terminating listener in state login
+[2014-6-3 14:4:46] Socket transfer for UID 8217
+[2014-6-3 14:4:46] Get home stats for UID 8217
+[2014-6-3 14:4:46] Number of request lookup made by UID 8217
+[2014-6-3 14:4:47] Get home stats for UID 8217
+[2014-6-3 14:4:47] Number of request lookup made by UID 8217
+[2014-6-3 14:4:47] Match request lookup made by UID 8217
+[2014-6-3 14:4:48] Request accept made by UID 8217 for RID 3348
+[2014-6-3 14:4:51] Get home stats for UID 8219
+[2014-6-3 14:4:51] Number of request lookup made by UID 8219
+[2014-6-3 14:4:51] Match request lookup made by UID 8219
+[2014-6-3 14:4:55] Get home stats for UID 8217
+[2014-6-3 14:4:55] Number of request lookup made by UID 8217
+[2014-6-3 14:4:56] Match request lookup made by UID 8217
+[2014-6-3 14:4:59] Search was made by UID 8217 for 'Kalle'
+[2014-6-3 14:5:5] Get home stats for UID 8219
+[2014-6-3 14:5:5] Number of request lookup made by UID 8219
+[2014-6-3 14:5:5] Match request lookup made by UID 8219
+[2014-6-3 14:5:6] Match request made by UID 8217 for 8219 distance 1
+[2014-6-3 14:5:6] UID 8217 disconnected unexpectedly
+[2014-6-3 14:5:6] Logged out UID 8217
+[2014-6-3 14:5:6] Terminating client server in state main
+[2014-6-3 14:5:8] Get home stats for UID 8219
+[2014-6-3 14:5:8] Number of request lookup made by UID 8219
+[2014-6-3 14:5:8] Match request lookup made by UID 8219
+[2014-6-3 14:5:11] Request cancellation made by UID 8219 for RID 3350
+[2014-6-3 14:5:13] Get home stats for UID 8219
+[2014-6-3 14:5:13] Number of request lookup made by UID 8219
+[2014-6-3 14:5:14] Match request lookup made by UID 8219
+[2014-6-3 14:5:30] User connected with IP 109.58.149.100 on port 30646
+[2014-6-3 14:5:30] Logged in UID 8217
+[2014-6-3 14:5:30] Spawned new client_serv for UID 8217
+[2014-6-3 14:5:30] Terminating listener in state login
+[2014-6-3 14:5:30] Socket transfer for UID 8217
+[2014-6-3 14:5:30] Get home stats for UID 8217
+[2014-6-3 14:5:30] Number of request lookup made by UID 8217
+[2014-6-3 14:5:31] Get home stats for UID 8217
+[2014-6-3 14:5:31] Number of request lookup made by UID 8217
+[2014-6-3 14:5:32] Match request lookup made by UID 8217
+[2014-6-3 14:5:33] Match started with RID 3348
+[2014-6-3 14:5:36] Match started with RID 3347
+[2014-6-3 14:5:44] Distance 3.05555555555555580227e-02 data sent to UID 8217 for MID 1386
+[2014-6-3 14:5:46] Received GPS data from UID 8219: -1.22032546392140716307e+02, 3.73352581845041058273e+01
+[2014-6-3 14:5:47] Received GPS data from UID 8219: -1.22032548379999994381e+02, 3.73352350652281756993e+01
+[2014-6-3 14:5:48] Distance 3.00300333333333391295e-01 data sent to UID 8219 for MID 1386
+[2014-6-3 14:5:48] Received GPS data from UID 8219: -1.22032550669131609311e+02, 3.73352135932971762600e+01
+[2014-6-3 14:5:49] Received GPS data from UID 8219: -1.22032550191250265925e+02, 3.73351938285794631156e+01
+[2014-6-3 14:5:50] Received GPS data from UID 8219: -1.22032549652738737223e+02, 3.73351764710953233362e+01
+[2014-6-3 14:5:51] Received GPS data from UID 8219: -1.22032552936918719411e+02, 3.73351513354005106748e+01
+[2014-6-3 14:5:52] Received GPS data from UID 8219: -1.22032560279197809905e+02, 3.73351226786684264880e+01
+[2014-6-3 14:5:52] Distance 5.12790027463241315786e-02 data sent to UID 8217 for MID 1386
+[2014-6-3 14:5:53] Received GPS data from UID 8217: 1.76485449759040555762e+01, 5.98432370112627722847e+01
+[2014-6-3 14:5:53] Received GPS data from UID 8217: 1.76485449759040555762e+01, 5.98432370112627722847e+01
+[2014-6-3 14:5:53] Received GPS data from UID 8217: 1.76485449759040555762e+01, 5.98432370112627722847e+01
+[2014-6-3 14:5:53] Received GPS data from UID 8219: -1.22032578828510281710e+02, 3.73350875891393059192e+01
+[2014-6-3 14:5:54] Distance 4.50450500000000031431e-01 data sent to UID 8219 for MID 1386
+[2014-6-3 14:5:54] Received GPS data from UID 8219: -1.22032638411975028703e+02, 3.73350369862680011579e+01
+[2014-6-3 14:5:55] Received GPS data from UID 8219: -1.22032809773221529781e+02, 3.73349781451092184170e+01
+[2014-6-3 14:5:55] Received GPS data from UID 8217: 1.76485449759040555762e+01, 5.98432370112627722847e+01
+[2014-6-3 14:5:56] Received GPS data from UID 8219: -1.22032809773221529781e+02, 3.73349781451092184170e+01
+[2014-6-3 14:5:57] Received GPS data from UID 8217: 1.76598047847040575675e+01, 5.98456676784637622291e+01
+[2014-6-3 14:5:57] Received GPS data from UID 8219: -1.22032920918849313807e+02, 3.73349482712628599756e+01
+[2014-6-3 14:5:58] Distance 9.28835758887927992467e-02 data sent to UID 8217 for MID 1386
+[2014-6-3 14:5:58] Received GPS data from UID 8219: -1.22033048408929161610e+02, 3.73349145666814408173e+01
+[2014-6-3 14:5:59] Received GPS data from UID 8217: 1.76626286812376136481e+01, 5.98462772760656491755e+01
+[2014-6-3 14:5:59] Match stopped by UID 8217 for MID 1386
+[2014-6-3 14:5:59] UID: 8217MID: 1386forefeited the race
+[2014-6-3 14:5:59] Received GPS data from UID 8219: -1.22033186944183100309e+02, 3.73348894602638523565e+01
+[2014-6-3 14:5:59] Distance 1.28191925409329288144e+00 data sent to UID 8219 for MID 1386
+[2014-6-3 14:6:0] Received GPS data from UID 8219: -1.22033347552597803087e+02, 3.73348570735096956241e+01
+[2014-6-3 14:6:1] Received GPS data from UID 8219: -1.22033700434625899334e+02, 3.73347827400999676684e+01
+[2014-6-3 14:6:2] Received GPS data from UID 8219: -1.22033903148801115890e+02, 3.73347372763900295922e+01
+[2014-6-3 14:6:3] Received GPS data from UID 8219: -1.22033903148801115890e+02, 3.73347372763900295922e+01
+[2014-6-3 14:6:4] Received GPS data from UID 8219: -1.22034114773365786277e+02, 3.73347071772720724425e+01
+[2014-6-3 14:6:5] Distance 1.43206942075995957708e+00 data sent to UID 8219 for MID 1386
+[2014-6-3 14:6:5] Received GPS data from UID 8219: -1.22034344763584201132e+02, 3.73346682159941423151e+01
+[2014-6-3 14:6:6] Received GPS data from UID 8219: -1.22034569400688184260e+02, 3.73346399231898047333e+01
+[2014-6-3 14:6:7] Received GPS data from UID 8219: -1.22034811654502661327e+02, 3.73346164140206226989e+01
+[2014-6-3 14:6:8] Received GPS data from UID 8219: -1.22035056154306786880e+02, 3.73345943144222118804e+01
+[2014-6-3 14:6:9] Received GPS data from UID 8219: -1.22035312577849609283e+02, 3.73345840599719025477e+01
+[2014-6-3 14:6:10] Received GPS data from UID 8219: -1.22035857364755045751e+02, 3.73345483008061975738e+01
+[2014-6-3 14:6:10] Distance 1.55719455964884834209e+00 data sent to UID 8219 for MID 1386
+[2014-6-3 14:6:11] Received GPS data from UID 8219: -1.22035857364755045751e+02, 3.73345483008061975738e+01
+[2014-6-3 14:6:12] Received GPS data from UID 8219: -1.22036134516917655901e+02, 3.73345478860034631907e+01
+[2014-6-3 14:6:13] Received GPS data from UID 8219: -1.22036697461455261760e+02, 3.73345376186377251315e+01
+[2014-6-3 14:6:14] Received GPS data from UID 8219: -1.22036697461455261760e+02, 3.73345376186377251315e+01
+[2014-6-3 14:6:15] Received GPS data from UID 8219: -1.22036980296269035762e+02, 3.73345393008439572213e+01
+[2014-6-3 14:6:16] Received GPS data from UID 8219: -1.22037268323070904330e+02, 3.73345354062418763874e+01
+[2014-6-3 14:6:16] Distance 1.70734472631551503774e+00 data sent to UID 8219 for MID 1386
+[2014-6-3 14:6:17] Received GPS data from UID 8219: -1.22037566081641287496e+02, 3.73345371799914573785e+01
+[2014-6-3 14:6:18] Received GPS data from UID 8219: -1.22037864486529699093e+02, 3.73345317708003605617e+01
+[2014-6-3 14:6:19] Received GPS data from UID 8219: -1.22038163637755928903e+02, 3.73345229010290466931e+01
+[2014-6-3 14:6:20] Received GPS data from UID 8219: -1.22038792365368450987e+02, 3.73345028095120454736e+01
+[2014-6-3 14:6:21] Received GPS data from UID 8219: -1.22038792365368450987e+02, 3.73345028095120454736e+01
+[2014-6-3 14:6:22] Received GPS data from UID 8219: -1.22039107021775450335e+02, 3.73344935625119802580e+01
+[2014-6-3 14:6:22] Distance 1.85749489298218173339e+00 data sent to UID 8219 for MID 1386
+[2014-6-3 14:6:23] Received GPS data from UID 8219: -1.22039773838871454359e+02, 3.73344772324902081095e+01
+[2014-6-3 14:6:24] Received GPS data from UID 8219: -1.22039773838871454359e+02, 3.73344772324902081095e+01
+[2014-6-3 14:6:25] Received GPS data from UID 8219: -1.22040451435243838318e+02, 3.73344595610211769099e+01
+[2014-6-3 14:6:26] Received GPS data from UID 8219: -1.22040451435243838318e+02, 3.73344595610211769099e+01
+[2014-6-3 14:6:27] Received GPS data from UID 8219: -1.22041171759519201601e+02, 3.73344506671159663824e+01
+[2014-6-3 14:6:28] UID 8217 disconnected unexpectedly
+[2014-6-3 14:6:28] Logged out UID 8217
+[2014-6-3 14:6:28] Terminating client server in state main
+[2014-6-3 14:6:28] Received GPS data from UID 8219: -1.22041171759519201601e+02, 3.73344506671159663824e+01
+[2014-6-3 14:6:28] Distance 2.00764505964884865108e+00 data sent to UID 8219 for MID 1386
+[2014-6-3 14:6:29] Received GPS data from UID 8219: -1.22041538998540787020e+02, 3.73344489145018769705e+01
+[2014-6-3 14:6:30] Received GPS data from UID 8219: -1.22041900621711945973e+02, 3.73344459841782736476e+01
+[2014-6-3 14:6:31] Received GPS data from UID 8219: -1.22042680805390673981e+02, 3.73344484300000019061e+01
+[2014-6-3 14:6:32] Received GPS data from UID 8219: -1.22042680805390673981e+02, 3.73344484300000019061e+01
+[2014-6-3 14:6:33] Received GPS data from UID 8219: -1.22043454636303891903e+02, 3.73344536300000058304e+01
+[2014-6-3 14:6:34] Received GPS data from UID 8219: -1.22043454636303891903e+02, 3.73344536300000058304e+01
+[2014-6-3 14:6:34] Received GPS data from UID 8219: -1.22043851349176378562e+02, 3.73344594500000042103e+01
+[2014-6-3 14:6:34] Match stopped by UID 8219 for MID 1386
+[2014-6-3 14:6:34] UID: 8219MID: 1386finished the race
+[2014-6-3 14:6:40] Get home stats for UID 8219
+[2014-6-3 14:6:40] Number of request lookup made by UID 8219
+[2014-6-3 14:6:41] Request for history by UID: 8219
+[2014-6-3 14:6:45] Get home stats for UID 8219
+[2014-6-3 14:6:45] Number of request lookup made by UID 8219
+[2014-6-3 14:6:48] Logged out UID 8219
+[2014-6-3 14:6:48] Terminating client server in state main
+[2014-6-3 14:6:54] User connected with IP 130.238.251.76 on port 55853
+[2014-6-3 14:6:54] Logged in UID 8217
+[2014-6-3 14:6:54] Spawned new client_serv for UID 8217
+[2014-6-3 14:6:54] Terminating listener in state login
+[2014-6-3 14:6:54] Socket transfer for UID 8217
+[2014-6-3 14:6:54] Get home stats for UID 8217
+[2014-6-3 14:6:54] Number of request lookup made by UID 8217
+[2014-6-3 14:6:55] Get home stats for UID 8217
+[2014-6-3 14:6:55] Number of request lookup made by UID 8217
+[2014-6-3 14:7:11] Logged out UID 8217
+[2014-6-3 14:7:11] Terminating client server in state main
+[2014-6-3 14:15:57] User connected with IP 109.58.149.100 on port 35010
+[2014-6-3 14:15:57] Logged in UID 4614
+[2014-6-3 14:15:57] Spawned new client_serv for UID 4614
+[2014-6-3 14:15:57] Terminating listener in state login
+[2014-6-3 14:15:57] Socket transfer for UID 4614
+[2014-6-3 14:16:1] User connected with IP 109.58.149.100 on port 35033
+[2014-6-3 14:16:1] Login failed because already logged in
+[2014-6-3 14:16:1] Terminating listener in state login
+[2014-6-3 14:16:8] User connected with IP 109.58.149.100 on port 35056
+[2014-6-3 14:16:8] Logged in UID 8217
+[2014-6-3 14:16:8] Spawned new client_serv for UID 8217
+[2014-6-3 14:16:8] Terminating listener in state login
+[2014-6-3 14:16:8] Socket transfer for UID 8217
+[2014-6-3 14:16:20] User connected with IP 109.58.149.100 on port 35079
+[2014-6-3 14:16:20] Logged in UID 7069
+[2014-6-3 14:16:20] Spawned new client_serv for UID 7069
+[2014-6-3 14:16:20] Terminating listener in state login
+[2014-6-3 14:16:20] Socket transfer for UID 7069
+[2014-6-3 14:16:40] User connected with IP 109.58.149.100 on port 35102
+[2014-6-3 14:16:40] Login failed because already logged in
+[2014-6-3 14:16:40] Terminating listener in state login
+[2014-6-3 14:16:47] Logged out UID 7069
+[2014-6-3 14:16:47] Terminating client server in state main
+[2014-6-3 14:16:47] Logged out UID 8217
+[2014-6-3 14:16:47] Terminating client server in state main
+[2014-6-3 14:16:47] Logged out UID 4614
+[2014-6-3 14:16:47] Terminating client server in state main

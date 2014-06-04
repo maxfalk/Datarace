@@ -413,17 +413,6 @@ set_winner(MatchId, WinnerId)->
 		      [WinnerId, MatchId]),
     ok.
     
-%%@doc Get the userid of the winner of a match.
--spec get_winner(MatchId)-> integer() when
-      MatchId :: integer().
-
-get_winner(MatchId)->
-    Sql_result = database:db_query(get_match_winner,
-				   <<"SELECT winnerUserId FROM tMatch WHERE id = ?">>,
-				   [MatchId]),
-    [[{<<"winnerUserId">>, Id}]] = database:as_list(Sql_result),
-    Id.
-    
 
 %%@doc Set flag in the db that the user is finished running her turn in a match.
 -spec set_match_participant_done(UserRequestId, MatchId)-> ok when
@@ -571,7 +560,7 @@ pad_num_pending_requests(R) -> hd(R).
 
 
 
-%%@doc Get match statisticsfor a user. Statistis for each match, include if it was a win
+%%@doc Get match statistics for a user. Statistis for each match, include if it was a win
 %% the distance, averageSpeed.
 -spec get_history(UserId) -> [match_stats_table(), ...] when
       UserId :: integer().

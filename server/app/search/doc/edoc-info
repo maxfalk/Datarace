@@ -1,0 +1,4 @@
+%% encoding: UTF-8
+{application,search}.
+{packages,[]}.
+{modules,[search,search_serv,search_sup]}.
