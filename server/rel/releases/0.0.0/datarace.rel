@@ -1,4 +1,4 @@
-%% rel generated at {2014,6,4} {13,18,23}
+%% rel generated at {2014,6,4} {14,18,34}
 {release,{"datarace","0.0.0"},
          {erts,"6.0"},
          [{kernel,"3.0"},
