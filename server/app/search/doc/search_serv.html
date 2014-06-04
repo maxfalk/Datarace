@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module search_serv</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module search_serv</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This module holds the server core for
+ the user search server.
+
+<p><b>Behaviours:</b> <a href="gen_server.html"><tt>gen_server</tt></a>.</p>
+
+<h2><a name="description">Description</a></h2>This module holds the server core for
+ the user search server.
+ Author: Max Falk
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle search calls, search first the internal state for matches to the saerch then
+  search the database for more matches.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle cast to stop the server.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Init the server.</td></tr>
+<tr><td valign="top"><a href="#search-3">search/3</a></td><td>Search for a user like the one with the sent username
+  ordering by the best match first, filter att the user with id MyId.</td></tr>
+<tr><td valign="top"><a href="#start_link-0">start_link/0</a></td><td>Start a new process for the search_serv gen_server.</td></tr>
+<tr><td valign="top"><a href="#stop-1">stop/1</a></td><td>Stop the gen_server.</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Terminate the server.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(UserName, From, State) -&gt; {noreply, NewState}</tt>
+<ul class="definitions"><li><tt>UserName = string()</tt></li><li><tt>From = {pid(), term()}</tt></li><li><tt>State = [<a href="#type-user_search_table">user_search_table()</a>, ...]</tt></li><li><tt>NewState = [<a href="#type-user_search_table">user_search_table()</a>, ...]</tt></li></ul></p>
+</div><p>Handle search calls, search first the internal state for matches to the saerch then
+  search the database for more matches. Remove duplicates and send them.</p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(X1::stop, State) -&gt; {stop, Reason, NewState}</tt>
+<ul class="definitions"><li><tt>State = list()</tt></li><li><tt>Reason = term()</tt></li><li><tt>NewState = list()</tt></li></ul></p>
+</div><p>Handle cast to stop the server.</p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(Options) -&gt; {ok, term()}</tt>
+<ul class="definitions"><li><tt>Options = list()</tt></li></ul></p>
+</div><p>Init the server</p>
+
+<h3 class="function"><a name="search-3">search/3</a></h3>
+<div class="spec">
+<p><tt>search(Pid, Username, MyId) -&gt; [<a href="#type-user_search_table">user_search_table()</a>, ...]</tt>
+<ul class="definitions"><li><tt>Pid = pid()</tt></li><li><tt>MyId = integer()</tt></li><li><tt>Username = string()</tt></li></ul></p>
+</div><p>Search for a user like the one with the sent username
+  ordering by the best match first, filter att the user with id MyId.</p>
+
+<h3 class="function"><a name="start_link-0">start_link/0</a></h3>
+<div class="spec">
+<p><tt>start_link() -&gt; Result</tt>
+<ul class="definitions"><li><tt>Result = {ok, Pid} | ignore | {error, Error}</tt></li><li><tt>Pid = pid()</tt></li><li><tt>Error = {already_started, Pid} | term()</tt></li></ul></p>
+</div><p>Start a new process for the search_serv gen_server.</p>
+
+<h3 class="function"><a name="stop-1">stop/1</a></h3>
+<div class="spec">
+<p><tt>stop(Pid) -&gt; ok</tt>
+<ul class="definitions"><li><tt>Pid = pid()</tt></li></ul></p>
+</div><p>Stop the gen_server.</p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason, State) -&gt; tbi</tt>
+<ul class="definitions"><li><tt>Reason = term()</tt></li><li><tt>State = term()</tt></li></ul></p>
+</div><p>Terminate the server</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Jun 4 2014, 12:07:25.</i></p>
+</body>
+</html>

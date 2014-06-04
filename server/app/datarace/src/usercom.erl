@@ -289,7 +289,10 @@ match_stophelper(MatchId, MatchDetails) when length(MatchDetails) > 1 ->
     case check_winner(MatchDetails) of
 	WinnerId when WinnerId > 0 ->
 	    set_winner(MatchId, WinnerId);
-	_ -> no_winner
+	0 -> 
+	    no_winner;
+	-1 ->
+	    set_winner(MatchId, -1)
     end,
     set_match_done(MatchId);
 match_stophelper(_MatchId, _MatchDetails)  ->
@@ -356,9 +359,9 @@ get_match_details(MatchId)->
 -spec check_winner(MatchDetails)-> integer() when
       MatchDetails :: [[{binary(), integer()}, ...], ...].
 
-check_winner([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time},{<<"time">>, Time}] | T] = List) when length(List) > 1->
+check_winner([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T]) ->
     check_winnerhelp(T, {UserId, Time});
-check_winner([[{<<"userId">>, _UserId}, {<<"state">>, 2},{<<"time">>, Time},{<<"time">>, Time}] | T] = List) when length(List) > 1->
+check_winner([[{<<"userId">>, _UserId}, {<<"state">>, 2},{<<"time">>, _Time}] | T])  ->
     check_winnerhelp(T, {-1, 0});
 check_winner(_List)->
     0.
@@ -372,13 +375,13 @@ check_winner(_List)->
 
 check_winnerhelp([], {WinnerId, _})->
     WinnerId;
+check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 2},{<<"time">>, _Time}] | T], {WinnerId, WinnerTime}) when WinnerId == -1 -> 
+    check_winnerhelp(T, {-1, WinnerTime});
 check_winnerhelp([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T], {WinnerId, _WinnerTime}) when WinnerId == -1 ->
     check_winnerhelp(T,{UserId, Time});
 check_winnerhelp([[{<<"userId">>, UserId}, {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time < WinnerTime ->
     check_winnerhelp(T,{UserId, Time});
 check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 1},{<<"time">>, Time}] | T], {_WinnerId, WinnerTime}) when Time == WinnerTime -> 
-    check_winnerhelp(T, {-1, WinnerTime});
-check_winnerhelp([[{<<"userId">>, _UserId},  {<<"state">>, 2},{<<"time">>, _Time}] | T], {WinnerId, WinnerTime}) when WinnerId == -1 -> 
     check_winnerhelp(T, {-1, WinnerTime});
 check_winnerhelp([_|T], Result) ->
     check_winnerhelp(T, Result).
@@ -409,17 +412,6 @@ set_winner(MatchId, WinnerId)->
 		      <<"UPDATE tMatch SET winnerUserId = ? WHERE id = ?">>,
 		      [WinnerId, MatchId]),
     ok.
-    
-%%@doc Get the userid of the winner of a match.
--spec get_winner(MatchId)-> integer() when
-      MatchId :: integer().
-
-get_winner(MatchId)->
-    Sql_result = database:db_query(get_match_winner,
-				   <<"SELECT winnerUserId FROM tMatch WHERE id = ?">>,
-				   [MatchId]),
-    [[{<<"winnerUserId">>, Id}]] = database:as_list(Sql_result),
-    Id.
     
 
 %%@doc Set flag in the db that the user is finished running her turn in a match.
@@ -568,7 +560,7 @@ pad_num_pending_requests(R) -> hd(R).
 
 
 
-%%@doc Get match statisticsfor a user. Statistis for each match, include if it was a win
+%%@doc Get match statistics for a user. Statistis for each match, include if it was a win
 %% the distance, averageSpeed.
 -spec get_history(UserId) -> [match_stats_table(), ...] when
       UserId :: integer().
